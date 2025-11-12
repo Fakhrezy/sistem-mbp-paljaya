@@ -164,12 +164,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </div>
                                 @if($item->keterangan)
                                 <div class="mb-3 text-xs text-gray-600">
-                                    <div class="flex items-start space-x-2">
-                                        <i class="mt-1 text-blue-500 fas fa-sticky-note"></i>
-                                        <div>
-                                            <span class="font-medium">Keterangan:</span>
-                                            <p class="mt-1 text-gray-700">{{ $item->keterangan }}</p>
-                                        </div>
+                                    <div>
+                                        <span class="font-medium">Keterangan:</span>
+                                        <p class="mt-1 text-gray-700">{{ $item->keterangan }}</p>
                                     </div>
                                 </div>
                                 @endif
@@ -331,12 +328,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     </td>
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         @if($item->keterangan)
-                                        <div class="flex items-start space-x-2">
-                                            <i class="mt-1 text-xs text-blue-500 fas fa-sticky-note"></i>
-                                            <span class="text-sm" title="{{ $item->keterangan }}">
-                                                {{ Str::limit($item->keterangan, 50) }}
-                                            </span>
-                                        </div>
+                                        <span class="text-sm" title="{{ $item->keterangan }}">
+                                            {{ Str::limit($item->keterangan, 50) }}
+                                        </span>
                                         @else
                                         <span class="text-xs italic text-gray-400">-</span>
                                         @endif

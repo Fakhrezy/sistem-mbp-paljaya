@@ -20,7 +20,9 @@ Pengambilan Barang
                         <!-- Cart Link -->
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('user.cart.index') }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                                onmouseout="this.style.backgroundColor='#0074BC'">
                                 <i class="mr-2 fas fa-shopping-cart"></i>
                                 Keranjang
                                 <span id="cart-count"
@@ -142,7 +144,9 @@ Pengambilan Barang
                                 data-barang-nama="{{ addslashes($item->nama_barang) }}"
                                 data-satuan="{{ $item->satuan }}" data-current-stock="{{ $item->available_stock }}"
                                 onclick="handleAddToCart(this)"
-                                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                                onmouseout="this.style.backgroundColor='#0074BC'">
                                 <i class="mr-2 fas fa-cart-plus"></i>
                                 Ambil Barang
                             </button>
@@ -192,7 +196,9 @@ Pengambilan Barang
                     @if(request('search') || request('jenis'))
                     <div class="mt-4">
                         <a href="{{ route('user.pengambilan.index') }}"
-                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white border border-transparent rounded-md shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'">
                             Lihat Semua Barang
                         </a>
                     </div>
@@ -205,18 +211,16 @@ Pengambilan Barang
 </div>
 
 <!-- Add to Cart Modal -->
-<div id="addToCartModal"
-    class="fixed inset-0 z-50 items-center justify-center hidden w-full h-full p-4 overflow-y-auto bg-black bg-opacity-50">
-    <div class="relative w-full max-w-lg mx-auto my-8 overflow-hidden bg-white rounded-lg shadow-xl">
+<div id="addToCartModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+    <div class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg relative">
         <!-- Modal Header -->
-        <div class="px-6 py-4 bg-blue-600 border-b border-gray-200">
+        <div class="px-6 py-4 rounded-t-lg" style="background-color: #0074BC;">
             <div class="flex items-center justify-between">
                 <h3 class="text-lg font-semibold text-white">
-                    <i class="mr-2 fas fa-cart-plus"></i>
-                    Tambah ke Keranjang
+                    Tambah Pengambilan
                 </h3>
-                <button onclick="closeModal()" class="text-blue-100 hover:text-white">
-                    <i class="text-lg fas fa-times"></i>
+                <button onclick="closeModal()" class="text-white hover:text-blue-200">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
         </div>
@@ -227,90 +231,94 @@ Pengambilan Barang
                 @csrf
                 <input type="hidden" id="id_barang" name="id_barang">
 
-                <!-- Nama Barang -->
-                <div class="mb-5">
-                    <label class="block mb-3 text-sm font-medium text-gray-700">
-                        <i class="mr-1 fas fa-box"></i>
+                <!-- Nama Barang Section -->
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-box text-gray-500 mr-2"></i>
                         Nama Barang
                     </label>
-                    <div class="p-4 border border-gray-200 rounded-lg bg-gray-50">
-                        <p id="barang_nama" class="mb-2 text-base font-medium text-gray-900">Loading...</p>
-                        <p class="text-sm text-gray-500">
+                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <p id="barang_nama" class="font-medium text-gray-900">Loading...</p>
+                        <p class="text-sm text-gray-500 mt-1">
                             Stok tersedia: <span id="max_stock" class="font-semibold">0</span> <span
                                 id="satuan">pcs</span>
                         </p>
                     </div>
                 </div>
 
-                <!-- Quantity -->
-                <div class="mb-5">
-                    <label class="block mb-3 text-sm font-medium text-gray-700">
-                        <i class="mr-1 fas fa-calculator"></i>
-                        Jumlah yang Diambil
+                <!-- Quantity Section -->
+                <div class="mb-4">
+                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                        Jumlah
                     </label>
-                    <div class="flex items-center justify-center space-x-4">
+                    <div class="flex items-center justify-center space-x-3">
                         <button type="button" onclick="decreaseQuantity()"
-                            class="flex items-center justify-center w-10 h-10 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300">
+                            class="w-8 h-8 text-white rounded-md flex items-center justify-center transition-colors duration-200"
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'">
                             <i class="fas fa-minus"></i>
                         </button>
                         <input type="number" id="quantity" name="quantity" min="1" value="1"
-                            class="w-20 h-10 text-lg font-medium text-center border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                            class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                         <button type="button" onclick="increaseQuantity()"
-                            class="flex items-center justify-center w-10 h-10 text-gray-700 bg-gray-200 rounded-full hover:bg-gray-300">
+                            class="w-8 h-8 text-white rounded-md flex items-center justify-center transition-colors duration-200"
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'">
                             <i class="fas fa-plus"></i>
                         </button>
                     </div>
                 </div>
 
-                <!-- Pengambil -->
-                <div class="mb-5">
-                    <label for="pengambil" class="block mb-3 text-sm font-medium text-gray-700">
-                        <i class="mr-1 fas fa-user"></i>
-                        Nama Pengambil <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="pengambil" name="pengambil" required
-                        class="w-full h-12 px-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Masukkan nama pengambil barang">
-                </div>
-
-                <!-- Bidang -->
-                <div class="mb-5">
-                    <label for="bidang" class="block mb-3 text-sm font-medium text-gray-700">
-                        <i class="mr-1 fas fa-building"></i>
+                <!-- Bidang Section -->
+                <div class="mb-4">
+                    <label for="bidang" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-building text-gray-500 mr-2"></i>
                         Bidang <span class="text-red-500">*</span>
                     </label>
                     <select id="bidang" name="bidang" required
-                        class="w-full h-12 px-3 text-base border-2 border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
-                        <option value="">-- Pilih Bidang --</option>
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                        <option value="">Pilih Bidang</option>
                         @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
                         <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
                 </div>
 
-                <!-- Keterangan -->
-                <div class="mb-5">
-                    <label for="keterangan" class="block mb-3 text-sm font-medium text-gray-700">
-                        <i class="mr-1 fas fa-sticky-note"></i>
-                        Keterangan
+                <!-- Nama Pengambil Section -->
+                <div class="mb-4">
+                    <label for="pengambil" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-user text-gray-500 mr-2"></i>
+                        Nama Pengambil <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="pengambil" name="pengambil" required
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                        placeholder="Masukkan nama pengambil...">
+                </div>
+
+                <!-- Keterangan Section -->
+                <div class="mb-4">
+                    <label for="keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
+                        <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
+                        Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
                     </label>
                     <textarea id="keterangan" name="keterangan" rows="3"
-                        class="w-full px-3 py-3 text-base border-2 border-gray-300 rounded-lg resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Tambahkan keterangan jika diperlukan (opsional)"></textarea>
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors duration-200"
+                        placeholder="Keterangan tambahan..."></textarea>
                 </div>
             </form>
         </div>
 
         <!-- Modal Footer -->
-        <div class="flex justify-end px-6 py-4 space-x-3 border-t border-gray-200 bg-gray-50">
+        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
             <button onclick="closeModal()"
-                class="px-6 py-3 text-base font-medium text-gray-700 bg-white border-2 border-gray-300 rounded-lg hover:bg-gray-50">
-                <i class="mr-2 fas fa-times"></i>
+                class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors duration-200">
                 Batal
             </button>
             <button id="addToCartBtn" onclick="addToCart()"
-                class="px-6 py-3 text-base font-medium text-white bg-blue-600 border-2 border-blue-600 rounded-lg hover:bg-blue-700">
-                <i class="mr-2 fas fa-cart-plus"></i>
+                class="flex-1 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                onmouseout="this.style.backgroundColor='#0074BC'">
                 Tambah ke Keranjang
             </button>
         </div>
@@ -328,10 +336,19 @@ Pengambilan Barang
     /* Modal styles */
     #addToCartModal.show {
         display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
     }
 
     #addToCartModal {
         display: none;
+    }
+
+    #addToCartModal>div {
+        margin: auto;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
     }
 
     /* Custom input number controls */
@@ -343,6 +360,25 @@ Pengambilan Barang
 
     input[type="number"] {
         -moz-appearance: textfield;
+    }
+
+    /* Animation for modal */
+    #addToCartModal {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #addToCartModal.show {
+        opacity: 1;
+    }
+
+    #addToCartModal>div {
+        transform: scale(0.95);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #addToCartModal.show>div {
+        transform: scale(1);
     }
 </style>
 </style>
@@ -374,7 +410,6 @@ function updateCartCount() {
             }
         })
         .catch(error => {
-            console.error('Error updating cart count:', error);
             // Set cart count to 0 if there's an error
             const cartCountElement = document.getElementById('cart-count');
             if (cartCountElement) {
@@ -395,11 +430,14 @@ function handleAddToCart(button) {
 
 // Modal functions
 function showAddToCartModal(barangId, namaBarang, satuan, stok) {
-    console.log('Opening modal with data:', { barangId, namaBarang, satuan, stok });
-
     // Check if stock is 0
     if (stok <= 0) {
-        alert('Barang belum tersedia. Stok saat ini: 0');
+        Swal.fire({
+            icon: 'warning',
+            title: 'Stok Tidak Tersedia',
+            text: 'Barang belum tersedia. Stok saat ini: 0',
+            confirmButtonColor: '#f59e0b'
+        });
         return;
     }
 
@@ -448,8 +486,6 @@ function decreaseQuantity() {
 }
 
 function addToCart() {
-    console.log('AddToCart function called');
-
     const form = document.getElementById('addToCartForm');
     const formData = new FormData(form);
     const addBtn = document.getElementById('addToCartBtn');
@@ -457,108 +493,63 @@ function addToCart() {
     // Check if CSRF token exists
     const csrfToken = document.querySelector('meta[name="csrf-token"]');
     if (!csrfToken) {
-        console.error('CSRF token not found');
-        alert('Error: CSRF token not found. Please refresh the page.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'CSRF token not found. Please refresh the page.',
+            confirmButtonColor: '#d33'
+        });
         return;
     }
 
     // Validate bidang
     if (!formData.get('bidang')) {
-        // Show error state on select
-        const bidangSelect = document.getElementById('bidang');
-        bidangSelect.classList.add('border-red-500');
-        bidangSelect.focus();
-
-        // Create error message
-        let errorMsg = document.getElementById('bidang-error');
-        if (!errorMsg) {
-            errorMsg = document.createElement('p');
-            errorMsg.id = 'bidang-error';
-            errorMsg.className = 'text-red-500 text-sm mt-1 font-medium';
-            errorMsg.textContent = 'Bidang harus dipilih';
-            bidangSelect.parentNode.appendChild(errorMsg);
-        }
-
-        // Remove error after user selects
-        bidangSelect.addEventListener('change', function() {
-            if (this.value) {
-                this.classList.remove('border-red-500');
-                const errorMsg = document.getElementById('bidang-error');
-                if (errorMsg) {
-                    errorMsg.remove();
-                }
-            }
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Silakan pilih bidang terlebih dahulu.',
+            confirmButtonColor: '#f59e0b'
         });
-
         return;
     }
 
     // Validate pengambil
-    if (!formData.get('pengambil')) {
-        // Show error state on input
-        const pengambilInput = document.getElementById('pengambil');
-        pengambilInput.classList.add('border-red-500');
-        pengambilInput.focus();
-
-        // Create error message
-        let errorMsg = document.getElementById('pengambil-error');
-        if (!errorMsg) {
-            errorMsg = document.createElement('p');
-            errorMsg.id = 'pengambil-error';
-            errorMsg.className = 'text-red-500 text-sm mt-1 font-medium';
-            errorMsg.textContent = 'Nama pengambil harus diisi';
-            pengambilInput.parentNode.appendChild(errorMsg);
-        }
-
-        // Remove error after user types
-        pengambilInput.addEventListener('input', function() {
-            if (this.value.trim()) {
-                this.classList.remove('border-red-500');
-                const errorMsg = document.getElementById('pengambil-error');
-                if (errorMsg) {
-                    errorMsg.remove();
-                }
-            }
+    if (!formData.get('pengambil') || formData.get('pengambil').trim() === '') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Nama pengambil harus diisi.',
+            confirmButtonColor: '#f59e0b'
         });
-
         return;
     }
 
-    // Log the data being sent
-    console.log('Sending cart data:', {
-        id_barang: formData.get('id_barang'),
-        quantity: formData.get('quantity'),
-        bidang: formData.get('bidang'),
-        keterangan: formData.get('keterangan'),
-        pengambil: formData.get('pengambil'),
-        csrf_token: csrfToken.getAttribute('content').substring(0, 10) + '...'
-    });
-
     addBtn.disabled = true;
-    addBtn.innerHTML = `
-        <i class="mr-2 fas fa-spinner fa-spin"></i>
-        Menambahkan...
-    `;
+    addBtn.textContent = 'Menambahkan...';
 
     fetch('{{ route("user.cart.add") }}', {
         method: 'POST',
         body: formData,
         headers: {
-            'X-CSRF-TOKEN': csrfToken.getAttribute('content')
+            'X-CSRF-TOKEN': csrfToken.getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
         }
     })
-    .then(response => {
-        console.log('Response status:', response.status);
-        console.log('Response headers:', response.headers);
+    .then(async response => {
+        const responseText = await response.text();
 
         if (!response.ok) {
-            throw new Error(`HTTP error! status: ${response.status}`);
+            throw new Error(`HTTP error! status: ${response.status}, response: ${responseText.substring(0, 200)}...`);
         }
 
-        return response.json();
+        try {
+            return JSON.parse(responseText);
+        } catch (e) {
+            throw new Error(`Invalid JSON response: ${responseText.substring(0, 200)}...`);
+        }
     })
     .then(data => {
-        console.log('Response data:', data);
         if (data.success) {
             closeModal();
             updateCartCount();
@@ -568,22 +559,37 @@ function addToCart() {
             const quantity = parseInt(formData.get('quantity'));
             updateStockDisplay(barangId, quantity);
 
-            // Show success message
-            showMessage(data.message, 'success');
+            // Show SweetAlert success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: data.message,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                toast: true,
+                position: 'top-end'
+            });
         } else {
-            alert(data.message || 'Terjadi kesalahan saat menambahkan ke keranjang.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat menambahkan ke keranjang.',
+                confirmButtonColor: '#d33'
+            });
         }
     })
     .catch(error => {
-        console.error('Error details:', error);
-        alert('Terjadi kesalahan saat menambahkan ke keranjang: ' + error.message);
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            text: 'Terjadi kesalahan saat menambahkan ke keranjang: ' + error.message,
+            confirmButtonColor: '#d33'
+        });
     })
     .finally(() => {
         addBtn.disabled = false;
-        addBtn.innerHTML = `
-            <i class="mr-2 fas fa-cart-plus"></i>
-            Tambah ke Keranjang
-        `;
+        addBtn.textContent = 'Tambah ke Keranjang';
     });
 }
 
@@ -684,7 +690,10 @@ function refreshAllStocks() {
                             // Re-enable button if it was disabled but now has stock
                             button.disabled = false;
                             button.onclick = function() { handleAddToCart(this); };
-                            button.className = 'w-full inline-flex items-center justify-center px-4 py-2 bg-blue-600 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest hover:bg-blue-700 focus:bg-blue-700 active:bg-blue-900 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150';
+                            button.className = 'w-full inline-flex items-center justify-center px-4 py-2 border border-transparent rounded-md font-semibold text-sm text-white tracking-widest focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition ease-in-out duration-150';
+                            button.style.backgroundColor = '#0074BC';
+                            button.onmouseover = function() { this.style.backgroundColor='#005a94'; };
+                            button.onmouseout = function() { this.style.backgroundColor='#0074BC'; };
                             button.innerHTML = `<i class="mr-2 fas fa-cart-plus"></i>
                             Ambil Barang`;
                         }
@@ -692,7 +701,7 @@ function refreshAllStocks() {
                 }
             })
             .catch(error => {
-                console.error('Error refreshing stock for item ' + barangId + ':', error);
+                // Silently handle error for auto-refresh
             });
     });
 }

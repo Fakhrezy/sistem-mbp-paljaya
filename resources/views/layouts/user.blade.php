@@ -31,7 +31,7 @@
     <div class="min-h-screen bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="flex-shrink-0 w-64 overflow-y-auto bg-blue-800 shadow-lg">
+            <div class="flex-shrink-0 w-0 overflow-y-auto bg-blue-800 shadow-lg hidden">
                 <div class="flex flex-col h-full">
                     <!-- Logo -->
                     <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
@@ -64,7 +64,7 @@
                                 Pengambilan Barang
                             </a>
 
-                            <!-- Usulan Pengadaan Link -->
+                            {{-- Usulan Pengadaan Link - Hidden
                             <a href="{{ route('user.usulan.index') }}"
                                 class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-blue-700 {{ request()->routeIs('user.usulan*') ? 'bg-blue-700' : '' }}">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
@@ -75,6 +75,7 @@
                                 </svg>
                                 Usulan Pengadaan
                             </a>
+                            --}}
 
 
                         </div>
@@ -119,22 +120,22 @@
                             SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         </h1>
                         <div class="flex items-center space-x-4">
-                            {{-- <span class="text-sm text-gray-500">
-                                @php
-                                $hari = [
-                                'Sunday' => 'Minggu',
-                                'Monday' => 'Senin',
-                                'Tuesday' => 'Selasa',
-                                'Wednesday' => 'Rabu',
-                                'Thursday' => 'Kamis',
-                                'Friday' => 'Jumat',
-                                'Saturday' => 'Sabtu'
-                                ];
-                                $now = now()->setTimezone('Asia/Jakarta');
-                                $namaHari = $hari[$now->format('l')];
-                                @endphp
-                                {{ $namaHari }}, {{ $now->format('d F Y') }}
-                            </span> --}}
+                            <!-- User Info -->
+                            <div class="flex items-center space-x-3 text-white">
+                                <i class="fas fa-user-circle text-xl"></i>
+                                <span class="text-sm font-medium">{{ Auth::user()->name }}</span>
+                            </div>
+
+                            <!-- Logout Button -->
+                            <form method="POST" action="{{ route('logout') }}" class="inline">
+                                @csrf
+                                <button type="submit"
+                                    class="flex items-center px-3 py-2 text-sm font-medium bg-white rounded-lg transition-colors duration-200 border border-white hover:bg-gray-100"
+                                    style="color: #0074BC;">
+                                    <i class="fas fa-sign-out-alt mr-2"></i>
+                                    Logout
+                                </button>
+                            </form>
                         </div>
                     </div>
                 </header>

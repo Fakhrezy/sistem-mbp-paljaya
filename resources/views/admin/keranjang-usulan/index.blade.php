@@ -92,8 +92,9 @@
         <div class="flex justify-end mt-6">
             <form action="{{ route('admin.pengadaan.store-batch') }}" method="POST">
                 @csrf
-                <button type="submit"
-                    class="px-6 py-2 text-white transition duration-200 bg-blue-500 rounded hover:bg-blue-600">
+                <button type="submit" class="px-6 py-2 text-white transition duration-200 rounded"
+                    style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                    onmouseout="this.style.backgroundColor='#0074BC'">
                     Ajukan Usulan
                 </button>
             </form>

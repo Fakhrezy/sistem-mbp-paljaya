@@ -55,11 +55,12 @@ class BarangController extends Controller
             'nama_barang' => 'required',
             'satuan' => 'required',
             'harga_barang' => 'required|numeric',
+            'stok' => 'required|numeric|min:0',
             'jenis' => 'required|in:atk,cetak,tinta',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $data = $request->all();
+        $data = $request->only(['nama_barang', 'satuan', 'harga_barang', 'stok', 'jenis']);
 
         if ($request->hasFile('foto')) {
             $foto = $request->file('foto');
@@ -81,18 +82,17 @@ class BarangController extends Controller
     public function update(Request $request, $id)
     {
         $barang = Barang::findOrFail($id);
-        $oldStok = $barang->stok; // Simpan stok lama
 
         $request->validate([
             'nama_barang' => 'required',
             'satuan' => 'required',
             'harga_barang' => 'required|numeric',
-            'stok' => 'required|numeric|min:0',
             'jenis' => 'required|in:atk,cetak,tinta',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        $data = $request->all();
+        // Exclude stok from update data - stok should not be editable manually
+        $data = $request->only(['nama_barang', 'satuan', 'harga_barang', 'jenis']);
 
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
@@ -105,20 +105,10 @@ class BarangController extends Controller
             $data['foto'] = $path;
         }
 
-        DB::beginTransaction();
         try {
             $barang->update($data);
-
-            // Jika stok berubah, update saldo di monitoring barang dan pengadaan
-            if ($oldStok != $request->stok) {
-                $this->updateMonitoringBarangSaldo($barang->id_barang, $request->stok);
-                $this->updateMonitoringPengadaanSaldo($barang->id_barang, $request->stok);
-            }
-
-            DB::commit();
             return redirect()->route('admin.barang')->with('success', 'Barang berhasil diperbarui');
         } catch (\Exception $e) {
-            DB::rollBack();
             return redirect()->route('admin.barang')->with('error', 'Gagal mengupdate barang: ' . $e->getMessage());
         }
     }

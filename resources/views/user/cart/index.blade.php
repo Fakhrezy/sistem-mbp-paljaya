@@ -18,13 +18,13 @@ Keranjang Barang
                         </div>
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('user.pengambilan.index') }}"
-                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out bg-gray-600 border border-transparent rounded-md hover:bg-gray-700 focus:bg-gray-700 active:bg-gray-900 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-400 focus:ring-offset-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" class="w-4 h-4 mr-2" fill="none"
                                     viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M10 19l-7-7m0 0l7-7m-7 7h18" />
                                 </svg>
-                                Kembali ke Katalog
+                                Kembali
                             </a>
                         </div>
                     </div>
@@ -52,72 +52,116 @@ Keranjang Barang
 </div>
 
 <!-- Edit Item Modal -->
-<div id="editItemModal" class="fixed inset-0 hidden w-full h-full overflow-y-auto bg-gray-600 bg-opacity-50">
-    <div class="relative p-5 mx-auto bg-white border rounded-md shadow-lg top-20 w-96">
-        <div class="mt-3 text-center">
-            <h3 class="text-lg font-medium leading-6 text-gray-900">Edit Item Keranjang</h3>
-            <div class="py-3 mt-2 px-7">
-                <form id="editItemForm">
-                    @csrf
-                    <input type="hidden" id="edit_cart_id" name="cart_id">
-
-                    <div class="mb-4">
-                        <label class="block mb-2 text-sm font-medium text-gray-700">Nama Barang:</label>
-                        <p class="text-sm font-semibold text-gray-900" id="edit_barang_nama"></p>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="edit_quantity" class="block mb-2 text-sm font-medium text-gray-700">Jumlah:</label>
-                        <div class="flex items-center">
-                            <button type="button" onclick="editDecreaseQuantity()"
-                                class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-l hover:bg-gray-300">-</button>
-                            <input type="number" id="edit_quantity" name="quantity" min="1" value="1"
-                                class="w-20 py-1 text-center transition duration-150 ease-in-out border-t border-b border-gray-300 focus:ring-blue-500 focus:border-blue-500">
-                            <button type="button" onclick="editIncreaseQuantity()"
-                                class="px-3 py-1 transition duration-150 ease-in-out bg-gray-200 rounded-r hover:bg-gray-300">+</button>
-                        </div>
-                        <p class="mt-1 text-xs text-gray-500">Maksimal: <span id="edit_max_stock"></span> <span
-                                id="edit_satuan"></span></p>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="edit_bidang" class="block mb-2 text-sm font-medium text-gray-700">Bidang:</label>
-                        <select id="edit_bidang" name="bidang" required
-                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500">
-                            <option value="">Pilih Bidang</option>
-                            @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
-                            <option value="{{ $key }}">{{ $label }}</option>
-                            @endforeach
-                        </select>
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="edit_pengambil" class="block mb-2 text-sm font-medium text-gray-700">Nama
-                            Pengambil:</label>
-                        <input type="text" id="edit_pengambil" name="pengambil" required
-                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Masukkan nama pengambil...">
-                    </div>
-
-                    <div class="mb-4">
-                        <label for="edit_keterangan" class="block mb-2 text-sm font-medium text-gray-700">Keterangan
-                            (opsional):</label>
-                        <textarea id="edit_keterangan" name="keterangan" rows="3"
-                            class="w-full px-3 py-2 transition duration-150 ease-in-out border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500"
-                            placeholder="Keterangan tambahan..."></textarea>
-                    </div>
-                </form>
-            </div>
-            <div class="items-center px-4 py-3">
-                <button id="updateItemBtn" onclick="updateCartItem()"
-                    class="w-full px-4 py-2 text-base font-medium text-white transition duration-150 ease-in-out bg-blue-500 rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-300">
-                    Update
-                </button>
-                <button onclick="closeEditModal()"
-                    class="w-full px-4 py-2 mt-3 text-base font-medium text-black transition duration-150 ease-in-out bg-gray-300 rounded-md shadow-sm hover:bg-gray-400 focus:outline-none focus:ring-2 focus:ring-gray-300">
-                    Batal
+<div id="editItemModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
+    <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 rounded-t-lg" style="background-color: #0074BC;">
+            <div class="flex items-center justify-between">
+                <h3 class="text-lg font-semibold text-white">
+                    Edit Item Keranjang
+                </h3>
+                <button onclick="closeEditModal()" class="text-white hover:text-blue-200">
+                    <i class="fas fa-times"></i>
                 </button>
             </div>
+        </div>
+
+        <!-- Modal Body -->
+        <div class="p-6">
+            <form id="editItemForm">
+                @csrf
+                <input type="hidden" id="edit_cart_id" name="cart_id">
+
+                <!-- Nama Barang Section -->
+                <div class="mb-4">
+                    <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-box"></i>
+                        Nama Barang
+                    </label>
+                    <div class="p-3 border border-gray-300 rounded-md bg-gray-50">
+                        <p id="edit_barang_nama" class="font-medium text-gray-900">Loading...</p>
+                        <p class="mt-1 text-sm text-gray-500">
+                            Stok tersedia: <span id="edit_max_stock" class="font-semibold">0</span> <span
+                                id="edit_satuan">pcs</span>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Quantity Section -->
+                <div class="mb-4">
+                    <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-calculator"></i>
+                        Jumlah
+                    </label>
+                    <div class="flex items-center justify-center space-x-3">
+                        <button type="button" onclick="editDecreaseQuantity()"
+                            class="flex items-center justify-center w-8 h-8 text-white transition-colors duration-200 rounded-md"
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'">
+                            <i class="fas fa-minus"></i>
+                        </button>
+                        <input type="number" id="edit_quantity" name="quantity" min="1" value="1"
+                            class="w-16 h-8 text-center transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <button type="button" onclick="editIncreaseQuantity()"
+                            class="flex items-center justify-center w-8 h-8 text-white transition-colors duration-200 rounded-md"
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'">
+                            <i class="fas fa-plus"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Bidang Section -->
+                <div class="mb-4">
+                    <label for="edit_bidang" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-building"></i>
+                        Bidang <span class="text-red-500">*</span>
+                    </label>
+                    <select id="edit_bidang" name="bidang" required
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
+                        <option value="">Pilih Bidang</option>
+                        @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
+                        <option value="{{ $key }}">{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+
+                <!-- Nama Pengambil Section -->
+                <div class="mb-4">
+                    <label for="edit_pengambil" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-user"></i>
+                        Nama Pengambil <span class="text-red-500">*</span>
+                    </label>
+                    <input type="text" id="edit_pengambil" name="pengambil" required
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Masukkan nama pengambil...">
+                </div>
+
+                <!-- Keterangan Section -->
+                <div class="mb-4">
+                    <label for="edit_keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-sticky-note"></i>
+                        Keterangan <span class="text-xs text-gray-400">(opsional)</span>
+                    </label>
+                    <textarea id="edit_keterangan" name="keterangan" rows="3"
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                        placeholder="Keterangan tambahan..."></textarea>
+                </div>
+            </form>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="flex px-6 py-4 space-x-3 rounded-b-lg bg-gray-50">
+            <button onclick="closeEditModal()"
+                class="flex-1 px-4 py-2 font-semibold text-white transition-colors duration-200 bg-gray-500 rounded-md hover:bg-gray-600">
+                Batal
+            </button>
+            <button id="updateItemBtn" onclick="updateCartItem()"
+                class="flex-1 px-4 py-2 font-semibold text-white transition-colors duration-200 rounded-md"
+                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                onmouseout="this.style.backgroundColor='#0074BC'">
+                Simpan
+            </button>
         </div>
     </div>
 </div>
@@ -185,13 +229,11 @@ function loadCartContent() {
         if (cartContent) {
             document.getElementById('cart-container').innerHTML = cartContent.outerHTML;
         } else {
-            console.warn('Cart content not found in response');
             // Reload the page if partial content fails
             window.location.reload();
         }
     })
     .catch(error => {
-        console.error('Error loading cart:', error);
         showMessage('Gagal memuat keranjang. Silakan refresh halaman.', 'error');
     });
 }
@@ -222,37 +264,65 @@ function updateQuantity(cartId, change) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         showMessage('Terjadi kesalahan saat mengupdate quantity.', 'error');
     });
 }
 
 // Remove item from cart
 function removeItem(cartId) {
-    if (!confirm('Yakin ingin menghapus item ini dari keranjang?')) {
-        return;
-    }
-
-    const formData = new FormData();
-    formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
-    formData.append('_method', 'DELETE');
-
-    fetch(`{{ url('user/cart/remove') }}/${cartId}`, {
-        method: 'POST',
-        body: formData
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            showMessage(data.message, 'success');
-            loadCartContent();
-        } else {
-            showMessage(data.message || 'Terjadi kesalahan saat menghapus item.', 'error');
+    Swal.fire({
+        title: 'Hapus Item?',
+        text: 'Yakin ingin menghapus item ini dari keranjang?',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#6b7280',
+        cancelButtonColor: '#3085d6',
+        confirmButtonText: '<i class="fas fa-trash"></i> Hapus!',
+        cancelButtonText: '<i class="fas fa-times"></i> Batal'
+    }).then((result) => {
+        if (!result.isConfirmed) {
+            return;
         }
-    })
-    .catch(error => {
-        console.error('Error:', error);
-        showMessage('Terjadi kesalahan saat menghapus item.', 'error');
+
+        const formData = new FormData();
+        formData.append('_token', document.querySelector('meta[name="csrf-token"]').getAttribute('content'));
+        formData.append('_method', 'DELETE');
+
+        fetch(`{{ url('user/cart/remove') }}/${cartId}`, {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                loadCartContent();
+                Swal.fire({
+                    icon: 'success',
+                    title: 'Berhasil!',
+                    text: data.message,
+                    showConfirmButton: false,
+                    timer: 2000,
+                    timerProgressBar: true,
+                    toast: true,
+                    position: 'top-end'
+                });
+            } else {
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Gagal!',
+                    text: data.message || 'Terjadi kesalahan saat menghapus item.',
+                    confirmButtonColor: '#d33'
+                });
+            }
+        })
+        .catch(error => {
+            Swal.fire({
+                icon: 'error',
+                title: 'Terjadi Kesalahan!',
+                text: 'Terjadi kesalahan saat menghapus item.',
+                confirmButtonColor: '#d33'
+            });
+        });
     });
 }
 
@@ -311,7 +381,6 @@ function clearCart() {
                 }
             })
             .catch(error => {
-                console.error('Error:', error);
                 Swal.fire({
                     title: 'Error!',
                     text: 'Terjadi kesalahan saat mengosongkan keranjang.',
@@ -335,11 +404,22 @@ function showEditModal(cartId, namaBarang, quantity, bidang, keterangan, pengamb
     document.getElementById('edit_pengambil').value = pengambil || '';
     document.getElementById('edit_max_stock').textContent = maxStock;
     document.getElementById('edit_satuan').textContent = satuan;
-    document.getElementById('editItemModal').classList.remove('hidden');
+
+    const modal = document.getElementById('editItemModal');
+    modal.classList.remove('hidden');
+    document.body.style.overflow = 'hidden'; // Prevent background scroll
+    setTimeout(() => {
+        modal.classList.add('show');
+    }, 10);
 }
 
 function closeEditModal() {
-    document.getElementById('editItemModal').classList.add('hidden');
+    const modal = document.getElementById('editItemModal');
+    modal.classList.remove('show');
+    document.body.style.overflow = 'auto'; // Restore background scroll
+    setTimeout(() => {
+        modal.classList.add('hidden');
+    }, 300);
 }
 
 function editIncreaseQuantity() {
@@ -365,9 +445,27 @@ function updateCartItem() {
     const updateBtn = document.getElementById('updateItemBtn');
     const cartId = document.getElementById('edit_cart_id').value;
 
-    // Validate bidang
-    if (!formData.get('bidang')) {
-        alert('Silakan pilih bidang terlebih dahulu.');
+    // Validate required fields
+    const bidang = formData.get('bidang');
+    const pengambil = formData.get('pengambil');
+
+    if (!bidang) {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Silakan pilih bidang terlebih dahulu.',
+            confirmButtonColor: '#f59e0b'
+        });
+        return;
+    }
+
+    if (!pengambil || pengambil.trim() === '') {
+        Swal.fire({
+            icon: 'warning',
+            title: 'Perhatian!',
+            text: 'Nama pengambil harus diisi.',
+            confirmButtonColor: '#f59e0b'
+        });
         return;
     }
 
@@ -378,7 +476,9 @@ function updateCartItem() {
         method: 'POST',
         body: formData,
         headers: {
-            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            'X-Requested-With': 'XMLHttpRequest',
+            'Accept': 'application/json'
         }
     })
     .then(response => response.json())
@@ -386,14 +486,34 @@ function updateCartItem() {
         if (data.success) {
             closeEditModal();
             loadCartContent();
-            showMessage(data.message, 'success');
+
+            // Show SweetAlert success message
+            Swal.fire({
+                icon: 'success',
+                title: 'Berhasil!',
+                text: data.message,
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true,
+                toast: true,
+                position: 'top-end'
+            });
         } else {
-            alert(data.message || 'Terjadi kesalahan saat mengupdate item.');
+            Swal.fire({
+                icon: 'error',
+                title: 'Gagal!',
+                text: data.message || 'Terjadi kesalahan saat mengupdate item.',
+                confirmButtonColor: '#d33'
+            });
         }
     })
     .catch(error => {
-        console.error('Error:', error);
-        alert('Terjadi kesalahan saat mengupdate item.');
+        Swal.fire({
+            icon: 'error',
+            title: 'Terjadi Kesalahan!',
+            text: 'Terjadi kesalahan saat mengupdate item.',
+            confirmButtonColor: '#d33'
+        });
     })
     .finally(() => {
         updateBtn.disabled = false;
@@ -451,8 +571,9 @@ function processCheckoutDirect(bidang) {
                 title: 'Berhasil!',
                 text: data.message,
                 icon: 'success',
-                confirmButtonColor: '#16a34a',
-                confirmButtonText: '<i class="mr-2 fas fa-check"></i>OK'
+                showConfirmButton: false,
+                timer: 2000,
+                timerProgressBar: true
             }).then(() => {
                 loadCartContent(); // Refresh cart content
             });
@@ -467,7 +588,6 @@ function processCheckoutDirect(bidang) {
         }
     })
     .catch(error => {
-        console.error('Error:', error);
         Swal.fire({
             title: 'Error!',
             text: 'Terjadi kesalahan saat pencatatan pengambilan.',
@@ -478,7 +598,7 @@ function processCheckoutDirect(bidang) {
     });
 }
 
-// Close modals when clicking outside
+    // Close modals when clicking outside
 window.onclick = function(event) {
     const editModal = document.getElementById('editItemModal');
 
@@ -486,6 +606,66 @@ window.onclick = function(event) {
         closeEditModal();
     }
 }
+
+// Close modal with ESC key
+document.addEventListener('keydown', function(event) {
+    if (event.key === 'Escape') {
+        const modal = document.getElementById('editItemModal');
+        if (!modal.classList.contains('hidden')) {
+            closeEditModal();
+        }
+    }
+});
 </script>
+
+<style>
+    /* Modal styles */
+    #editItemModal.show {
+        display: flex !important;
+        align-items: center;
+        justify-content: center;
+        padding: 1rem;
+    }
+
+    #editItemModal {
+        display: none;
+    }
+
+    #editItemModal>div {
+        margin: auto;
+        max-height: calc(100vh - 2rem);
+        overflow-y: auto;
+    }
+
+    /* Custom input number controls */
+    input[type="number"]::-webkit-outer-spin-button,
+    input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+    }
+
+    input[type="number"] {
+        -moz-appearance: textfield;
+    }
+
+    /* Animation for modal */
+    #editItemModal {
+        opacity: 0;
+        transition: opacity 0.3s ease-in-out;
+    }
+
+    #editItemModal.show {
+        opacity: 1;
+    }
+
+    #editItemModal>div {
+        transform: scale(0.95);
+        transition: transform 0.3s ease-in-out;
+    }
+
+    #editItemModal.show>div {
+        transform: scale(1);
+    }
+</style>
 
 @endsection

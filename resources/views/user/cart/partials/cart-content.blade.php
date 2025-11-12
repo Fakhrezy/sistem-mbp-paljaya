@@ -1,10 +1,10 @@
 <div id="cart-content">
     @if($cartByBidang->count() > 0)
     <!-- Summary -->
-    <div class="bg-blue-50 border-l-4 border-blue-400 p-4 mb-6">
+    <div class="p-4 mb-6 border-l-4 border-blue-400 bg-blue-50">
         <div class="flex">
             <div class="flex-shrink-0">
-                <i class="fas fa-info-circle text-blue-400"></i>
+                <i class="text-blue-400 fas fa-info-circle"></i>
             </div>
             <div class="ml-3">
                 <p class="text-sm text-blue-700">
@@ -17,30 +17,30 @@
 
     <!-- Cart Items Grouped by Bidang -->
     @foreach($cartByBidang as $bidang => $items)
-    <div class="mb-8 border border-gray-200 rounded-lg overflow-hidden">
+    <div class="mb-8 overflow-hidden border border-gray-200 rounded-lg">
         <!-- Bidang Header -->
-        <div class="bg-gray-50 px-6 py-4 border-b border-gray-200">
-            <h3 class="text-lg font-semibold text-gray-800 flex items-center">
+        <div class="px-6 py-4 border-b border-gray-200 bg-gray-50">
+            <h3 class="flex items-center text-lg font-semibold text-gray-800">
                 @switch($bidang)
                 @case('umum')
-                <i class="fas fa-building mr-2 text-gray-600"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('perencanaan')
-                <i class="fas fa-building mr-2 text-gray-600"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('keuangan')
-                <i class="fas fa-building mr-2 text-gray-600"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @case('operasional')
-                <i class="fas fa-building mr-2 text-gray-600"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @break
                 @default
-                <i class="fas fa-building mr-2 text-gray-600"></i>
+                <i class="mr-2 text-gray-600 fas fa-building"></i>
                 @endswitch
                 Bidang: {{ \App\Constants\BidangConstants::getBidangName($bidang) }}
                 <span
                     class="ml-2 bg-blue-100 text-blue-800 text-xs font-medium px-2.5 py-0.5 rounded flex items-center">
-                    <i class="fas fa-list mr-1"></i>{{ $items->count() }} item
+                    <i class="mr-1 fas fa-list"></i>{{ $items->count() }} item
                 </span>
             </h3>
         </div>
@@ -53,51 +53,51 @@
                     <div class="flex-1">
                         <div class="flex items-start justify-between">
                             <div>
-                                <h4 class="text-lg font-medium text-gray-900 flex items-center">
-                                    <i class="fas fa-box mr-2 text-gray-500"></i>{{ $item->barang->nama_barang }}
+                                <h4 class="flex items-center text-lg font-medium text-gray-900">
+                                    <i class="mr-2 text-gray-500 fas fa-box"></i>{{ $item->barang->nama_barang }}
                                 </h4>
-                                <p class="text-sm text-gray-600 mt-1 flex items-center">
+                                <p class="flex items-center mt-1 text-sm text-gray-600">
                                     @switch($item->barang->jenis)
                                     @case('atk')
-                                    <i class="fas fa-pen mr-1 text-gray-500"></i>Jenis: ATK
+                                    <i class="mr-1 text-gray-500 fas fa-pen"></i>Jenis: ATK
                                     @break
                                     @case('cetak')
-                                    <i class="fas fa-print mr-1 text-gray-500"></i>Jenis: Cetakan
+                                    <i class="mr-1 text-gray-500 fas fa-print"></i>Jenis: Cetakan
                                     @break
                                     @case('tinta')
-                                    <i class="fas fa-tint mr-1 text-gray-500"></i>Jenis: Tinta
+                                    <i class="mr-1 text-gray-500 fas fa-tint"></i>Jenis: Tinta
                                     @break
                                     @default
-                                    <i class="fas fa-tag mr-1 text-gray-500"></i>Jenis: {{ ucfirst($item->barang->jenis)
+                                    <i class="mr-1 text-gray-500 fas fa-tag"></i>Jenis: {{ ucfirst($item->barang->jenis)
                                     }}
                                     @endswitch
                                 </p>
-                                <p class="text-sm text-gray-500 flex items-center">
-                                    <i class="fas fa-ruler mr-1 text-gray-400"></i>Satuan: {{ $item->barang->satuan }}
+                                <p class="flex items-center text-sm text-gray-500">
+                                    <i class="mr-1 text-gray-400 fas fa-ruler"></i>Satuan: {{ $item->barang->satuan }}
                                 </p>
                                 @if($item->pengambil)
-                                <p class="text-sm text-gray-600 mt-1 flex items-center">
-                                    <i class="fas fa-user mr-1 text-gray-500"></i>Pengambil: {{ $item->pengambil }}
+                                <p class="flex items-center mt-1 text-sm text-gray-600">
+                                    <i class="mr-1 text-gray-500 fas fa-user"></i>Pengambil: {{ $item->pengambil }}
                                 </p>
                                 @endif
                                 @if($item->keterangan)
-                                <p class="text-sm text-gray-600 mt-1 flex items-center">
-                                    <i class="fas fa-comment mr-1 text-blue-500"></i>{{ $item->keterangan }}
+                                <p class="flex items-center mt-1 text-sm text-gray-600">
+                                    <i class="mr-1 text-blue-500 fas fa-comment"></i>{{ $item->keterangan }}
                                 </p>
                                 @endif
-                                <p class="text-xs text-gray-400 mt-1 flex items-center">
-                                    <i class="fas fa-clock mr-1"></i>Ditambahkan: {{ $item->created_at->format('d/m/Y
+                                <p class="flex items-center mt-1 text-xs text-gray-400">
+                                    <i class="mr-1 fas fa-clock"></i>Ditambahkan: {{ $item->created_at->format('d/m/Y
                                     H:i')
                                     }}
                                 </p>
                             </div>
                             <div class="text-right">
-                                <span class="text-lg font-semibold text-gray-900 flex items-center justify-end">
-                                    <i class="fas fa-shopping-cart mr-2 text-blue-500"></i>{{ $item->quantity }} {{
+                                <span class="flex items-center justify-end text-lg font-semibold text-gray-900">
+                                    <i class="mr-2 text-blue-500 fas fa-shopping-cart"></i>{{ $item->quantity }} {{
                                     $item->barang->satuan }}
                                 </span>
-                                <p class="text-sm text-gray-500 flex items-center justify-end">
-                                    <i class="fas fa-warehouse mr-1 text-gray-500"></i>Stok tersedia: {{
+                                <p class="flex items-center justify-end text-sm text-gray-500">
+                                    <i class="mr-1 text-gray-500 fas fa-warehouse"></i>Stok tersedia: {{
                                     $item->barang->stok
                                     }}
                                 </p>
@@ -106,18 +106,21 @@
                     </div>
 
                     <!-- Action Buttons -->
-                    <div class="flex items-center space-x-2 ml-4">
+                    <div class="flex items-center ml-4 space-x-2">
                         <!-- Edit Button -->
                         <button
                             onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', '{{ addslashes($item->pengambil ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"
-                            class="w-8 h-8 bg-blue-500 hover:bg-blue-700 text-white rounded transition ease-in-out duration-150 inline-flex items-center justify-center"
+                            class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out rounded"
+                            style="background-color: #0074BC;"
+                            onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'"
                             title="Edit item dalam keranjang">
                             <i class="fas fa-edit"></i>
                         </button>
 
                         <!-- Remove Button -->
                         <button onclick="removeItem({{ $item->id }})"
-                            class="w-8 h-8 bg-gray-400 hover:bg-gray-500 text-white rounded transition ease-in-out duration-150 inline-flex items-center justify-center"
+                            class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-gray-400 rounded hover:bg-gray-500"
                             title="Hapus item dari keranjang">
                             <i class="fas fa-trash-alt"></i>
                         </button>
@@ -127,8 +130,8 @@
             </div>
 
             <!-- Bidang Action Section -->
-            <div class="mt-6 pt-4 border-t border-gray-200">
-                <div class="flex justify-between items-center">
+            <div class="pt-4 mt-6 border-t border-gray-200">
+                <div class="flex items-center justify-between">
                     <div class="text-sm text-gray-600">
                         <span class="font-medium">{{ $items->count() }} item</span> •
                         <span class="font-medium">{{ $items->sum('quantity') }} unit</span> dalam bidang {{
@@ -136,9 +139,12 @@
                         }}
                     </div>
                     <button onclick="submitPengambilanBidang('{{ $bidang }}')"
-                        class="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded-lg transition ease-in-out duration-150 inline-flex items-center"
+                        class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out rounded-lg"
+                        style="background-color: #0074BC;"
+                        onmouseover="this.style.backgroundColor='#005a94'"
+                        onmouseout="this.style.backgroundColor='#0074BC'"
                         title="Ajukan pengambilan untuk bidang {{ \App\Constants\BidangConstants::getBidangName($bidang) }}">
-                        <i class="fas fa-paper-plane mr-2"></i>Ajukan Pengambilan
+                        <i class="mr-2 fas fa-paper-plane"></i>Ajukan Pengambilan
                     </button>
                 </div>
             </div>
@@ -147,27 +153,29 @@
     @endforeach
 
     <!-- Action Buttons -->
-    <div class="flex justify-center items-center pt-6 border-t border-gray-200">
+    <div class="flex items-center justify-center pt-6 border-t border-gray-200">
         <button onclick="clearCart()"
-            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center"
+            class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-red-500 rounded hover:bg-red-700"
             title="Hapus semua item dari keranjang">
-            <i class="fas fa-trash-alt mr-2"></i>Kosongkan Semua Keranjang
+            <i class="mr-2 fas fa-trash-alt"></i>Kosongkan Semua Keranjang
         </button>
     </div>
 
     @else
     <!-- Empty Cart -->
-    <div class="text-center py-12">
+    <div class="py-12 text-center">
         <div class="mb-4">
-            <i class="fas fa-shopping-cart text-6xl text-gray-400"></i>
+            <i class="text-6xl text-gray-400 fas fa-shopping-cart"></i>
         </div>
-        <h2 class="text-xl font-semibold text-gray-600 mb-2 flex items-center justify-center">
-            <i class="fas fa-info-circle mr-2 text-blue-500"></i>Belum Ada Item untuk Diambil
+        <h2 class="flex items-center justify-center mb-6 text-xl font-semibold text-gray-600">
+            <i class="mr-2 text-blue-500 fas fa-info-circle"></i>Belum Ada Item untuk Diambil
         </h2>
-        <p class="text-gray-500 mb-6">Anda belum menambahkan barang ATK untuk diambil</p>
         <a href="{{ route('user.pengambilan.index') }}"
-            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded transition ease-in-out duration-150 inline-flex items-center">
-            <i class="fas fa-plus mr-2"></i>Pilih Barang ATK
+            class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out rounded"
+            style="background-color: #0074BC;"
+            onmouseover="this.style.backgroundColor='#005a94'"
+            onmouseout="this.style.backgroundColor='#0074BC'">
+            <i class="mr-2 fas fa-plus"></i>Ambil Barang
         </a>
     </div>
     @endif

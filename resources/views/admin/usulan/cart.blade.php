@@ -139,8 +139,10 @@ SISTEM MONITORING BARANG HABIS PAKAI
 								<!-- Edit Button -->
 								<button
 									onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->jumlah }}, '{{ addslashes($item->keterangan ?? '') }}', '{{ $item->barang->satuan }}')"
-									class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700"
-									title="Edit usulan">
+									class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out rounded"
+									style="background-color: #0074BC;"
+									onmouseover="this.style.backgroundColor='#005a94'"
+									onmouseout="this.style.backgroundColor='#0074BC'" title="Edit usulan">
 									<i class="fas fa-edit"></i>
 								</button>
 
@@ -163,8 +165,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
 							<i class="mr-2 fas fa-trash-alt"></i>Kosongkan Keranjang
 						</button>
 						<button onclick="submitUsulan()"
-							class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out bg-blue-500 rounded-lg hover:bg-blue-600"
-							title="Catat semua Penambahan">
+							class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out rounded-lg"
+							style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+							onmouseout="this.style.backgroundColor='#0074BC'" title="Catat semua Penambahan">
 							<i class="mr-2 fas fa-paper-plane"></i>Catat Penambahan
 						</button>
 					</div>
@@ -179,7 +182,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
 						</h2>
 						<p class="mb-6 text-gray-500">Anda belum menambahkan barang</p>
 						<a href="{{ route('admin.usulan.index') }}"
-							class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out bg-blue-500 rounded hover:bg-blue-700">
+							class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out rounded focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+							style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+							onmouseout="this.style.backgroundColor='#0074BC'">
 							<i class="mr-2 fas fa-plus"></i>Tambah Barang
 						</a>
 					</div>
@@ -263,7 +268,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
 					Batal
 				</button>
 				<button type="button" onclick="updateItem()"
-					class="flex-1 px-4 py-2 font-semibold text-white bg-blue-600 rounded-md">
+					class="flex-1 px-4 py-2 font-semibold text-white rounded-md" style="background-color: #0074BC;"
+					onmouseover="this.style.backgroundColor='#005a94'"
+					onmouseout="this.style.backgroundColor='#0074BC'">
 					Simpan
 				</button>
 			</div>

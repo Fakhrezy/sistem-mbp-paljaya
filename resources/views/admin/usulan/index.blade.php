@@ -20,7 +20,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
                         <!-- Cart Link -->
                         <div class="flex items-center space-x-4">
                             <a href="{{ route('admin.usulan.cart.index') }}"
-                                class="inline-flex items-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
+                                class="inline-flex items-center rounded-md border border-transparent px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-offset-2"
+                                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                                onmouseout="this.style.backgroundColor='#0074BC'">
                                 <i class="fas fa-shopping-cart mr-2"></i>
                                 Keranjang
                                 <span id="cart-count"
@@ -152,7 +154,9 @@ SISTEM MONITORING BARANG HABIS PAKAI
                             <!-- Action Button -->
                             <button
                                 onclick="showUsulanModal('{{ $item->id_barang }}', '{{ addslashes($item->nama_barang) }}', '{{ $item->satuan }}')"
-                                class="inline-flex w-full items-center justify-center rounded-md border border-transparent bg-blue-600 px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out hover:bg-blue-700 focus:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 active:bg-blue-900">
+                                class="inline-flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                                onmouseout="this.style.backgroundColor='#0074BC'">
                                 <i class="mr-2 fas fa-cart-plus"></i>
                                 Tambah Barang
                             </button>
@@ -281,7 +285,8 @@ SISTEM MONITORING BARANG HABIS PAKAI
                 Batal
             </button>
             <button id="submitUsulanBtn" onclick="submitUsulan()"
-                class="flex-1 bg-blue-600 text-white font-semibold py-2 px-4 rounded-md">
+                class="flex-1 text-white font-semibold py-2 px-4 rounded-md" style="background-color: #0074BC;"
+                onmouseover="this.style.backgroundColor='#005a94'" onmouseout="this.style.backgroundColor='#0074BC'">
                 Tambah ke Keranjang
             </button>
         </div>
