@@ -32,7 +32,7 @@ class RegisteredUserController extends Controller
     {
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
+            'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:' . User::class],
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
             'bidang' => ['required', 'string', 'in:teknik,pemasaran,umum,keuangan'],
         ]);
@@ -47,8 +47,7 @@ class RegisteredUserController extends Controller
 
         event(new Registered($user));
 
-        Auth::login($user);
-
-        return redirect(RouteServiceProvider::HOME);
+        // Don't auto-login, redirect to login page with success message
+        return redirect()->route('login')->with('success', 'Akun berhasil dibuat! Silakan login dengan akun Anda.');
     }
 }

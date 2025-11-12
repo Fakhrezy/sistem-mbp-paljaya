@@ -34,3 +34,8 @@ RUN chown -R www-data:www-data /var/www
 
 # Set up environment file and generate key
 RUN cp .env.example .env && php artisan key:generate
+
+# Create storage link and set permissions
+RUN php artisan storage:link && \
+    chmod -R 775 storage && \
+    chmod -R 775 public/storage

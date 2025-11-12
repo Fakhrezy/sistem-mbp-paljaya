@@ -65,3 +65,5 @@ networks:
 volumes:
   sail-mysql:
     driver: local
+  sail-storage:
+    driver: local

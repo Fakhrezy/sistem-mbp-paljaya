@@ -233,8 +233,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 <td class="px-6 py-4 border border-gray-300 whitespace-nowrap">
                                     @if($item->foto)
                                     <div class="flex justify-center p-1">
-                                        <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nama_barang }}"
-                                            style="width: 90px; height: 90px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);">
+                                        <img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}"
+                                            style="width: 90px; height: 90px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.05);"
+                                            onerror="this.style.display='none'; this.nextElementSibling.classList.remove('hidden'); this.nextElementSibling.classList.add('flex');">
+                                        <div class="hidden items-center justify-center"
+                                            style="width: 90px; height: 90px; background-color: #f3f4f6; border-radius: 0.375rem;">
+                                            <span class="text-xs text-gray-500">No Image</span>
+                                        </div>
                                     </div>
                                     @else
                                     <span

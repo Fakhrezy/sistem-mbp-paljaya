@@ -1,0 +1,27 @@
+publish flow local
+
+set IP static
+ipconfig
+192.168.20.xx
+subnet
+255.255.255.0
+gateway
+192.168.20.1
+dns
+8.8.8.8
+8.8.4.4
+
+set Firewall off
+windows defender
+-> inbound rules
+-> new rule
+-> port
+-> TCP 8000
+-> allow the connection
+-> domain, private, public
+-> name: sismon barang
+-> finish
+
+run project
+cd c:\laragon\www\sistem-mbp-paljaya
+php artisan serve --host=192.168.20.xx --port=8000
