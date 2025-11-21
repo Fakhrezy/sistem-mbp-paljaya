@@ -26,11 +26,11 @@ class AuthenticatedSessionController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $request->validate([
-            'email' => 'required|email',
+            'name' => 'required|string',
             'password' => 'required',
         ]);
 
-        Auth::attempt($request->only('email', 'password'));
+        Auth::attempt($request->only('name', 'password'));
 
         $request->session()->regenerate();
 

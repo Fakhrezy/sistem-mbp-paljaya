@@ -333,7 +333,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         @if($item->pengambil)
                                         <div class="flex items-center space-x-2">
                                             <i class="text-blue-500 fas fa-user"></i>
-                                            <span class="font-medium text-gray-600">Pengambil:</span>
+                                            <span class="font-medium text-gray-600">Penerima:</span>
                                             <span class="text-gray-700">{{ $item->pengambil }}</span>
                                         </div>
                                         @endif
@@ -413,7 +413,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         Bidang
                                     </th>
                                     <th class="px-3 py-3 text-sm font-bold text-center text-gray-700 uppercase border">
-                                        Pengambil
+                                        Penerima
                                     </th>
                                     <th class="px-3 py-3 text-sm font-bold text-center text-gray-700 uppercase border">
                                         Debit
@@ -456,7 +456,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         {{ $item->bidang ? \App\Constants\BidangConstants::getBidangName($item->bidang)
                                         : '-' }}
                                     </td>
-                                    <!-- Uraian: Pengambil -->
+                                    <!-- Uraian: Penerima -->
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border">
                                         {{ $item->pengambil ? Str::limit($item->pengambil, 15) : '-' }}
                                     </td>

@@ -13,6 +13,14 @@ class User extends Authenticatable
     use HasApiTokens, HasFactory, Notifiable;
 
     /**
+     * The username field for authentication.
+     */
+    public function username()
+    {
+        return 'name';
+    }
+
+    /**
      * The attributes that are mass assignable.
      *
      * @var array<int, string>

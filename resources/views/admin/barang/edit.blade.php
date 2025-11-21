@@ -40,10 +40,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                     <div>
                         <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
-                        <!-- Hidden input to preserve original stock value for reference (not sent to server) -->
-                        <input type="number" id="stok" value="{{ $barang->stok }}" min="0"
-                            class="block w-full mt-1 text-gray-600 bg-gray-100 border-gray-300 rounded-md shadow-sm cursor-not-allowed"
-                            readonly disabled>
+                        <input type="number" name="stok" id="stok" value="{{ $barang->stok }}" min="0"
+                            class="block w-full mt-1 border-gray-300 rounded-md shadow-sm focus:border-indigo-500 focus:ring-indigo-500"
+                            required>
                     </div>
 
                     <div>
@@ -56,7 +55,6 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <option value="tinta" {{ $barang->jenis == 'tinta' ? 'selected' : '' }}>Tinta</option>
                         </select>
                     </div>
-
                     <div>
                         <label for="foto" class="block mb-2 text-sm font-medium text-gray-700">Foto Barang</label>
                         <div class="px-6 pt-5 pb-6 mt-1 border border-gray-300 rounded-lg" id="file-drop-area">
@@ -97,7 +95,6 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         <p class="mt-2 text-sm text-gray-500">Foto saat ini akan diganti jika Anda memilih file baru</p>
                         @endif
                     </div>
-
                     <div class="flex items-center justify-end">
                         <a href="{{ route('admin.barang') }}"
                             class="px-4 py-2 mr-2 font-bold text-white bg-gray-500 rounded hover:bg-gray-700">Batal</a>

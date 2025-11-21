@@ -17,8 +17,16 @@ Pengambilan Barang
                             <h2 class="text-2xl font-semibold text-gray-800">Daftar Barang Tersedia</h2>
                             <p class="mt-1 text-sm text-gray-600">Pilih barang untuk melakukan pengambilan</p>
                         </div>
-                        <!-- Cart Link -->
+                        <!-- Action Buttons -->
                         <div class="flex items-center space-x-4">
+                            <!-- Status Pengambilan Button -->
+                            <a href="{{ route('user.monitoring.index') }}"
+                                class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-blue-600 transition duration-150 ease-in-out bg-white border border-blue-500 rounded-md shadow-sm hover:bg-blue-50 focus:bg-blue-50 active:bg-blue-100 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                                <i class="mr-2 fas fa-bell"></i>
+                                Status Pengambilan
+                            </a>
+
+                            <!-- Cart Link -->
                             <a href="{{ route('user.cart.index') }}"
                                 class="inline-flex items-center px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
@@ -276,6 +284,15 @@ Pengambilan Barang
                         <i class="fas fa-building text-gray-500 mr-2"></i>
                         Bidang <span class="text-red-500">*</span>
                     </label>
+                    @if(Auth::user()->bidang && \App\Constants\BidangConstants::isValidBidang(Auth::user()->bidang))
+                    <!-- Field bidang readonly jika user sudah terdaftar dengan bidang tertentu -->
+                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <p class="font-medium text-gray-900">{{
+                            \App\Constants\BidangConstants::getBidangName(Auth::user()->bidang) }}</p>
+                    </div>
+                    <input type="hidden" id="bidang" name="bidang" value="{{ Auth::user()->bidang }}">
+                    @else
+                    <!-- Dropdown bidang jika user belum memiliki bidang yang terdaftar -->
                     <select id="bidang" name="bidang" required
                         class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
                         <option value="">Pilih Bidang</option>
@@ -283,6 +300,7 @@ Pengambilan Barang
                         <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
+                    @endif
                 </div>
 
                 <!-- Nama Pengambil Section -->
@@ -447,7 +465,13 @@ function showAddToCartModal(barangId, namaBarang, satuan, stok) {
     document.getElementById('max_stock').textContent = stok;
     document.getElementById('quantity').max = stok;
     document.getElementById('quantity').value = 1;
-    document.getElementById('bidang').value = '';
+
+    // Reset bidang hanya jika bukan hidden input (berarti user bisa memilih)
+    const bidangElement = document.getElementById('bidang');
+    if (bidangElement && bidangElement.tagName.toLowerCase() === 'select') {
+        bidangElement.value = '';
+    }
+
     document.getElementById('keterangan').value = '';
     document.getElementById('pengambil').value = '';
 
@@ -503,11 +527,12 @@ function addToCart() {
     }
 
     // Validate bidang
-    if (!formData.get('bidang')) {
+    const bidangValue = formData.get('bidang');
+    if (!bidangValue || bidangValue.trim() === '') {
         Swal.fire({
             icon: 'warning',
             title: 'Perhatian!',
-            text: 'Silakan pilih bidang terlebih dahulu.',
+            text: 'Bidang harus terisi. Pastikan akun Anda sudah terdaftar dengan bidang yang sesuai.',
             confirmButtonColor: '#f59e0b'
         });
         return;

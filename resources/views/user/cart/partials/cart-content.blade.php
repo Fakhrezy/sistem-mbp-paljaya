@@ -77,7 +77,7 @@
                                 </p>
                                 @if($item->pengambil)
                                 <p class="flex items-center mt-1 text-sm text-gray-600">
-                                    <i class="mr-1 text-gray-500 fas fa-user"></i>Pengambil: {{ $item->pengambil }}
+                                    <i class="mr-1 text-gray-500 fas fa-user"></i>Penerima: {{ $item->pengambil }}
                                 </p>
                                 @endif
                                 @if($item->keterangan)
@@ -111,10 +111,8 @@
                         <button
                             onclick="showEditModal({{ $item->id }}, '{{ addslashes($item->barang->nama_barang) }}', {{ $item->quantity }}, '{{ $item->bidang }}', '{{ addslashes($item->keterangan ?? '') }}', '{{ addslashes($item->pengambil ?? '') }}', {{ $item->barang->stok }}, '{{ $item->barang->satuan }}')"
                             class="inline-flex items-center justify-center w-8 h-8 text-white transition duration-150 ease-in-out rounded"
-                            style="background-color: #0074BC;"
-                            onmouseover="this.style.backgroundColor='#005a94'"
-                            onmouseout="this.style.backgroundColor='#0074BC'"
-                            title="Edit item dalam keranjang">
+                            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
+                            onmouseout="this.style.backgroundColor='#0074BC'" title="Edit item dalam keranjang">
                             <i class="fas fa-edit"></i>
                         </button>
 
@@ -140,8 +138,7 @@
                     </div>
                     <button onclick="submitPengambilanBidang('{{ $bidang }}')"
                         class="inline-flex items-center px-4 py-2 font-semibold text-white transition duration-150 ease-in-out rounded-lg"
-                        style="background-color: #0074BC;"
-                        onmouseover="this.style.backgroundColor='#005a94'"
+                        style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
                         onmouseout="this.style.backgroundColor='#0074BC'"
                         title="Ajukan pengambilan untuk bidang {{ \App\Constants\BidangConstants::getBidangName($bidang) }}">
                         <i class="mr-2 fas fa-paper-plane"></i>Ajukan Pengambilan
@@ -172,8 +169,7 @@
         </h2>
         <a href="{{ route('user.pengambilan.index') }}"
             class="inline-flex items-center px-4 py-2 font-bold text-white transition duration-150 ease-in-out rounded"
-            style="background-color: #0074BC;"
-            onmouseover="this.style.backgroundColor='#005a94'"
+            style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
             onmouseout="this.style.backgroundColor='#0074BC'">
             <i class="mr-2 fas fa-plus"></i>Ambil Barang
         </a>

@@ -117,6 +117,15 @@ Keranjang Barang
                         <i class="mr-2 text-gray-500 fas fa-building"></i>
                         Bidang <span class="text-red-500">*</span>
                     </label>
+                    @if(Auth::user()->bidang && \App\Constants\BidangConstants::isValidBidang(Auth::user()->bidang))
+                    <!-- Field bidang readonly jika user sudah terdaftar dengan bidang tertentu -->
+                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                        <p class="font-medium text-gray-900">{{
+                            \App\Constants\BidangConstants::getBidangName(Auth::user()->bidang) }}</p>
+                    </div>
+                    <input type="hidden" id="edit_bidang" name="bidang" value="{{ Auth::user()->bidang }}">
+                    @else
+                    <!-- Dropdown bidang jika user belum memiliki bidang yang terdaftar -->
                     <select id="edit_bidang" name="bidang" required
                         class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Pilih Bidang</option>
@@ -124,6 +133,7 @@ Keranjang Barang
                         <option value="{{ $key }}">{{ $label }}</option>
                         @endforeach
                     </select>
+                    @endif
                 </div>
 
                 <!-- Nama Pengambil Section -->
@@ -399,7 +409,13 @@ function showEditModal(cartId, namaBarang, quantity, bidang, keterangan, pengamb
     document.getElementById('edit_barang_nama').textContent = namaBarang;
     document.getElementById('edit_quantity').value = quantity;
     document.getElementById('edit_quantity').max = maxStock;
-    document.getElementById('edit_bidang').value = bidang;
+
+    // Set bidang value hanya jika bukan hidden input (berarti user bisa memilih)
+    const bidangElement = document.getElementById('edit_bidang');
+    if (bidangElement && bidangElement.tagName.toLowerCase() === 'select') {
+        bidangElement.value = bidang;
+    }
+
     document.getElementById('edit_keterangan').value = keterangan || '';
     document.getElementById('edit_pengambil').value = pengambil || '';
     document.getElementById('edit_max_stock').textContent = maxStock;
@@ -449,11 +465,11 @@ function updateCartItem() {
     const bidang = formData.get('bidang');
     const pengambil = formData.get('pengambil');
 
-    if (!bidang) {
+    if (!bidang || bidang.trim() === '') {
         Swal.fire({
             icon: 'warning',
             title: 'Perhatian!',
-            text: 'Silakan pilih bidang terlebih dahulu.',
+            text: 'Bidang harus terisi. Pastikan akun Anda sudah terdaftar dengan bidang yang sesuai.',
             confirmButtonColor: '#f59e0b'
         });
         return;

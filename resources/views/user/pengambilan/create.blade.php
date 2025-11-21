@@ -115,15 +115,24 @@ Ambil Barang
                         <label for="bidang" class="block text-sm font-medium text-gray-700">
                             Bidang <span class="text-red-500">*</span>
                         </label>
+                        @if(Auth::user()->bidang && \App\Constants\BidangConstants::isValidBidang(Auth::user()->bidang))
+                        <!-- Field bidang readonly jika user sudah terdaftar dengan bidang tertentu -->
+                        <div class="p-3 mt-1 border border-gray-300 rounded-md bg-gray-50">
+                            <p class="font-medium text-gray-900">{{
+                                \App\Constants\BidangConstants::getBidangName(Auth::user()->bidang) }}</p>
+                        </div>
+                        <input type="hidden" name="bidang" value="{{ Auth::user()->bidang }}">
+                        @else
+                        <!-- Dropdown bidang jika user belum memiliki bidang yang terdaftar -->
                         <select name="bidang" id="bidang"
                             class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500 @error('bidang') border-red-500 @enderror"
                             required>
                             <option value="">Pilih Bidang</option>
                             @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
-                            <option value="{{ $key }}" {{ old('bidang', auth()->user()->bidang) == $key ? 'selected' :
-                                '' }}>{{ $label }}</option>
+                            <option value="{{ $key }}" {{ old('bidang')==$key ? 'selected' : '' }}>{{ $label }}</option>
                             @endforeach
                         </select>
+                        @endif
                         @error('bidang')
                         <p class="mt-1 text-sm text-red-600">{{ $message }}</p>
                         @enderror

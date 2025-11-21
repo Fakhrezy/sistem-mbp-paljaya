@@ -87,12 +87,13 @@ class BarangController extends Controller
             'nama_barang' => 'required',
             'satuan' => 'required',
             'harga_barang' => 'required|numeric',
+            'stok' => 'required|numeric|min:0',
             'jenis' => 'required|in:atk,cetak,tinta',
             'foto' => 'nullable|image|mimes:jpeg,png,jpg|max:2048'
         ]);
 
-        // Exclude stok from update data - stok should not be editable manually
-        $data = $request->only(['nama_barang', 'satuan', 'harga_barang', 'jenis']);
+        // Include stok in update data
+        $data = $request->only(['nama_barang', 'satuan', 'harga_barang', 'stok', 'jenis']);
 
         if ($request->hasFile('foto')) {
             // Hapus foto lama jika ada
