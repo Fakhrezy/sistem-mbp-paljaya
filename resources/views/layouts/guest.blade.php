@@ -17,29 +17,57 @@
 
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+
+    <!-- Custom Login Background Style -->
+    <style>
+        .login-background {
+            background-color: #f8f9fa;
+            background-image: url('{{ asset(' images/pal-fr-gd.jpg') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            background-attachment: scroll;
+            min-height: 100vh;
+        }
+
+        /* Ensure background loads properly */
+        .login-background::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: url('{{ asset(' images/pal-fr-gd.jpg') }}');
+            background-size: cover;
+            background-position: center center;
+            background-repeat: no-repeat;
+            opacity: 0.7;
+            z-index: 0;
+        }
+    </style>
 </head>
 
-<body class="font-sans text-gray-900 antialiased">
-    <div class="min-h-screen flex flex-col sm:justify-center items-center pt-6 sm:pt-0 bg-gray-100">
-        <div class="text-center">
-            <!-- Illustration Image -->
-            {{-- <div class="mb-6">
-                <img src="{{ asset('images/illustration.png') }}" alt="Illustration"
-                    class="w-64 h-auto mx-auto">
-            </div> --}}
+<body class="font-sans antialiased text-gray-900">
+    <div class="relative flex flex-col items-center pt-6 login-background sm:justify-center sm:pt-0">
+        <!-- Overlay putih semi-transparan -->
+        <div class="absolute inset-0 bg-white bg-opacity-30 z-5"></div>
 
+        <!-- Content dengan z-index tinggi agar berada di atas overlay -->
+        <div class="relative z-20 text-center">
             <a href="/">
-                <x-application-logo class="w-20 h-20 fill-current text-gray-500 mx-auto" />
+                <x-application-logo class="w-20 h-20 mx-auto text-gray-500 fill-current" />
             </a>
             <div class="mt-4">
-                <h1 class="text-lg font-semibold text-gray-800 leading-tight">
+                <h1 class="text-lg font-semibold leading-tight text-gray-800">
                     SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                 </h1>
-                <h2 class="text-lg font-semibold text-blue-800 leading-tight">PERUMDA PALJAYA</h2>
+                <h2 class="text-lg font-semibold leading-tight text-blue-800">PERUMDA PALJAYA</h2>
             </div>
         </div>
 
-        <div class="w-full sm:max-w-md mt-6 px-6 py-4 bg-white shadow-md overflow-hidden sm:rounded-lg">
+        <div
+            class="relative z-20 w-full px-6 py-4 mt-6 overflow-hidden bg-white border border-gray-200 shadow-lg sm:max-w-md sm:rounded-lg">
             {{ $slot }}
         </div>
     </div>

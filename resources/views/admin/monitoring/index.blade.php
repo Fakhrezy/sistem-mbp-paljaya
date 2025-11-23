@@ -74,6 +74,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </option>
                                 <option value="diterima" {{ request('status')=='diterima' ? 'selected' : '' }}>Diterima
                                 </option>
+                                <option value="ditolak" {{ request('status')=='ditolak' ? 'selected' : '' }}>Ditolak
+                                </option>
                             </select>
                         </div>
 
@@ -255,6 +257,12 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
                                         <i class="fas fa-check mr-1"></i>
                                         Diterima
+                                    </span>
+                                    @elseif($item->status === 'ditolak')
+                                    <span
+                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                                        <i class="fas fa-times-circle mr-1"></i>
+                                        Ditolak
                                     </span>
                                     @else
                                     <span

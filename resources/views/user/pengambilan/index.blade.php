@@ -220,7 +220,7 @@ Pengambilan Barang
 
 <!-- Add to Cart Modal -->
 <div id="addToCartModal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-50">
-    <div class="w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg relative">
+    <div class="relative w-full max-w-lg mx-auto bg-white rounded-lg shadow-lg">
         <!-- Modal Header -->
         <div class="px-6 py-4 rounded-t-lg" style="background-color: #0074BC;">
             <div class="flex items-center justify-between">
@@ -241,13 +241,13 @@ Pengambilan Barang
 
                 <!-- Nama Barang Section -->
                 <div class="mb-4">
-                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-box text-gray-500 mr-2"></i>
+                    <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-box"></i>
                         Nama Barang
                     </label>
-                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                    <div class="p-3 border border-gray-300 rounded-md bg-gray-50">
                         <p id="barang_nama" class="font-medium text-gray-900">Loading...</p>
-                        <p class="text-sm text-gray-500 mt-1">
+                        <p class="mt-1 text-sm text-gray-500">
                             Stok tersedia: <span id="max_stock" class="font-semibold">0</span> <span
                                 id="satuan">pcs</span>
                         </p>
@@ -256,21 +256,21 @@ Pengambilan Barang
 
                 <!-- Quantity Section -->
                 <div class="mb-4">
-                    <label class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-calculator text-gray-500 mr-2"></i>
+                    <label class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-calculator"></i>
                         Jumlah
                     </label>
                     <div class="flex items-center justify-center space-x-3">
                         <button type="button" onclick="decreaseQuantity()"
-                            class="w-8 h-8 text-white rounded-md flex items-center justify-center transition-colors duration-200"
+                            class="flex items-center justify-center w-8 h-8 text-white transition-colors duration-200 rounded-md"
                             style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
                             onmouseout="this.style.backgroundColor='#0074BC'">
                             <i class="fas fa-minus"></i>
                         </button>
                         <input type="number" id="quantity" name="quantity" min="1" value="1"
-                            class="w-16 h-8 border border-gray-300 rounded-md text-center focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                            class="w-16 h-8 text-center transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <button type="button" onclick="increaseQuantity()"
-                            class="w-8 h-8 text-white rounded-md flex items-center justify-center transition-colors duration-200"
+                            class="flex items-center justify-center w-8 h-8 text-white transition-colors duration-200 rounded-md"
                             style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
                             onmouseout="this.style.backgroundColor='#0074BC'">
                             <i class="fas fa-plus"></i>
@@ -280,13 +280,13 @@ Pengambilan Barang
 
                 <!-- Bidang Section -->
                 <div class="mb-4">
-                    <label for="bidang" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-building text-gray-500 mr-2"></i>
+                    <label for="bidang" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-building"></i>
                         Bidang <span class="text-red-500">*</span>
                     </label>
                     @if(Auth::user()->bidang && \App\Constants\BidangConstants::isValidBidang(Auth::user()->bidang))
                     <!-- Field bidang readonly jika user sudah terdaftar dengan bidang tertentu -->
-                    <div class="bg-gray-50 border border-gray-300 rounded-md p-3">
+                    <div class="p-3 border border-gray-300 rounded-md bg-gray-50">
                         <p class="font-medium text-gray-900">{{
                             \App\Constants\BidangConstants::getBidangName(Auth::user()->bidang) }}</p>
                     </div>
@@ -294,7 +294,7 @@ Pengambilan Barang
                     @else
                     <!-- Dropdown bidang jika user belum memiliki bidang yang terdaftar -->
                     <select id="bidang" name="bidang" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200">
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500">
                         <option value="">Pilih Bidang</option>
                         @foreach(\App\Constants\BidangConstants::getBidangList() as $key => $label)
                         <option value="{{ $key }}">{{ $label }}</option>
@@ -305,36 +305,36 @@ Pengambilan Barang
 
                 <!-- Nama Pengambil Section -->
                 <div class="mb-4">
-                    <label for="pengambil" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-user text-gray-500 mr-2"></i>
+                    <label for="pengambil" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-user"></i>
                         Nama Pengambil <span class="text-red-500">*</span>
                     </label>
                     <input type="text" id="pengambil" name="pengambil" required
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-colors duration-200"
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Masukkan nama pengambil...">
                 </div>
 
                 <!-- Keterangan Section -->
                 <div class="mb-4">
-                    <label for="keterangan" class="flex items-center text-sm font-medium text-gray-700 mb-2">
-                        <i class="fas fa-sticky-note text-gray-500 mr-2"></i>
-                        Keterangan <span class="text-gray-400 text-xs">(opsional)</span>
+                    <label for="keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
+                        <i class="mr-2 text-gray-500 fas fa-sticky-note"></i>
+                        Keterangan <span class="text-xs text-gray-400">(opsional)</span>
                     </label>
                     <textarea id="keterangan" name="keterangan" rows="3"
-                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500 resize-none transition-colors duration-200"
+                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md resize-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                         placeholder="Keterangan tambahan..."></textarea>
                 </div>
             </form>
         </div>
 
         <!-- Modal Footer -->
-        <div class="bg-gray-50 px-6 py-4 rounded-b-lg flex space-x-3">
+        <div class="flex px-6 py-4 space-x-3 rounded-b-lg bg-gray-50">
             <button onclick="closeModal()"
-                class="flex-1 bg-gray-500 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600 transition-colors duration-200">
+                class="flex-1 px-4 py-2 font-semibold text-white transition-colors duration-200 bg-gray-500 rounded-md hover:bg-gray-600">
                 Batal
             </button>
             <button id="addToCartBtn" onclick="addToCart()"
-                class="flex-1 text-white font-semibold py-2 px-4 rounded-md transition-colors duration-200"
+                class="flex-1 px-4 py-2 font-semibold text-white transition-colors duration-200 rounded-md"
                 style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
                 onmouseout="this.style.backgroundColor='#0074BC'">
                 Tambah ke Keranjang

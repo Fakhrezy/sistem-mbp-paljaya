@@ -17,6 +17,18 @@ class UserMonitoringController extends Controller
             ->whereHas('barang')
             ->where('bidang', $userBidang);
 
+        // Filter berdasarkan pencarian (nama barang atau nama pengambil)
+        if ($request->filled('search')) {
+            $search = $request->search;
+            $query->where(function ($q) use ($search) {
+                $q->where('nama_pengambil', 'like', "%{$search}%")
+                    ->orWhere('nama_barang', 'like', "%{$search}%")
+                    ->orWhereHas('barang', function ($subQ) use ($search) {
+                        $subQ->where('nama_barang', 'like', "%{$search}%");
+                    });
+            });
+        }
+
         // Filter berdasarkan status
         if ($request->filled('status')) {
             $query->where('status', $request->status);

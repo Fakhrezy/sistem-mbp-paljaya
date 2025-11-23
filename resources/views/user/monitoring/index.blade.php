@@ -25,7 +25,7 @@
         @endif
 
         <!-- Statistics Cards -->
-        <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-3">
+        <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-4">
             <!-- Total Pengambilan -->
             <div class="p-4 border border-blue-200 rounded-lg bg-blue-50">
                 <div class="flex items-center">
@@ -68,11 +68,33 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Ditolak -->
+            <div class="p-4 border border-red-200 rounded-lg bg-red-50">
+                <div class="flex items-center">
+                    <div class="p-2 bg-red-100 rounded-lg">
+                        <i class="text-red-600 fas fa-times-circle"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-red-900">Ditolak</p>
+                        <p class="text-lg font-semibold text-red-600">
+                            {{ $monitorings->where('status', 'ditolak')->count() }}
+                        </p>
+                    </div>
+                </div>
+            </div>
         </div>
 
         <!-- Filter Section -->
         <div class="p-4 mb-6 rounded-lg bg-gray-50">
             <form method="GET" action="{{ route('user.monitoring.index') }}" class="flex flex-wrap items-end gap-4">
+                <div class="flex-1 min-w-64">
+                    <label for="search" class="block text-sm font-medium text-gray-700">Pencarian</label>
+                    <input type="text" id="search" name="search" value="{{ request('search') }}"
+                        class="w-full px-3 mt-1 border border-gray-300 rounded-md h-9 focus:ring-blue-500 focus:border-blue-500 sm:text-sm"
+                        placeholder="Cari nama barang atau nama pengambil...">
+                </div>
+
                 <div class="min-w-48">
                     <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                     <select id="status" name="status"
@@ -102,7 +124,7 @@
                         <i class="w-4 h-4 mr-1 text-gray-500 fas fa-search"></i>
                         Filter
                     </button>
-                    @if(request()->hasAny(['status', 'start_date', 'end_date']))
+                    @if(request()->hasAny(['search', 'status', 'start_date', 'end_date']))
                     <a href="{{ route('user.monitoring.index') }}"
                         class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                         Reset
@@ -116,25 +138,26 @@
             <table class="min-w-full bg-white">
                 <thead class="bg-gray-100">
                     <tr>
-                        <th class="px-4 py-3 text-left">No</th>
-                        <th class="px-4 py-3 text-left">Tanggal</th>
-                        <th class="px-4 py-3 text-left">Nama Barang</th>
-                        <th class="px-4 py-3 text-left">Penerima</th>
-                        <th class="px-4 py-3 text-left">Jumlah</th>
-                        <th class="px-4 py-3 text-left">Status</th>
-                        <th class="px-4 py-3 text-left">Keterangan</th>
+                        <th class="px-4 py-3 text-left w-12">No</th>
+                        <th class="px-4 py-3 text-left w-24">Tanggal</th>
+                        <th class="px-4 py-3 text-left min-w-48">Nama Barang</th>
+                        <th class="px-4 py-3 text-left w-32">Penerima</th>
+                        <th class="px-4 py-3 text-left w-20">Jumlah</th>
+                        <th class="px-4 py-3 text-left w-24">Status</th>
+                        <th class="px-4 py-3 text-left min-w-40">Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
                     @forelse($monitorings as $monitoring)
                     <tr class="hover:bg-gray-50">
                         <td class="px-4 py-3 text-sm">{{ $loop->iteration }}</td>
-                        <td class="px-4 py-3 text-sm">
+                        <td class="px-4 py-3 text-sm whitespace-nowrap">
                             {{ $monitoring->tanggal_ambil ? $monitoring->tanggal_ambil->format('d/m/Y') :
                             $monitoring->created_at->format('d/m/Y') }}
                         </td>
-                        <td class="px-4 py-3">
-                            <div class="text-sm font-medium text-gray-900">{{ $monitoring->barang->nama_barang ??
+                        <td class="px-4 py-3 min-w-48">
+                            <div class="text-sm font-medium text-gray-900 break-words leading-relaxed">{{
+                                $monitoring->barang->nama_barang ??
                                 $monitoring->nama_barang }}</div>
                             <div class="text-xs text-gray-500">{{ $monitoring->jenis_barang ??
                                 $monitoring->barang->jenis ?? '-' }}</div>
@@ -166,12 +189,17 @@
                                 {{ ucfirst($statusText) }}
                             </span>
                         </td>
-                        <td class="px-4 py-3 text-sm text-gray-600">
-                            @if($monitoring->keterangan)
-                            <span title="{{ $monitoring->keterangan }}">
-                                {{ strlen($monitoring->keterangan) > 30 ? substr($monitoring->keterangan, 0, 30) . '...'
-                                : $monitoring->keterangan }}
-                            </span>
+                        <td class="px-4 py-3 text-sm text-gray-600 min-w-40">
+                            @if(strtolower($monitoring->status) == 'ditolak' && $monitoring->alasan_penolakan)
+                            <div class="p-2 bg-red-50 border-l-4 border-red-400 rounded">
+                                <p class="text-xs text-red-600 break-words leading-relaxed">
+                                    {{ $monitoring->alasan_penolakan }}
+                                </p>
+                            </div>
+                            @elseif($monitoring->keterangan)
+                            <div class="break-words leading-relaxed">
+                                {{ $monitoring->keterangan }}
+                            </div>
                             @else
                             -
                             @endif

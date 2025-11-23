@@ -26,7 +26,7 @@
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 
-    <!-- Custom Styles for Notification Badge -->
+    <!-- Custom Styles for Notification Badge and Sidebar -->
     <style>
         .notification-badge {
             animation: pulse 2s infinite;
@@ -50,6 +50,98 @@
             animation: none;
             transform: scale(1.1);
         }
+
+        /* Sidebar Tooltip Styles - Only show when minimized */
+        #sidebar.w-16 .sidebar-item[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-left: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            animation: tooltipFadeIn 0.2s ease-out forwards;
+        }
+
+        #sidebar.w-16 .sidebar-subitem[title]:hover::after {
+            content: attr(title);
+            position: absolute;
+            left: 100%;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: #1f2937;
+            color: white;
+            padding: 0.5rem 0.75rem;
+            border-radius: 0.375rem;
+            font-size: 0.75rem;
+            white-space: nowrap;
+            z-index: 1000;
+            margin-left: 0.5rem;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            animation: tooltipFadeIn 0.2s ease-out forwards;
+        }
+
+        @keyframes tooltipFadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(-50%) translateX(-5px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(-50%) translateX(0);
+            }
+        }
+
+        /* Smooth transitions */
+        .sidebar-text,
+        .sidebar-arrow,
+        .sidebar-badge {
+            transition: all 0.3s ease-in-out;
+        }
+
+        /* Center icons when minimized */
+        #sidebar.w-16 .sidebar-item svg {
+            margin-right: 0;
+            width: 1.25rem;
+            height: 1.25rem;
+        }
+
+        #sidebar.w-16 .sidebar-subitem svg {
+            margin-right: 0;
+            width: 1.5rem !important;
+            height: 1.5rem !important;
+            min-width: 1.5rem;
+            min-height: 1.5rem;
+        }
+
+        /* Ensure submenu icons are properly sized and centered when minimized */
+        #sidebar.w-16 .sidebar-subitem {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 0.75rem !important;
+        }
+
+        /* Override any conflicting styles for submenu items */
+        #sidebar.w-16 .sidebar-submenu .sidebar-subitem {
+            margin-left: 0;
+            padding-left: 0.75rem;
+            padding-right: 0.75rem;
+        }
+
+        /* Menu item positioning */
+        .sidebar-item,
+        .sidebar-subitem {
+            position: relative;
+        }
     </style>
 </head>
 
@@ -57,11 +149,23 @@
     <div class="min-h-screen bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="flex-shrink-0 w-64 overflow-y-auto bg-gray-800 shadow-lg" style="z-index: 50;">
+            <div id="sidebar"
+                class="flex-shrink-0 w-64 overflow-y-auto bg-gray-800 shadow-lg transition-all duration-300 ease-in-out"
+                style="z-index: 50;">
                 <div class="flex flex-col h-full">
-                    <!-- Logo -->
-                    <div class="flex items-center justify-center h-16 px-4 bg-gray-900">
-                        <img src="{{ asset('images/paljaya-logo.png') }}" alt="Logo" class="w-auto h-7">
+                    <!-- Logo & Toggle Button -->
+                    <div class="flex items-center justify-between h-16 px-4 bg-gray-900">
+                        <div class="flex items-center justify-center w-full">
+                            <img id="sidebar-logo" src="{{ asset('images/paljaya-logo.png') }}" alt="Logo"
+                                class="w-auto h-7 transition-opacity duration-300">
+                        </div>
+                        <button id="sidebar-toggle" onclick="toggleSidebar()"
+                            class="p-1 text-gray-400 rounded hover:text-white hover:bg-gray-700 transition-colors duration-200 flex-shrink-0">
+                            <svg id="toggle-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>
+                            </svg>
+                        </button>
                     </div>
 
                     <!-- Navigation -->
@@ -69,20 +173,22 @@
                         <div class="space-y-2">
                             <!-- Dashboard Link -->
                             <a href="{{ route('admin.dashboard') }}"
-                                class="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                class="sidebar-item flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.dashboard') ? 'bg-gray-700 text-blue-400' : 'text-white' }}"
+                                title="Dashboard">
                                 <svg class="w-5 h-5 mr-3 text-gray-300" fill="none" stroke="currentColor"
                                     viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6">
                                     </path>
                                 </svg>
-                                <span class="truncate">Dashboard</span>
+                                <span class="sidebar-text truncate">Dashboard</span>
                             </a>
 
                             <!-- Manajemen Barang Dropdown -->
                             <div class="relative">
                                 <button onclick="toggleDropdown('manajemenBarang')"
-                                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                    class="sidebar-item flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}"
+                                    title="Manajemen Barang">
                                     <div class="flex items-center">
                                         <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                             xmlns="http://www.w3.org/2000/svg">
@@ -90,46 +196,50 @@
                                                 d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
                                             </path>
                                         </svg>
-                                        <span class="truncate">Manajemen Barang</span>
+                                        <span class="sidebar-text truncate">Manajemen Barang</span>
                                     </div>
-                                    <svg id="manajemenBarang-icon" class="w-4 h-4 transition-transform duration-200"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg id="manajemenBarang-icon"
+                                        class="sidebar-arrow w-4 h-4 transition-transform duration-200" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
 
                                 <div id="manajemenBarang-menu"
-                                    class="mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? '' : 'hidden' }}">
+                                    class="sidebar-submenu mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.barang*', 'admin.pengambilan*', 'admin.usulan*') ? '' : 'hidden' }}">
                                     <!-- Data Barang -->
                                     <a href="{{ route('admin.barang') }}"
-                                        class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
-                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="sidebar-subitem flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Data Barang">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M20 7l-8-4-8 4m16 0l-8 4m8-4v10l-8 4m0-10L4 7m8 4v10M4 7v10l8 4">
                                             </path>
                                         </svg>
-                                        Data Barang
-                                    </a>
-
-                                    <!-- Pengambilan Barang -->
-                                    <a href="{{ route('admin.pengambilan.index') }}"
-                                        class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.pengambilan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
-                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
-                                        </svg>
-                                        Pengambilan Barang
+                                        <span class="sidebar-text">Data Barang</span>
                                     </a>
 
                                     <!-- Pengadaan Barang -->
                                     <a href="{{ route('admin.usulan.index') }}"
-                                        class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.usulan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
-                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="sidebar-subitem flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.usulan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Pengadaan Barang">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M12 9v3m0 0v3m0-3h3m-3 0H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
                                         </svg>
-                                        Pengadaan Barang
+                                        <span class="sidebar-text">Pengadaan Barang</span>
+                                    </a>
+
+                                    <!-- Pengambilan Barang -->
+                                    <a href="{{ route('admin.pengambilan.index') }}"
+                                        class="sidebar-subitem flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.pengambilan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Pengambilan Barang">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                d="M15 12H9m12 0a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                                        </svg>
+                                        <span class="sidebar-text">Pengambilan Barang</span>
                                     </a>
                                 </div>
                             </div>
@@ -137,7 +247,8 @@
                             <!-- Monitoring Barang Dropdown -->
                             <div class="relative">
                                 <button onclick="toggleDropdown('monitoringBarang')"
-                                    class="flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                    class="sidebar-item flex items-center justify-between w-full px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}"
+                                    title="Monitoring Barang">
                                     <div class="flex items-center">
                                         <div class="relative">
                                             <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor"
@@ -154,84 +265,89 @@
                                                 class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full shadow-lg notification-badge"></span>
                                             @endif
                                         </div>
-                                        <span class="truncate">Monitoring Barang</span>
+                                        <span class="sidebar-text truncate">Monitoring Barang</span>
                                     </div>
-                                    <svg id="monitoringBarang-icon" class="w-4 h-4 transition-transform duration-200"
-                                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg id="monitoringBarang-icon"
+                                        class="sidebar-arrow w-4 h-4 transition-transform duration-200" fill="none"
+                                        stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M19 9l-7 7-7-7"></path>
                                     </svg>
                                 </button>
 
                                 <div id="monitoringBarang-menu"
-                                    class="mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? '' : 'hidden' }}">
-                                    <!-- Monitoring Pengambilan -->
-                                    <a href="{{ route('admin.monitoring-barang.index') }}"
-                                        class="flex items-center justify-between px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
-                                        <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
-                                                viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
-                                                </path>
-                                            </svg>
-                                            Monitoring Pengambilan
-                                        </div>
-                                        @if(isset($notifications['monitoring_pengambilan']) &&
-                                        $notifications['monitoring_pengambilan'] > 0)
-                                        <span
-                                            class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
-                                            title="{{ $notifications['monitoring_pengambilan'] }} pengambilan menunggu persetujuan">
-                                            {{ $notifications['monitoring_pengambilan'] }}
-                                        </span>
-                                        @endif
-                                    </a>
-
+                                    class="sidebar-submenu mt-2 ml-4 space-y-1 {{ request()->routeIs('admin.monitoring-barang*', 'admin.monitoring-pengadaan*', 'admin.detail-monitoring-barang*') ? '' : 'hidden' }}">
                                     <!-- Monitoring Pengadaan -->
                                     <a href="{{ route('admin.monitoring-pengadaan.index') }}"
-                                        class="flex items-center justify-between px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-pengadaan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
+                                        class="sidebar-subitem flex items-center justify-between px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-pengadaan*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Monitoring Pengadaan">
                                         <div class="flex items-center">
-                                            <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor"
+                                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor"
                                                 viewBox="0 0 24 24">
                                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                     d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
                                                 </path>
                                             </svg>
-                                            Monitoring Pengadaan
+                                            <span class="sidebar-text">Monitoring Pengadaan</span>
                                         </div>
                                         @if(isset($notifications['monitoring_pengadaan']) &&
                                         $notifications['monitoring_pengadaan'] > 0)
                                         <span
-                                            class="inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
+                                            class="sidebar-badge inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
                                             title="{{ $notifications['monitoring_pengadaan'] }} pengadaan menunggu persetujuan">
                                             {{ $notifications['monitoring_pengadaan'] }}
                                         </span>
                                         @endif
                                     </a>
 
+                                    <!-- Monitoring Pengambilan -->
+                                    <a href="{{ route('admin.monitoring-barang.index') }}"
+                                        class="sidebar-subitem flex items-center justify-between px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Monitoring Pengambilan">
+                                        <div class="flex items-center">
+                                            <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor"
+                                                viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
+                                                </path>
+                                            </svg>
+                                            <span class="sidebar-text">Monitoring Pengambilan</span>
+                                        </div>
+                                        @if(isset($notifications['monitoring_pengambilan']) &&
+                                        $notifications['monitoring_pengambilan'] > 0)
+                                        <span
+                                            class="sidebar-badge inline-flex items-center justify-center px-2 py-1 text-xs font-bold leading-none text-white bg-red-500 rounded-full shadow-lg notification-badge"
+                                            title="{{ $notifications['monitoring_pengambilan'] }} pengambilan menunggu persetujuan">
+                                            {{ $notifications['monitoring_pengambilan'] }}
+                                        </span>
+                                        @endif
+                                    </a>
+
                                     <!-- Detail Monitoring Barang -->
                                     <a href="{{ route('admin.detail-monitoring-barang.index') }}"
-                                        class="flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}">
-                                        <svg class="w-4 h-4 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        class="sidebar-subitem flex items-center px-4 py-2 text-sm rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.detail-monitoring-barang*') ? 'bg-gray-700 text-blue-400' : 'text-gray-300 hover:text-white' }}"
+                                        title="Detail Monitoring">
+                                        <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                                 d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
                                             </path>
                                         </svg>
-                                        Detail Monitoring
+                                        <span class="sidebar-text">Detail Monitoring</span>
                                     </a>
                                 </div>
                             </div>
 
                             <!-- Data Triwulan Link -->
                             <a href="{{ route('admin.triwulan.index') }}"
-                                class="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.triwulan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                class="sidebar-item flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.triwulan*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}"
+                                title="Data Triwulan">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z">
                                     </path>
                                 </svg>
-                                Data Triwulan
+                                <span class="sidebar-text">Data Triwulan</span>
                             </a>
 
                             {{--
@@ -249,14 +365,15 @@
 
                             <!-- Users Link -->
                             <a href="{{ route('admin.users') }}"
-                                class="flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.users*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}">
+                                class="sidebar-item flex items-center px-4 py-2 text-sm font-medium rounded-lg hover:bg-gray-700 {{ request()->routeIs('admin.users*') ? 'bg-gray-700 text-blue-400' : 'text-white' }}"
+                                title="Kelola Users">
                                 <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                     xmlns="http://www.w3.org/2000/svg">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                         d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z">
                                     </path>
                                 </svg>
-                                Kelola Users
+                                <span class="sidebar-text">Kelola Users</span>
                             </a>
                         </div>
 
@@ -266,14 +383,15 @@
                                 @csrf
                                 <a href="{{ route('logout') }}"
                                     onclick="event.preventDefault(); this.closest('form').submit();"
-                                    class="flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700">
+                                    class="sidebar-item flex items-center px-4 py-2 text-sm font-medium text-white rounded-lg hover:bg-gray-700"
+                                    title="Logout">
                                     <svg class="w-5 h-5 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"
                                         xmlns="http://www.w3.org/2000/svg">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
                                             d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1">
                                         </path>
                                     </svg>
-                                    Logout
+                                    <span class="sidebar-text">Logout</span>
                                 </a>
                             </form>
                         </div>
@@ -428,6 +546,117 @@
                 headerBadge.remove();
             }
         }
+
+        // Toggle sidebar function
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            const toggleIcon = document.getElementById('toggle-icon');
+            const sidebarLogo = document.getElementById('sidebar-logo');
+            const sidebarTexts = document.querySelectorAll('.sidebar-text');
+            const sidebarArrows = document.querySelectorAll('.sidebar-arrow');
+            const sidebarSubmenus = document.querySelectorAll('.sidebar-submenu');
+            const sidebarBadges = document.querySelectorAll('.sidebar-badge');
+
+            if (sidebar.classList.contains('w-64')) {
+                // Minimize sidebar
+                sidebar.classList.remove('w-64');
+                sidebar.classList.add('w-16');
+
+                // Hide logo
+                sidebarLogo.style.display = 'none';
+
+                // Hide text elements
+                sidebarTexts.forEach(text => {
+                    text.style.display = 'none';
+                });
+
+                // Hide arrows
+                sidebarArrows.forEach(arrow => {
+                    arrow.style.display = 'none';
+                });
+
+                // Hide submenus
+                sidebarSubmenus.forEach(submenu => {
+                    submenu.classList.add('hidden');
+                });
+
+                // Hide badges
+                sidebarBadges.forEach(badge => {
+                    badge.style.display = 'none';
+                });
+
+                // Adjust padding for menu items to center icons
+                const sidebarItems = document.querySelectorAll('.sidebar-item');
+                sidebarItems.forEach(item => {
+                    item.style.justifyContent = 'center';
+                    item.style.padding = '0.5rem';
+                });
+
+                const sidebarSubitems = document.querySelectorAll('.sidebar-subitem');
+                sidebarSubitems.forEach(item => {
+                    item.style.justifyContent = 'center';
+                    item.style.padding = '0.5rem';
+                });
+
+                // Change icon to expand
+                toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 5l7 7-7 7M5 5l7 7-7 7"></path>';
+
+                // Store state
+                localStorage.setItem('sidebarCollapsed', 'true');
+            } else {
+                // Expand sidebar
+                sidebar.classList.remove('w-16');
+                sidebar.classList.add('w-64');
+
+                // Show logo
+                sidebarLogo.style.display = 'block';
+
+                // Show text elements
+                sidebarTexts.forEach(text => {
+                    text.style.display = 'inline';
+                });
+
+                // Show arrows
+                sidebarArrows.forEach(arrow => {
+                    arrow.style.display = 'block';
+                });
+
+                // Show badges
+                sidebarBadges.forEach(badge => {
+                    badge.style.display = 'inline-flex';
+                });
+
+                // Restore padding for menu items
+                const sidebarItems = document.querySelectorAll('.sidebar-item');
+                sidebarItems.forEach(item => {
+                    item.style.justifyContent = '';
+                    item.style.padding = '';
+                });
+
+                const sidebarSubitems = document.querySelectorAll('.sidebar-subitem');
+                sidebarSubitems.forEach(item => {
+                    item.style.justifyContent = '';
+                    item.style.padding = '';
+                });
+
+                // Change icon to collapse
+                toggleIcon.innerHTML = '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 19l-7-7 7-7m8 14l-7-7 7-7"></path>';
+
+                // Store state
+                localStorage.setItem('sidebarCollapsed', 'false');
+            }
+        }
+
+        // Load sidebar state on page load
+        document.addEventListener('DOMContentLoaded', function() {
+            // ... existing code ...
+
+            // Load saved sidebar state
+            const isCollapsed = localStorage.getItem('sidebarCollapsed') === 'true';
+            if (isCollapsed) {
+                toggleSidebar();
+            }
+        });
     </script>
 </body>
 

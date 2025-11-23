@@ -15,7 +15,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Monitoring Pengadaan</h2>
-
+                            <div class="text-xs text-gray-500">
+                                Last Updated: {{ now()->format('d/m/Y H:i:s') }} |
+                                Total Records: {{ $pengadaans->total() }} |
+                                Selesai: {{ $pengadaans->where('status', 'selesai')->count() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -118,7 +122,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             @forelse($pengadaans as $index => $pengadaan)
                             <tr class="transition-colors duration-200 hover:bg-gray-50">
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
-                                    {{ $index + 1 }}
+                                    {{ $pengadaans->firstItem() + $index }}
                                 </td>
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
                                     {{ $pengadaan->tanggal->format('d/m/Y') }}
@@ -189,13 +193,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         <button onclick="editPengadaan({{ $pengadaan->id }})"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
                                             title="Edit">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-pen"></i>
                                         </button>
                                         @else
                                         <button disabled
                                             class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
                                             title="Tidak dapat mengedit data yang sudah selesai">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-pen"></i>
                                         </button>
                                         @endif
                                         <button onclick="deletePengadaan({{ $pengadaan->id }})"
@@ -221,6 +225,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     </table>
                 </div>
             </div>
+
+            <!-- Pagination -->
+            @if($pengadaans->hasPages())
+            <div class="mt-8 mb-6">
+                {{ $pengadaans->appends(request()->query())->links() }}
+            </div>
+            @endif
         </div>
     </div>
 

@@ -6,6 +6,12 @@
 SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 @endsection
 
+@push('head')
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate">
+<meta http-equiv="Pragma" content="no-cache">
+<meta http-equiv="Expires" content="0">
+@endpush
+
 @section('content')
 <div class="h-full">
     <div class="max-w-full">
@@ -15,7 +21,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Monitoring Pengambilan</h2>
-
+                            <div class="text-xs text-gray-500">
+                                Last Updated: {{ now()->format('d/m/Y H:i:s') }} |
+                                Total Records: {{ $monitoringBarang->count() }} |
+                                Ditolak: {{ $monitoringBarang->where('status', 'ditolak')->count() }}
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -39,6 +49,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 <option value="diajukan" {{ request('status')=='diajukan' ? 'selected' : '' }}>Diajukan
                                 </option>
                                 <option value="diterima" {{ request('status')=='diterima' ? 'selected' : '' }}>Diterima
+                                </option>
+                                <option value="ditolak" {{ request('status')=='ditolak' ? 'selected' : '' }}>Ditolak
                                 </option>
                             </select>
                         </div>
@@ -127,8 +139,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             @forelse ($monitoringBarang as $index => $item)
                             <div class="p-4 border rounded-lg bg-gray-50">
                                 <div class="flex items-start justify-between mb-2">
-                                    <h3 class="text-sm font-medium text-gray-900" title="{{ $item->nama_barang }}">{{
-                                        Str::limit($item->nama_barang, 30) }}</h3>
+                                    <h3 class="text-sm font-medium text-gray-900 break-words"
+                                        title="{{ $item->nama_barang }}">{{
+                                        $item->nama_barang }}</h3>
                                     @if($item->jenis_barang)
                                     @switch($item->jenis_barang)
                                     @case('atk')
@@ -170,11 +183,22 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     </div>
                                 </div>
                                 @endif
+                                @if($item->status == 'ditolak' && $item->alasan_penolakan)
+                                <div class="mb-3 text-xs">
+                                    <div class="p-2 bg-red-50 border-l-4 border-red-400 rounded">
+                                        <span class="font-medium text-red-700">
+                                            <i class="fas fa-exclamation-triangle mr-1"></i>Alasan Penolakan:
+                                        </span>
+                                        <p class="mt-1 text-red-600">{{ $item->alasan_penolakan }}</p>
+                                    </div>
+                                </div>
+                                @endif
                                 <div class="flex items-center justify-between">
                                     @if($item->status == 'diajukan')
+                                    <!-- Status Diajukan -->
                                     <span
                                         class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
-                                        Diajukan
+                                        <i class="mr-1 fas fa-clock"></i>Diajukan
                                     </span>
                                     <div class="flex gap-2">
                                         <button onclick="updateStatus({{ $item->id }}, 'diterima')"
@@ -183,17 +207,18 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         </button>
                                         <button onclick="editMonitoring({{ $item->id }})"
                                             class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
-                                            <i class="mr-1 fas fa-edit"></i>Edit
+                                            <i class="mr-1 fas fa-pen"></i>Edit
                                         </button>
                                         <button onclick="deleteMonitoring({{ $item->id }})"
-                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600">
-                                            <i class="mr-1 fas fa-trash"></i>Hapus
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
+                                            <i class="mr-1 fas fa-times"></i>Tolak
                                         </button>
                                     </div>
-                                    @else
+                                    @elseif($item->status == 'diterima')
+                                    <!-- Status Diterima -->
                                     <span
                                         class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
-                                        Diterima
+                                        <i class="mr-1 fas fa-check-circle"></i>Diterima
                                     </span>
                                     <div class="flex gap-2">
                                         <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
@@ -202,12 +227,31 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         </button>
                                         <button disabled
                                             class="px-3 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed">
-                                            <i class="mr-1 fas fa-edit"></i>Edit
+                                            <i class="mr-1 fas fa-pen"></i>Edit
                                         </button>
-                                        <button onclick="deleteMonitoring({{ $item->id }})"
-                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
-                                            <i class="mr-1 fas fa-trash"></i>Hapus
+                                        <span class="px-3 py-1 text-xs text-gray-500 bg-gray-100 rounded">
+                                            <i class="mr-1 fas fa-times"></i>Final
+                                        </span>
+                                    </div>
+                                    @elseif($item->status == 'ditolak')
+                                    <!-- Status Ditolak -->
+                                    <span
+                                        class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded">
+                                        <i class="mr-1 fas fa-times-circle"></i>Ditolak
+                                    </span>
+                                    <div class="flex gap-2">
+                                        <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700">
+                                            <i class="mr-1 fas fa-redo"></i>Kembalikan
                                         </button>
+                                        <button
+                                            onclick="showRejectionReason('{{ addslashes($item->alasan_penolakan ?? 'Tidak ada alasan') }}')"
+                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
+                                            <i class="mr-1 fas fa-question"></i>Alasan
+                                        </button>
+                                        <span class="px-3 py-1 text-xs text-gray-500 bg-gray-100 rounded">
+                                            <i class="mr-1 fas fa-ban"></i>Ditolak
+                                        </span>
                                     </div>
                                     @endif
                                 </div>
@@ -234,7 +278,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Tanggal</th>
                                     <th
-                                        class="min-w-[200px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Nama Barang</th>
                                     <th
                                         class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
@@ -243,16 +287,16 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Pengambil</th>
                                     <th
-                                        class="min-w-[150px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
+                                        class="min-w-[120px] px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                         Bidang</th>
                                     <th
-                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
+                                        class="min-w-[70px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Saldo</th>
                                     <th
-                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
+                                        class="min-w-[70px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Kredit</th>
                                     <th
-                                        class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
+                                        class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Saldo Akhir</th>
                                     <th
                                         class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
@@ -274,7 +318,8 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 border">
+                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 border break-words"
+                                        title="{{ $item->nama_barang }}">
                                         {{ $item->nama_barang }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
@@ -299,8 +344,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         {{ $item->nama_pengambil }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm text-gray-900 border">
-                                        {{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}
+                                    <td class="px-3 py-3 text-sm text-gray-900 border"
+                                        title="{{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}">
+                                        {{ Str::limit(\App\Constants\BidangConstants::getBidangName($item->bidang), 18)
+                                        }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ number_format($item->saldo, 0, ',', '.') }}
@@ -319,10 +366,20 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded">
                                             Diajukan
                                         </span>
-                                        @else
+                                        @elseif($item->status == 'diterima')
                                         <span
                                             class="inline-flex items-center px-2 py-1 text-xs font-medium text-green-800 bg-green-100 rounded">
                                             Diterima
+                                        </span>
+                                        @elseif($item->status == 'ditolak')
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-red-800 bg-red-100 rounded">
+                                            Ditolak
+                                        </span>
+                                        @else
+                                        <span
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-800 bg-gray-100 rounded">
+                                            {{ ucfirst($item->status) }}
                                         </span>
                                         @endif
                                     </td>
@@ -338,36 +395,58 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <td class="px-3 py-3 text-sm border">
                                         <div class="flex gap-1">
                                             @if($item->status == 'diajukan')
+                                            <!-- Status Diajukan - bisa diterima atau ditolak -->
                                             <button onclick="updateStatus({{ $item->id }}, 'diterima')"
                                                 class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
                                                 title="Terima">
                                                 <i class="fas fa-check"></i>
                                             </button>
-                                            @else
+                                            <button onclick="editMonitoring({{ $item->id }})"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
+                                                title="Edit">
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <button onclick="deleteMonitoring({{ $item->id }})"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700"
+                                                title="Tolak">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            @elseif($item->status == 'diterima')
+                                            <!-- Status Diterima - bisa dibatalkan -->
                                             <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
                                                 class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
                                                 title="Batalkan">
                                                 <i class="fas fa-undo"></i>
                                             </button>
-                                            @endif
-                                            @if($item->status == 'diajukan')
-                                            <button onclick="editMonitoring({{ $item->id }})"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
-                                                title="Edit">
-                                                <i class="fas fa-edit"></i>
-                                            </button>
-                                            @else
                                             <button disabled
                                                 class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
                                                 title="Tidak dapat mengedit data yang sudah diterima">
-                                                <i class="fas fa-edit"></i>
+                                                <i class="fas fa-pen"></i>
+                                            </button>
+                                            <button disabled
+                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                title="Data sudah diterima">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                            @elseif($item->status == 'ditolak')
+                                            <!-- Status Ditolak - bisa dikembalikan ke diajukan -->
+                                            <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
+                                                title="Kembalikan ke diajukan">
+                                                <i class="fas fa-redo"></i>
+                                            </button>
+                                            <button
+                                                onclick="showRejectionReason('{{ addslashes($item->alasan_penolakan ?? 'Tidak ada alasan') }}')"
+                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
+                                                title="Lihat alasan penolakan">
+                                                <i class="fas fa-question"></i>
+                                            </button>
+                                            <button disabled
+                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                title="Data sudah ditolak">
+                                                <i class="fas fa-times"></i>
                                             </button>
                                             @endif
-                                            <button onclick="deleteMonitoring({{ $item->id }})"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-gray-500 rounded hover:bg-gray-600"
-                                                title="Hapus">
-                                                <i class="fas fa-trash"></i>
-                                            </button>
                                         </div>
                                     </td>
                                 </tr>
@@ -387,16 +466,17 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         </table>
                     </div>
                 </div>
-
-                <!-- Pagination -->
-                @if($monitoringBarang->hasPages())
-                <div class="mt-6">
-                    {{ $monitoringBarang->appends(request()->query())->links() }}
-                </div>
-                @endif
             </div>
+
+            <!-- Pagination -->
+            @if($monitoringBarang->hasPages())
+            <div class="mt-8 mb-6">
+                {{ $monitoringBarang->appends(request()->query())->links() }}
+            </div>
+            @endif
         </div>
     </div>
+</div>
 </div>
 
 <script>
@@ -477,24 +557,68 @@ function updateStatus(id, status) {
     });
 }
 
-// Delete monitoring function
+// Delete monitoring function (with rejection reason)
 function deleteMonitoring(id) {
     Swal.fire({
-        title: 'Hapus Data Monitoring?',
-        text: 'Yakin ingin menghapus data monitoring ini?',
+        title: 'Tolak Pengambilan Barang',
+        html: `
+            <div class="text-left">
+                <p class="text-sm text-gray-600 mb-4">Berikan alasan penolakan yang akan ditampilkan kepada user:</p>
+                <textarea
+                    id="alasan-penolakan"
+                    class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                    rows="4"
+                    placeholder="Contoh: Stok barang tidak mencukupi, permintaan melebihi kuota, dll..."
+                    maxlength="1000"
+                ></textarea>
+                <div class="text-xs text-gray-400 mt-1">
+                    <span id="char-count">0</span>/1000 karakter
+                </div>
+            </div>
+        `,
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#dc2626',
         cancelButtonColor: '#6b7280',
-        confirmButtonText: '<i class="mr-2 fas fa-trash"></i>Hapus',
+        confirmButtonText: '<i class="mr-2 fas fa-ban"></i>Tolak Pengambilan',
         cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
-        reverseButtons: true
+        reverseButtons: true,
+        preConfirm: () => {
+            const alasan = document.getElementById('alasan-penolakan').value.trim();
+            if (!alasan) {
+                Swal.showValidationMessage('Alasan penolakan wajib diisi!');
+                return false;
+            }
+            if (alasan.length < 10) {
+                Swal.showValidationMessage('Alasan penolakan minimal 10 karakter!');
+                return false;
+            }
+            return alasan;
+        },
+        didOpen: () => {
+            const textarea = document.getElementById('alasan-penolakan');
+            const charCount = document.getElementById('char-count');
+
+            textarea.addEventListener('input', function() {
+                charCount.textContent = this.value.length;
+                if (this.value.length >= 1000) {
+                    charCount.style.color = '#dc2626';
+                } else {
+                    charCount.style.color = '#6b7280';
+                }
+            });
+
+            // Focus on textarea
+            textarea.focus();
+        }
     }).then((result) => {
         if (result.isConfirmed) {
+            const alasanPenolakan = result.value;
+
             // Show loading
             Swal.fire({
-                title: 'Menghapus...',
-                text: 'Sedang menghapus data monitoring',
+                title: 'Memproses Penolakan...',
+                text: 'Sedang menyimpan alasan penolakan',
                 allowOutsideClick: false,
                 showConfirmButton: false,
                 didOpen: () => {
@@ -502,31 +626,38 @@ function deleteMonitoring(id) {
                 }
             });
 
-            // Send delete request
+            // Send delete request with reason
             fetch(`{{ url('/admin/monitoring-barang') }}/${id}`, {
                 method: 'DELETE',
                 headers: {
                     'Content-Type': 'application/json',
                     'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                }
+                },
+                body: JSON.stringify({
+                    alasan_penolakan: alasanPenolakan
+                })
             })
             .then(response => response.json())
             .then(data => {
+                console.log('Response received:', data); // Debug log
                 if (data.success) {
+                    console.log('Debug info:', data.debug); // Debug log
                     Swal.fire({
                         title: 'Berhasil!',
-                        text: data.message || 'Data monitoring berhasil dihapus',
+                        text: data.message || 'Pengambilan berhasil ditolak dan alasan telah disimpan',
                         icon: 'success',
                         showConfirmButton: false,
-                        timer: 2000,
+                        timer: 2500,
                         timerProgressBar: true
                     }).then(() => {
-                        location.reload();
+                        console.log('Reloading page...'); // Debug log
+                        // Force reload with cache busting
+                        window.location.href = window.location.href + '?t=' + Date.now();
                     });
                 } else {
                     Swal.fire({
                         title: 'Gagal!',
-                        text: data.message || 'Tidak dapat menghapus data monitoring',
+                        text: data.message || 'Tidak dapat menolak pengambilan',
                         icon: 'error',
                         confirmButtonColor: '#dc2626',
                         confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
@@ -713,6 +844,26 @@ function editMonitoring(id) {
             confirmButtonColor: '#dc2626',
             confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
         });
+    });
+}
+
+// Show rejection reason function
+function showRejectionReason(reason) {
+    Swal.fire({
+        title: '<i class="fas fa-exclamation-triangle text-red-500"></i> Alasan Penolakan',
+        html: `
+            <div class="text-left p-4 bg-red-50 border-l-4 border-red-400 rounded">
+                <p class="text-sm text-gray-700 leading-relaxed">${reason}</p>
+            </div>
+        `,
+        icon: null,
+        showCancelButton: false,
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: '<i class="mr-2 fas fa-times"></i>Tutup',
+        customClass: {
+            popup: 'swal2-popup-custom',
+            title: 'text-left'
+        }
     });
 }
 </script>

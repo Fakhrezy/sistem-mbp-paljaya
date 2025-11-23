@@ -369,7 +369,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                 <!-- Pagination -->
                 @if($triwulans->hasPages())
-                <div class="mt-4">
+                <div class="mt-8 mb-6">
                     {{ $triwulans->appends(request()->query())->links() }}
                 </div>
                 @endif

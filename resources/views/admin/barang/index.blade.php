@@ -258,7 +258,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         <a href="{{ route('admin.barang.edit', $item) }}"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
                                             title="Edit Barang">
-                                            <i class="fas fa-edit"></i>
+                                            <i class="fas fa-pen"></i>
                                         </a>
                                         <a href="{{ route('admin.detail-monitoring-barang.index', ['id_barang' => $item->id_barang]) }}"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-800 rounded hover:bg-blue-900"

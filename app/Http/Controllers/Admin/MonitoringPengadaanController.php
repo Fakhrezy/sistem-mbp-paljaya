@@ -46,7 +46,7 @@ class MonitoringPengadaanController extends Controller
             $query->where('status', $request->status);
         }
 
-        $pengadaans = $query->get();
+        $pengadaans = $query->paginate(15)->appends($request->query());
 
         // Sync saldo_akhir dengan stok barang terkini
         $this->syncSaldoAkhirWithCurrentStock();

@@ -7,6 +7,7 @@ use App\Models\MonitoringBarang;
 use App\Models\Barang;
 use App\Services\DetailMonitoringBarangService;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Log;
 
 class MonitoringBarangController extends Controller
 {
@@ -180,25 +181,50 @@ class MonitoringBarangController extends Controller
     }
 
     /**
-     * Delete monitoring barang record
+     * Reject monitoring barang record (change status to ditolak with reason)
      */
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
+        $request->validate([
+            'alasan_penolakan' => 'required|string|min:10|max:1000'
+        ]);
+
         try {
-            // Hapus dari detail monitoring barang
-            $this->detailMonitoringService->deleteByMonitoringBarang($id);
+            DB::beginTransaction();
 
             $monitoringBarang = MonitoringBarang::findOrFail($id);
-            $monitoringBarang->delete();
+
+            // Debug logging
+            Log::info("Before update - ID: {$id}, Status: {$monitoringBarang->status}");
+
+            // Update status to 'ditolak' dan simpan alasan penolakan
+            $monitoringBarang->update([
+                'status' => 'ditolak',
+                'alasan_penolakan' => $request->alasan_penolakan
+            ]);
+
+            // Verify update
+            $monitoringBarang->refresh();
+            Log::info("After update - ID: {$id}, Status: {$monitoringBarang->status}, Alasan: {$monitoringBarang->alasan_penolakan}");            // Sinkronisasi ke detail monitoring barang berdasarkan status baru
+            $this->detailMonitoringService->syncOnStatusChange('barang', $id, 'ditolak');
+
+            DB::commit();
 
             return response()->json([
                 'success' => true,
-                'message' => 'Data monitoring berhasil dihapus!'
+                'message' => 'Pengambilan berhasil ditolak dengan alasan yang disimpan!',
+                'debug' => [
+                    'id' => $id,
+                    'new_status' => $monitoringBarang->status,
+                    'alasan' => $monitoringBarang->alasan_penolakan,
+                    'timestamp' => now()->toDateTimeString()
+                ]
             ]);
         } catch (\Exception $e) {
+            DB::rollBack();
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal menghapus data monitoring: ' . $e->getMessage()
+                'message' => 'Gagal menolak pengambilan: ' . $e->getMessage()
             ], 500);
         }
     }
