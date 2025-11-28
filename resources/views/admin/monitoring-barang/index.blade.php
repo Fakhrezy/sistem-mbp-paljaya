@@ -21,11 +21,6 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Monitoring Pengambilan</h2>
-                            <div class="text-xs text-gray-500">
-                                Last Updated: {{ now()->format('d/m/Y H:i:s') }} |
-                                Total Records: {{ $monitoringBarang->count() }} |
-                                Ditolak: {{ $monitoringBarang->where('status', 'ditolak')->count() }}
-                            </div>
                         </div>
                     </div>
                 </div>

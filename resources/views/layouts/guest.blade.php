@@ -50,6 +50,20 @@
 
 <body class="font-sans antialiased text-gray-900">
     <div class="relative flex flex-col items-center pt-6 login-background sm:justify-center sm:pt-0">
+        <!-- Panduan Button - Positioned prominently -->
+        <div class="absolute top-6 right-6 z-30">
+            <a href="https://drive.google.com/file/d/1Lca7dtT8Ol5uyjGlBRkH0C9ZbPC8Iiac/view?usp=sharing" target="_blank"
+                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
+                <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.746 0 3.332.477 4.5 1.253v13C20.168 18.477 18.582 18 16.5 18c-1.746 0-3.332.477-4.5 1.253">
+                    </path>
+                </svg>
+                Panduan
+            </a>
+        </div>
+
         <!-- Overlay putih semi-transparan -->
         <div class="absolute inset-0 bg-white bg-opacity-30 z-5"></div>
 
