@@ -51,7 +51,7 @@
 <body class="font-sans antialiased text-gray-900">
     <div class="relative flex flex-col items-center pt-6 login-background sm:justify-center sm:pt-0">
         <!-- Panduan Button - Positioned prominently -->
-        <div class="absolute top-6 right-6 z-30">
+        <div class="absolute z-30 top-6 right-6">
             <a href="https://drive.google.com/file/d/1Lca7dtT8Ol5uyjGlBRkH0C9ZbPC8Iiac/view?usp=sharing" target="_blank"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-lg shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2">
                 <svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"

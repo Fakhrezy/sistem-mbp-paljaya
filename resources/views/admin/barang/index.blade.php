@@ -204,8 +204,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     class="px-3 py-4 text-sm font-medium text-gray-900 border border-gray-300 whitespace-nowrap text-center">
                                     {{ ($barang->currentPage() - 1) * $barang->perPage() + $index + 1 }}
                                 </td>
-                                <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
-                                    <div class="text-sm font-medium text-gray-900">{{ $item->nama_barang }}</div>
+                                <td class="px-3 py-4 border border-gray-300 min-w-48">
+                                    <div class="text-sm font-medium text-gray-900 break-words">{{ $item->nama_barang }}
+                                    </div>
                                 </td>
                                 <td class="px-3 py-4 border border-gray-300 whitespace-nowrap">
                                     <span class="text-sm text-gray-900">{{ $item->satuan }}</span>
