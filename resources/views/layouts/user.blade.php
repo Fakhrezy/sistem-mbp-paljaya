@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>sismon paljaya</title>
+    <title>sisebar paljaya</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
@@ -117,7 +117,7 @@
                 <header class="shadow-sm" style="background-color: #0074BC;">
                     <div class="flex items-center justify-between px-6 py-4">
                         <h1 class="text-2xl font-semibold text-white">
-                            SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+                            SISTEM PERSEDIAAN BARANG
                         </h1>
                         <div class="flex items-center space-x-4">
                             <!-- User Info -->

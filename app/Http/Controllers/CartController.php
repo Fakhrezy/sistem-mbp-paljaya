@@ -110,8 +110,11 @@ class CartController extends Controller
                 'quantity' => 'required|integer|min:1',
                 'bidang' => 'required|string',
                 'keterangan' => 'nullable|string',
-                'pengambil' => 'required|string|max:255',
+                'pengambil' => 'nullable|string|max:255',
             ]);
+
+            // Set pengambil otomatis dari user login jika tidak diisi
+            $pengambil = $request->pengambil ?? auth()->user()->name;
 
             $barang = Barang::where('id_barang', $request->id_barang)->first();
 
@@ -150,7 +153,7 @@ class CartController extends Controller
                 $existingCart->update([
                     'quantity' => $newQuantity,
                     'keterangan' => $request->keterangan,
-                    'pengambil' => $request->pengambil,
+                    'pengambil' => $pengambil,
                 ]);
 
                 $message = 'Item berhasil diupdate untuk pengambilan bidang "' . $request->bidang . '"! Total: ' . $newQuantity;
@@ -173,7 +176,7 @@ class CartController extends Controller
                     'quantity' => $request->quantity,
                     'bidang' => $request->bidang,
                     'keterangan' => $request->keterangan,
-                    'pengambil' => $request->pengambil,
+                    'pengambil' => $pengambil,
                     'jenis_barang' => $barang->jenis, // Simpan jenis barang dari tabel barang
                 ]);
 
@@ -233,9 +236,12 @@ class CartController extends Controller
         $request->validate([
             'quantity' => 'required|integer|min:1',
             'bidang' => 'required|string',
-            'pengambil' => 'required|string|max:255',
+            'pengambil' => 'nullable|string|max:255',
             'keterangan' => 'nullable|string',
         ]);
+
+        // Set pengambil otomatis dari user login jika tidak diisi
+        $pengambil = $request->pengambil ?? auth()->user()->name;
 
         $barang = $cart->barang;
 
@@ -263,7 +269,7 @@ class CartController extends Controller
         $cart->update([
             'quantity' => $request->quantity,
             'bidang' => $request->bidang,
-            'pengambil' => $request->pengambil,
+            'pengambil' => $pengambil,
             'keterangan' => $request->keterangan,
             'jenis_barang' => $barang->jenis, // Update jenis barang dari tabel barang
         ]);

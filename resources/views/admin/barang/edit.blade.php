@@ -3,7 +3,7 @@
 @section('title', 'Edit Barang')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')

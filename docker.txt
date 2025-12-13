@@ -1,4 +1,4 @@
-# Sistem Monitoring Barang Habis Pakai (MBP)
+# Sistem Persediaan Barang
 
 Sistem informasi untuk monitoring dan manajemen barang habis pakai berbasis web menggunakan Laravel dan Docker.
 

@@ -8,8 +8,6 @@
         <div class="flex items-center justify-between mb-6">
             <div>
                 <h2 class="text-2xl font-bold">Status Pengambilan Barang</h2>
-                <p class="mt-1 text-sm text-gray-600">Bidang: <span class="font-semibold">{{
-                        \App\Constants\BidangConstants::getBidangName($userBidang) }}</span></p>
             </div>
             <a href="{{ route('user.pengambilan.index') }}"
                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 transition duration-150 ease-in-out bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:bg-gray-50 active:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-500 focus:ring-offset-2">
@@ -27,20 +25,38 @@
         <!-- Statistics Cards -->
         <div class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-4">
             <!-- Total Pengambilan -->
-            <div class="p-4 border border-blue-200 rounded-lg bg-blue-50">
+            <div class="p-4 border border-blue-200 rounded-lg bg-blue-50 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                onclick="filterByStatus('')">
                 <div class="flex items-center">
                     <div class="p-2 bg-blue-100 rounded-lg">
                         <i class="text-blue-600 fas fa-list"></i>
                     </div>
                     <div class="ml-3">
                         <p class="text-sm font-medium text-blue-900">Total Pengambilan</p>
-                        <p class="text-lg font-semibold text-blue-600">{{ $monitorings->count() }}</p>
+                        <p class="text-lg font-semibold text-blue-600">{{ $totalCount }}</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Proses -->
+            <div class="p-4 border border-yellow-200 rounded-lg bg-yellow-50 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                onclick="filterByStatus('diajukan')">
+                <div class="flex items-center">
+                    <div class="p-2 bg-yellow-100 rounded-lg">
+                        <i class="text-yellow-600 fas fa-clock"></i>
+                    </div>
+                    <div class="ml-3">
+                        <p class="text-sm font-medium text-yellow-900">Proses</p>
+                        <p class="text-lg font-semibold text-yellow-600">
+                            {{ $pendingCount }}
+                        </p>
                     </div>
                 </div>
             </div>
 
             <!-- Diterima -->
-            <div class="p-4 border border-green-200 rounded-lg bg-green-50">
+            <div class="p-4 border border-green-200 rounded-lg bg-green-50 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                onclick="filterByStatus('diterima')">
                 <div class="flex items-center">
                     <div class="p-2 bg-green-100 rounded-lg">
                         <i class="text-green-600 fas fa-check-circle"></i>
@@ -48,29 +64,15 @@
                     <div class="ml-3">
                         <p class="text-sm font-medium text-green-900">Diterima</p>
                         <p class="text-lg font-semibold text-green-600">
-                            {{ $monitorings->whereIn('status', ['diterima', 'disetujui'])->count() }}
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Pending/Diajukan -->
-            <div class="p-4 border border-yellow-200 rounded-lg bg-yellow-50">
-                <div class="flex items-center">
-                    <div class="p-2 bg-yellow-100 rounded-lg">
-                        <i class="text-yellow-600 fas fa-clock"></i>
-                    </div>
-                    <div class="ml-3">
-                        <p class="text-sm font-medium text-yellow-900">Pending</p>
-                        <p class="text-lg font-semibold text-yellow-600">
-                            {{ $monitorings->whereIn('status', ['diajukan', 'pending'])->count() }}
+                            {{ $diterimaCount }}
                         </p>
                     </div>
                 </div>
             </div>
 
             <!-- Ditolak -->
-            <div class="p-4 border border-red-200 rounded-lg bg-red-50">
+            <div class="p-4 border border-red-200 rounded-lg bg-red-50 cursor-pointer hover:shadow-md transition-shadow duration-200"
+                onclick="filterByStatus('ditolak')">
                 <div class="flex items-center">
                     <div class="p-2 bg-red-100 rounded-lg">
                         <i class="text-red-600 fas fa-times-circle"></i>
@@ -78,7 +80,7 @@
                     <div class="ml-3">
                         <p class="text-sm font-medium text-red-900">Ditolak</p>
                         <p class="text-lg font-semibold text-red-600">
-                            {{ $monitorings->where('status', 'ditolak')->count() }}
+                            {{ $ditolakCount }}
                         </p>
                     </div>
                 </div>
@@ -141,10 +143,10 @@
                         <th class="px-4 py-3 text-left w-12">No</th>
                         <th class="px-4 py-3 text-left w-24">Tanggal</th>
                         <th class="px-4 py-3 text-left min-w-48">Nama Barang</th>
-                        <th class="px-4 py-3 text-left w-32">Penerima</th>
-                        <th class="px-4 py-3 text-left w-20">Jumlah</th>
+                        <th class="px-4 py-3 text-left w-20">Total Ambil</th>
                         <th class="px-4 py-3 text-left w-24">Status</th>
                         <th class="px-4 py-3 text-left min-w-40">Keterangan</th>
+                        <th class="px-4 py-3 text-left min-w-40">Feedback</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">
@@ -161,9 +163,6 @@
                                 $monitoring->nama_barang }}</div>
                             <div class="text-xs text-gray-500">{{ $monitoring->jenis_barang ??
                                 $monitoring->barang->jenis ?? '-' }}</div>
-                        </td>
-                        <td class="px-4 py-3 text-sm">
-                            {{ $monitoring->nama_pengambil ?? '-' }}
                         </td>
                         <td class="px-4 py-3 text-sm font-semibold">
                             @if($monitoring->kredit > 0)
@@ -190,16 +189,33 @@
                             </span>
                         </td>
                         <td class="px-4 py-3 text-sm text-gray-600 min-w-40">
-                            @if(strtolower($monitoring->status) == 'ditolak' && $monitoring->alasan_penolakan)
+                            @if($monitoring->keterangan)
+                            <div class="break-words leading-relaxed">
+                                {{ $monitoring->keterangan }}
+                            </div>
+                            @else
+                            -
+                            @endif
+                        </td>
+                        <td class="px-4 py-3 text-sm text-gray-600 min-w-40">
+                            @if($monitoring->alasan_penolakan)
+                            @if(strtolower($monitoring->status) == 'ditolak')
                             <div class="p-2 bg-red-50 border-l-4 border-red-400 rounded">
                                 <p class="text-xs text-red-600 break-words leading-relaxed">
                                     {{ $monitoring->alasan_penolakan }}
                                 </p>
                             </div>
-                            @elseif($monitoring->keterangan)
-                            <div class="break-words leading-relaxed">
-                                {{ $monitoring->keterangan }}
+                            @elseif(strtolower($monitoring->status) == 'diterima')
+                            <div class="p-2 bg-green-50 border-l-4 border-green-400 rounded">
+                                <p class="text-xs text-green-600 break-words leading-relaxed">
+                                    {{ $monitoring->alasan_penolakan }}
+                                </p>
                             </div>
+                            @else
+                            <div class="break-words leading-relaxed">
+                                {{ $monitoring->alasan_penolakan }}
+                            </div>
+                            @endif
                             @else
                             -
                             @endif
@@ -211,8 +227,6 @@
                             <div class="flex flex-col items-center">
                                 <i class="mb-3 text-3xl text-gray-400 fas fa-clipboard-list"></i>
                                 <p class="text-base font-medium">Belum ada riwayat pengambilan barang</p>
-                                <p class="text-sm">untuk bidang {{
-                                    \App\Constants\BidangConstants::getBidangName($userBidang) }}</p>
                             </div>
                         </td>
                     </tr>
@@ -229,4 +243,24 @@
         @endif
     </div>
 </div>
+
+<script>
+    function filterByStatus(status) {
+    // Get current URL
+    const url = new URL(window.location.href);
+
+    // Set or remove status parameter
+    if (status === '') {
+        url.searchParams.delete('status');
+    } else {
+        url.searchParams.set('status', status);
+    }
+
+    // Reset to page 1 when filtering
+    url.searchParams.delete('page');
+
+    // Navigate to new URL
+    window.location.href = url.toString();
+}
+</script>
 @endsection

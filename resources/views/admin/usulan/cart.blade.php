@@ -3,7 +3,7 @@
 @section('title', 'Keranjang Penambahan')
 
 @section('header')
-SISTEM MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @push('scripts')

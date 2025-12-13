@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>sismon paljaya</title>
+    <title>sisebar paljaya</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
@@ -74,7 +74,7 @@
             </a>
             <div class="mt-4">
                 <h1 class="text-lg font-semibold leading-tight text-gray-800">
-                    SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+                    SISTEM PERSEDIAAN BARANG
                 </h1>
                 <h2 class="text-lg font-semibold leading-tight text-blue-800">PERUMDA PALJAYA</h2>
             </div>

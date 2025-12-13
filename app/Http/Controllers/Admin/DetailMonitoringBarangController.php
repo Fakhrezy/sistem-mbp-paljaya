@@ -34,11 +34,12 @@ class DetailMonitoringBarangController extends Controller
 
             // Persiapan filter
             $filters = [
-                'id_barang' => $request->get('id_barang'),
+                'search' => $request->get('search'),
                 'start_date' => $request->get('start_date'),
                 'end_date' => $request->get('end_date'),
                 'bidang' => $request->get('bidang'),
                 'jenis' => $request->get('jenis'),
+                'jenis_barang' => $request->get('jenis_barang'),
             ];
 
             // Ambil data detail monitoring dengan filter
@@ -213,7 +214,7 @@ class DetailMonitoringBarangController extends Controller
 </head>
 <body>
     <div class="header">
-        SISTEM INFORMASI MONITORING BARANG HABIS PAKAI<br>
+        SISTEM PERSEDIAAN BARANG<br>
         Detail Monitoring Barang<br>
         <small style="font-size: 12px;">Rekapitulasi monitoring pengambilan dan pengadaan barang</small>
         <br><br>

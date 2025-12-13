@@ -3,7 +3,7 @@
 @section('title', 'Monitoring Pengambilan')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @push('head')
@@ -166,7 +166,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         \App\Constants\BidangConstants::getBidangName($item->bidang) }}</div>
                                     <div><span class="font-medium">Tanggal:</span> {{
                                         \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}</div>
-                                    <div><span class="font-medium">Kredit:</span> <span
+                                    <div><span class="font-medium">Keluar:</span> <span
                                             class="font-medium text-red-600">{{ number_format($item->kredit, 0, ',',
                                             '.') }}</span></div>
                                 </div>
@@ -196,18 +196,24 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         <i class="mr-1 fas fa-clock"></i>Diajukan
                                     </span>
                                     <div class="flex gap-2">
-                                        <button onclick="updateStatus({{ $item->id }}, 'diterima')"
-                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700">
+                                        @if($item->saldo_akhir < 0) <button onclick="showStockWarning()"
+                                            class="px-3 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed">
                                             <i class="mr-1 fas fa-check"></i>Terima
-                                        </button>
-                                        <button onclick="editMonitoring({{ $item->id }})"
-                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
-                                            <i class="mr-1 fas fa-pen"></i>Edit
-                                        </button>
-                                        <button onclick="deleteMonitoring({{ $item->id }})"
-                                            class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
-                                            <i class="mr-1 fas fa-times"></i>Tolak
-                                        </button>
+                                            </button>
+                                            @else
+                                            <button onclick="updateStatus({{ $item->id }}, 'diterima')"
+                                                class="px-3 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700">
+                                                <i class="mr-1 fas fa-check"></i>Terima
+                                            </button>
+                                            @endif
+                                            <button onclick="editMonitoring({{ $item->id }})"
+                                                class="px-3 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700">
+                                                <i class="mr-1 fas fa-pen"></i>Edit
+                                            </button>
+                                            <button onclick="deleteMonitoring({{ $item->id }})"
+                                                class="px-3 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700">
+                                                <i class="mr-1 fas fa-times"></i>Tolak
+                                            </button>
                                     </div>
                                     @elseif($item->status == 'diterima')
                                     <!-- Status Diterima -->
@@ -286,13 +292,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         Bidang</th>
                                     <th
                                         class="min-w-[70px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
-                                        Saldo</th>
+                                        Stok</th>
                                     <th
                                         class="min-w-[70px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
-                                        Kredit</th>
+                                        Keluar</th>
                                     <th
                                         class="min-w-[80px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
-                                        Saldo Akhir</th>
+                                        Sisa</th>
                                     <th
                                         class="min-w-[100px] px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
                                         Status</th>
@@ -347,12 +353,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ number_format($item->saldo, 0, ',', '.') }}
                                     </td>
-                                    <td
-                                        class="px-3 py-3 text-sm font-medium text-center text-red-600 border whitespace-nowrap">
-                                        {{ number_format($item->kredit, 0, ',', '.') }}
+                                    <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
+                                        {{ number_format($item->saldo_akhir, 0, ',', '.') }}
                                     </td>
                                     <td
-                                        class="px-3 py-3 text-sm font-medium text-center text-gray-900 border whitespace-nowrap">
+                                        class="px-3 py-3 text-sm font-medium text-center border whitespace-nowrap {{ $item->saldo_akhir < 0 ? 'text-red-600 font-bold' : 'text-gray-900' }}">
                                         {{ number_format($item->saldo_akhir, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-3 text-sm border">
@@ -391,57 +396,64 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                         <div class="flex gap-1">
                                             @if($item->status == 'diajukan')
                                             <!-- Status Diajukan - bisa diterima atau ditolak -->
-                                            <button onclick="updateStatus({{ $item->id }}, 'diterima')"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
-                                                title="Terima">
+                                            @if($item->saldo_akhir < 0) <button onclick="showStockWarning()"
+                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                title="Stok tidak tersedia">
                                                 <i class="fas fa-check"></i>
-                                            </button>
-                                            <button onclick="editMonitoring({{ $item->id }})"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
-                                                title="Edit">
-                                                <i class="fas fa-pen"></i>
-                                            </button>
-                                            <button onclick="deleteMonitoring({{ $item->id }})"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700"
-                                                title="Tolak">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                            @elseif($item->status == 'diterima')
-                                            <!-- Status Diterima - bisa dibatalkan -->
-                                            <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
-                                                title="Batalkan">
-                                                <i class="fas fa-undo"></i>
-                                            </button>
-                                            <button disabled
-                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
-                                                title="Tidak dapat mengedit data yang sudah diterima">
-                                                <i class="fas fa-pen"></i>
-                                            </button>
-                                            <button disabled
-                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
-                                                title="Data sudah diterima">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                            @elseif($item->status == 'ditolak')
-                                            <!-- Status Ditolak - bisa dikembalikan ke diajukan -->
-                                            <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
-                                                title="Kembalikan ke diajukan">
-                                                <i class="fas fa-redo"></i>
-                                            </button>
-                                            <button
-                                                onclick="showRejectionReason('{{ addslashes($item->alasan_penolakan ?? 'Tidak ada alasan') }}')"
-                                                class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
-                                                title="Lihat alasan penolakan">
-                                                <i class="fas fa-question"></i>
-                                            </button>
-                                            <button disabled
-                                                class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
-                                                title="Data sudah ditolak">
-                                                <i class="fas fa-times"></i>
-                                            </button>
-                                            @endif
+                                                </button>
+                                                @else
+                                                <button onclick="updateStatus({{ $item->id }}, 'diterima')"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-green-600 rounded hover:bg-green-700"
+                                                    title="Terima">
+                                                    <i class="fas fa-check"></i>
+                                                </button>
+                                                @endif
+                                                <button onclick="editMonitoring({{ $item->id }})"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
+                                                    title="Edit">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                                <button onclick="deleteMonitoring({{ $item->id }})"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-red-600 rounded hover:bg-red-700"
+                                                    title="Tolak">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                @elseif($item->status == 'diterima')
+                                                <!-- Status Diterima - bisa dibatalkan -->
+                                                <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
+                                                    title="Batalkan">
+                                                    <i class="fas fa-undo"></i>
+                                                </button>
+                                                <button disabled
+                                                    class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                    title="Tidak dapat mengedit data yang sudah diterima">
+                                                    <i class="fas fa-pen"></i>
+                                                </button>
+                                                <button disabled
+                                                    class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                    title="Data sudah diterima">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                @elseif($item->status == 'ditolak')
+                                                <!-- Status Ditolak - bisa dikembalikan ke diajukan -->
+                                                <button onclick="updateStatus({{ $item->id }}, 'diajukan')"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-yellow-600 rounded hover:bg-yellow-700"
+                                                    title="Kembalikan ke diajukan">
+                                                    <i class="fas fa-redo"></i>
+                                                </button>
+                                                <button
+                                                    onclick="showRejectionReason('{{ addslashes($item->alasan_penolakan ?? 'Tidak ada alasan') }}')"
+                                                    class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-600 rounded hover:bg-blue-700"
+                                                    title="Lihat alasan penolakan">
+                                                    <i class="fas fa-question"></i>
+                                                </button>
+                                                <button disabled
+                                                    class="px-2 py-1 text-xs text-gray-400 transition duration-150 bg-gray-300 rounded cursor-not-allowed"
+                                                    title="Data sudah ditolak">
+                                                    <i class="fas fa-times"></i>
+                                                </button>
+                                                @endif
                                         </div>
                                     </td>
                                 </tr>
@@ -476,45 +488,119 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
 <script>
     // Update status function
+function showStockWarning() {
+    Swal.fire({
+        icon: 'error',
+        title: 'Stok Tidak Tersedia',
+        text: 'Barang tidak dapat diproses karena stok tidak mencukupi atau sudah habis (sisa minus).',
+        confirmButtonColor: '#dc2626',
+        confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
+    });
+}
+
 function updateStatus(id, status) {
     const actionText = status === 'diterima' ? 'menerima' : 'membatalkan penerimaan';
     const confirmTitle = status === 'diterima' ? 'Terima Pengambilan?' : 'Batalkan Penerimaan?';
-    const confirmText = `Yakin ingin ${actionText} pengambilan barang ini?`;
     const confirmButtonText = status === 'diterima' ? '<i class="mr-2 fas fa-check"></i>Terima!' : '<i class="mr-2 fas fa-check"></i>Ya, Batalkan!';
     const confirmButtonColor = status === 'diterima' ? '#16a34a' : '#f59e0b';
 
-    Swal.fire({
-        title: confirmTitle,
-        text: confirmText,
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: confirmButtonColor,
-        cancelButtonColor: '#6b7280',
-        confirmButtonText: confirmButtonText,
-        cancelButtonText: '<i class="mr-2 fas fa-times"></i>Tidak',
-        reverseButtons: true
-    }).then((result) => {
-        if (result.isConfirmed) {
-            // Show loading
-            Swal.fire({
-                title: 'Memproses...',
-                text: 'Sedang memperbarui status pengambilan',
-                allowOutsideClick: false,
-                showConfirmButton: false,
-                didOpen: () => {
-                    Swal.showLoading();
-                }
-            });
+    // Jika status diterima, tampilkan field feedback
+    if (status === 'diterima') {
+        Swal.fire({
+            title: confirmTitle,
+            html: `
+                <div class="text-left">
+                    <p class="mb-4 text-sm text-gray-600">Berikan feedback untuk pengambilan barang ini (opsional)</p>
+                    <textarea
+                        id="feedback-penerimaan"
+                        class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-green-500 focus:border-green-500"
+                        rows="4"
+                        maxlength="1000"
+                        placeholder="Contoh: Barang diterima dengan baik, pastikan digunakan sesuai kebutuhan..."
+                    ></textarea>
+                    <div class="mt-1 text-xs text-right text-gray-500">
+                        <span id="feedback-char-count">0</span>/1000 karakter
+                    </div>
+                </div>
+            `,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+            reverseButtons: true,
+            preConfirm: () => {
+                const feedback = document.getElementById('feedback-penerimaan').value.trim();
+                return feedback || null; // Return null jika kosong
+            },
+            didOpen: () => {
+                const textarea = document.getElementById('feedback-penerimaan');
+                const charCount = document.getElementById('feedback-char-count');
 
-            // Send request
-            fetch(`{{ url('/admin/monitoring-barang') }}/${id}/update-status`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
-                },
-                body: JSON.stringify({ status: status })
-            })
+                textarea.addEventListener('input', function() {
+                    charCount.textContent = this.value.length;
+                    if (this.value.length >= 1000) {
+                        charCount.style.color = '#dc2626';
+                    } else {
+                        charCount.style.color = '#6b7280';
+                    }
+                });
+
+                textarea.focus();
+            }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                const feedback = result.value;
+                sendUpdateStatus(id, status, feedback);
+            }
+        });
+    } else {
+        // Untuk status selain diterima, langsung konfirmasi tanpa feedback
+        Swal.fire({
+            title: confirmTitle,
+            text: `Yakin ingin ${actionText} pengambilan barang ini?`,
+            icon: 'question',
+            showCancelButton: true,
+            confirmButtonColor: confirmButtonColor,
+            cancelButtonColor: '#6b7280',
+            confirmButtonText: confirmButtonText,
+            cancelButtonText: '<i class="mr-2 fas fa-times"></i>Tidak',
+            reverseButtons: true
+        }).then((result) => {
+            if (result.isConfirmed) {
+                sendUpdateStatus(id, status, null);
+            }
+        });
+    }
+}
+
+function sendUpdateStatus(id, status, feedback) {
+    // Show loading
+    Swal.fire({
+        title: 'Memproses...',
+        text: 'Sedang memperbarui status pengambilan',
+        allowOutsideClick: false,
+        showConfirmButton: false,
+        didOpen: () => {
+            Swal.showLoading();
+        }
+    });
+
+    // Send request
+    const requestBody = { status: status };
+    if (feedback) {
+        requestBody.feedback = feedback;
+    }
+
+    fetch(`{{ url('/admin/monitoring-barang') }}/${id}/update-status`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+        },
+        body: JSON.stringify(requestBody)
+    })
             .then(response => response.json())
             .then(data => {
                 if (data.success) {
@@ -548,8 +634,6 @@ function updateStatus(id, status) {
                     confirmButtonText: '<i class="mr-2 fas fa-times"></i>OK'
                 });
             });
-        }
-    });
 }
 
 // Delete monitoring function (with rejection reason)
@@ -731,14 +815,14 @@ function editMonitoring(id) {
                             <div>
                                 <label class="flex items-center block mb-2 text-sm font-medium text-gray-500">
                                     <i class="mr-2 text-gray-400 fas fa-wallet"></i>
-                                    Saldo
+                                    Stok
                                 </label>
                                 <input type="number" class="w-full px-3 py-2 text-gray-500 bg-gray-100 border border-gray-200 rounded-md" value="${monitoring.saldo}" readonly>
                             </div>
                             <div>
                                 <label class="flex items-center block mb-2 text-sm font-medium text-gray-500">
                                     <i class="mr-2 text-gray-400 fas fa-calculator"></i>
-                                    Saldo Akhir
+                                    Sisa
                                 </label>
                                 <input type="number" class="w-full px-3 py-2 text-gray-500 bg-gray-100 border border-gray-200 rounded-md" value="${monitoring.saldo_akhir}" readonly>
                             </div>

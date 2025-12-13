@@ -3,7 +3,7 @@
 @section('title', 'Laporan Triwulan')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @push('styles')
@@ -61,17 +61,17 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="flex items-center justify-between">
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Laporan Triwulan</h2>
-                            <p class="mt-1 text-sm text-gray-600">Kelola dan pantau laporan barang per triwulan</p>
+                            <p class="mt-1 text-sm text-gray-600">Kelola laporan triwulan</p>
                         </div>
                         <div class="flex space-x-3">
                             <button onclick="generateCurrentQuarter()"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md shadow-sm hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <i class="fas fa-plus mr-2"></i>
+                                <i class="mr-2 fas fa-plus"></i>
                                 Generate Triwulan Saat Ini
                             </button>
                             <button onclick="generateCustomQuarter()"
                                 class="inline-flex items-center px-4 py-2 text-sm font-medium text-gray-700 bg-white border border-gray-300 rounded-md shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                <i class="fas fa-chart-line mr-2"></i>
+                                <i class="mr-2 fas fa-chart-line"></i>
                                 Generate Custom
                             </button>
                         </div>
@@ -79,20 +79,20 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                 </div>
 
                 <!-- Filter & Statistics Cards -->
-                <div class="bg-white rounded-lg shadow-sm mb-6">
+                <div class="mb-6 bg-white rounded-lg shadow-sm">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <h5 class="text-lg font-semibold text-gray-900 flex items-center">
-                            <i class="fas fa-filter mr-2 text-blue-600"></i>Filter & Ringkasan Laporan
+                        <h5 class="flex items-center text-lg font-semibold text-gray-900">
+                            <i class="mr-2 text-blue-600 fas fa-filter"></i>Filter & Ringkasan Laporan
                         </h5>
                     </div>
                     <div class="p-6">
                         <!-- Filter Form -->
                         <form method="GET" id="filterForm"
-                            class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+                            class="grid grid-cols-1 gap-4 mb-6 md:grid-cols-2 lg:grid-cols-4">
                             <div>
-                                <label for="tahun" class="block text-sm font-medium text-gray-700 mb-2">Tahun</label>
+                                <label for="tahun" class="block mb-2 text-sm font-medium text-gray-700">Tahun</label>
                                 <select name="tahun" id="tahun"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     @foreach($availableYears as $year)
                                     <option value="{{ $year }}" {{ $year==$tahun ? 'selected' : '' }}>
                                         {{ $year }}
@@ -102,9 +102,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             </div>
                             <div>
                                 <label for="triwulan"
-                                    class="block text-sm font-medium text-gray-700 mb-2">Triwulan</label>
+                                    class="block mb-2 text-sm font-medium text-gray-700">Triwulan</label>
                                 <select name="triwulan" id="triwulan"
-                                    class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                                    class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                     <option value="">Semua Triwulan</option>
                                     <option value="1" {{ $triwulan=='1' ? 'selected' : '' }}>Q1 (Jan-Mar)</option>
                                     <option value="2" {{ $triwulan=='2' ? 'selected' : '' }}>Q2 (Apr-Jun)</option>
@@ -113,29 +113,29 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                 </select>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Aksi</label>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Aksi</label>
                                 <div class="flex space-x-2">
                                     <button type="submit"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-                                        <i class="fas fa-search mr-2"></i>Filter
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                        <i class="mr-2 fas fa-search"></i>Filter
                                     </button>
                                     <button type="button"
-                                        class="inline-flex items-center px-3 py-2 border border-gray-300 text-sm leading-4 font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-gray-700 bg-white border border-gray-300 rounded-md hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                         onclick="resetFilter()">
-                                        <i class="fas fa-undo mr-2"></i>Reset
+                                        <i class="mr-2 fas fa-undo"></i>Reset
                                     </button>
                                 </div>
                             </div>
                             <div>
-                                <label class="block text-sm font-medium text-gray-700 mb-2">Export</label>
+                                <label class="block mb-2 text-sm font-medium text-gray-700">Export</label>
                                 <div class="flex space-x-2">
                                     <a href="{{ route('admin.laporan-triwulan.export', ['tahun' => $tahun, 'triwulan' => $triwulan, 'format' => 'excel']) }}"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                        <i class="fas fa-file-excel mr-1"></i>Excel
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white bg-green-600 border border-transparent rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                                        <i class="mr-1 fas fa-file-excel"></i>Excel
                                     </a>
                                     <a href="{{ route('admin.laporan-triwulan.export', ['tahun' => $tahun, 'triwulan' => $triwulan, 'format' => 'csv']) }}"
-                                        class="inline-flex items-center px-3 py-2 border border-transparent text-sm leading-4 font-medium rounded-md text-white bg-teal-600 hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
-                                        <i class="fas fa-file-csv mr-1"></i>CSV
+                                        class="inline-flex items-center px-3 py-2 text-sm font-medium leading-4 text-white bg-teal-600 border border-transparent rounded-md hover:bg-teal-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-teal-500">
+                                        <i class="mr-1 fas fa-file-csv"></i>CSV
                                     </a>
                                 </div>
                             </div>
@@ -143,7 +143,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 
                         <!-- Statistics Cards -->
                         @if($ringkasan->isNotEmpty())
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
+                        <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
                             @foreach($ringkasan as $index => $stat)
                             @php
                             $colors = [
@@ -156,22 +156,22 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <div class="rounded-lg shadow-sm {{ $colors[$index % 4] }} text-white p-4">
                                 <div class="flex items-start">
                                     <div class="flex-1">
-                                        <div class="text-white/70 text-sm font-medium mb-1">
+                                        <div class="mb-1 text-sm font-medium text-white/70">
                                             Triwulan {{ $stat->triwulan }} - {{ $tahun }}
                                         </div>
-                                        <div class="text-2xl font-bold mb-2">
+                                        <div class="mb-2 text-2xl font-bold">
                                             Rp {{ number_format($stat->total_nilai_akhir, 0, ',', '.') }}
                                         </div>
                                         <div class="space-y-1 text-sm text-white/80">
                                             <div class="flex items-center">
-                                                <i class="fas fa-boxes mr-2"></i>{{ $stat->jumlah_barang }} Jenis Barang
+                                                <i class="mr-2 fas fa-boxes"></i>{{ $stat->jumlah_barang }} Jenis Barang
                                             </div>
                                             <div class="flex items-center">
-                                                <i class="fas fa-arrow-up mr-2"></i>Pengadaan: {{
+                                                <i class="mr-2 fas fa-arrow-up"></i>Pengadaan: {{
                                                 number_format($stat->total_pengadaan) }}
                                             </div>
                                             <div class="flex items-center">
-                                                <i class="fas fa-arrow-down mr-2"></i>Pemakaian: {{
+                                                <i class="mr-2 fas fa-arrow-down"></i>Pemakaian: {{
                                                 number_format($stat->total_pemakaian) }}
                                             </div>
                                         </div>
@@ -187,9 +187,9 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                 <!-- Data Table -->
                 <div class="bg-white rounded-lg shadow-sm">
                     <div class="px-6 py-4 border-b border-gray-200">
-                        <div class="flex justify-between items-center">
-                            <h5 class="text-lg font-semibold text-gray-900 flex items-center">
-                                <i class="fas fa-table mr-2 text-blue-600"></i>Data Laporan Triwulan
+                        <div class="flex items-center justify-between">
+                            <h5 class="flex items-center text-lg font-semibold text-gray-900">
+                                <i class="mr-2 text-blue-600 fas fa-table"></i>Data Laporan Triwulan
                                 @if($triwulan)
                                 - Q{{ $triwulan }} {{ $tahun }}
                                 @else
@@ -199,58 +199,58 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             <div>
                                 <span
                                     class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                    <i class="fas fa-list mr-1"></i>{{ $laporans->count() }} Data
+                                    <i class="mr-1 fas fa-list"></i>{{ $laporans->count() }} Data
                                 </span>
                             </div>
                         </div>
                     </div>
                     <div class="p-0">
                         @if($laporans->isEmpty())
-                        <div class="text-center py-12">
-                            <h5 class="text-lg font-medium text-gray-500 mb-2">Belum Ada Data Laporan</h5>
-                            <p class="text-gray-400 mb-4">Silakan generate laporan terlebih dahulu</p>
+                        <div class="py-12 text-center">
+                            <h5 class="mb-2 text-lg font-medium text-gray-500">Belum Ada Data Laporan</h5>
+                            <p class="mb-4 text-gray-400">Silakan generate laporan</p>
                             <button type="button"
-                                class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
+                                class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500"
                                 onclick="generateCurrentQuarter()">
-                                <i class="fas fa-plus mr-2"></i> Generate Laporan
+                                <i class="mr-2 fas fa-plus"></i> Generate Laporan
                             </button>
                         </div>
                         @else
                         <!-- Desktop Table View -->
-                        <div class="hidden lg:block overflow-x-auto">
+                        <div class="hidden overflow-x-auto lg:block">
                             <table class="min-w-full divide-y divide-gray-200">
                                 <thead class="bg-gray-50">
                                     <tr>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Periode
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Barang
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Stok Awal
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Pengadaan
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Pemakaian
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Stok Akhir
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Nilai (Rp)
                                         </th>
                                         <th scope="col"
-                                            class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                            class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                             Aksi
                                         </th>
                                     </tr>
@@ -270,22 +270,22 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             <div class="text-sm text-gray-500">{{ $laporan->barang->kategori_barang }}
                                             </div>
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ number_format($laporan->stok_awal) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ number_format($laporan->pengadaan) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ number_format($laporan->pemakaian) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             {{ number_format($laporan->stok_akhir) }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                                        <td class="px-6 py-4 text-sm text-gray-900 whitespace-nowrap">
                                             Rp {{ number_format($laporan->nilai_akhir, 0, ',', '.') }}
                                         </td>
-                                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                                        <td class="px-6 py-4 text-sm font-medium whitespace-nowrap">
                                             <div class="flex space-x-2">
                                                 <button onclick="showDetailLaporan({{ $laporan->id }})"
                                                     class="text-blue-600 hover:text-blue-900">
@@ -297,8 +297,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                                 </button>
                                                 <button onclick="deleteLaporan({{ $laporan->id }})"
                                                     class="text-red-600 hover:text-red-900">
-                                                    <i class="fas fa-trash"></i>
-                                                </button>
+                                                    <i class="fas fa-trash"></i>                                                </button>
                                             </div>
                                         </td>
                                     </tr>
@@ -383,16 +382,16 @@ function generateCustomQuarter() {
         html: `
             <div class="text-left">
                 <div class="mb-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Tahun</label>
-                    <select id="customTahun" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Tahun</label>
+                    <select id="customTahun" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         @foreach($availableYears as $year)
                         <option value="{{ $year }}" {{ $year==$tahun ? 'selected' : '' }}>{{ $year }}</option>
                         @endforeach
                     </select>
                 </div>
                 <div class="mb-3">
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Triwulan</label>
-                    <select id="customTriwulan" class="w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500">
+                    <label class="block mb-2 text-sm font-medium text-gray-700">Triwulan</label>
+                    <select id="customTriwulan" class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                         <option value="1">Q1 (Jan-Mar)</option>
                         <option value="2">Q2 (Apr-Jun)</option>
                         <option value="3">Q3 (Jul-Sep)</option>

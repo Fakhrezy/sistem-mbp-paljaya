@@ -136,17 +136,6 @@ Keranjang Barang
                     @endif
                 </div>
 
-                <!-- Nama Pengambil Section -->
-                <div class="mb-4">
-                    <label for="edit_pengambil" class="flex items-center mb-2 text-sm font-medium text-gray-700">
-                        <i class="mr-2 text-gray-500 fas fa-user"></i>
-                        Nama Pengambil <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="edit_pengambil" name="pengambil" required
-                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Masukkan nama pengambil...">
-                </div>
-
                 <!-- Keterangan Section -->
                 <div class="mb-4">
                     <label for="edit_keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
@@ -417,7 +406,6 @@ function showEditModal(cartId, namaBarang, quantity, bidang, keterangan, pengamb
     }
 
     document.getElementById('edit_keterangan').value = keterangan || '';
-    document.getElementById('edit_pengambil').value = pengambil || '';
     document.getElementById('edit_max_stock').textContent = maxStock;
     document.getElementById('edit_satuan').textContent = satuan;
 
@@ -470,16 +458,6 @@ function updateCartItem() {
             icon: 'warning',
             title: 'Perhatian!',
             text: 'Bidang harus terisi. Pastikan akun Anda sudah terdaftar dengan bidang yang sesuai.',
-            confirmButtonColor: '#f59e0b'
-        });
-        return;
-    }
-
-    if (!pengambil || pengambil.trim() === '') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Perhatian!',
-            text: 'Nama pengambil harus diisi.',
             confirmButtonColor: '#f59e0b'
         });
         return;

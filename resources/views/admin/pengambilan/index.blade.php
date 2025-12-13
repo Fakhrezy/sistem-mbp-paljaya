@@ -3,7 +3,7 @@
 @section('title', 'Pengambilan Barang')
 
 @section('header')
-SISTEM MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')
@@ -106,16 +106,16 @@ SISTEM MONITORING BARANG HABIS PAKAI
 
 				<!-- Items Grid -->
 				@if ($barang->count() > 0)
-				<div class="mb-6 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+				<div class="mb-6 grid grid-cols-1 gap-2 sm:grid-cols-2 md:grid-cols-6">
 					@foreach ($barang as $item)
 					<div
-						class="rounded-lg border border-gray-200 bg-white shadow-md transition-shadow duration-200 hover:shadow-lg">
+						class="rounded-lg border border-gray-200 bg-white shadow transition-shadow duration-200 hover:shadow-md">
 						<!-- Item Image -->
-						<div class="aspect-w-1 aspect-h-1 h-48 w-full overflow-hidden rounded-t-lg bg-gray-200">
+						<div class="aspect-w-1 aspect-h-1 h-32 w-full overflow-hidden rounded-t-lg bg-gray-200">
 							@if ($item->foto)
-							<div class="flex h-full items-center justify-center p-4">
+							<div class="flex h-full items-center justify-center p-2">
 								<img src="{{ asset('storage/' . $item->foto) }}" alt="{{ $item->nama_barang }}"
-									style="width: 140px; height: 140px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
+									style="width: 100px; height: 100px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
 							</div>
 							@else
 							<div class="flex h-full items-center justify-center bg-gray-100">
@@ -129,26 +129,26 @@ SISTEM MONITORING BARANG HABIS PAKAI
 						</div>
 
 						<!-- Item Info -->
-						<div class="p-4">
-							<h3 class="mb-2 line-clamp-2 text-lg font-semibold text-gray-900">
+						<div class="p-2">
+							<h3 class="mb-1.5 text-sm font-semibold text-gray-900 line-clamp-1">
 								{{ $item->nama_barang }}</h3>
 
-							<div class="mb-4 space-y-2">
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Jenis:</span>
-									<span class="text-sm font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
+							<div class="mb-2.5 space-y-1">
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-gray-600">Jenis:</span>
+									<span class="text-xs font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
 								</div>
 
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Satuan:</span>
-									<span class="text-sm font-medium text-gray-900">{{ $item->satuan }}</span>
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-gray-600">Satuan:</span>
+									<span class="text-xs font-medium text-gray-900">{{ $item->satuan }}</span>
 								</div>
 
-								<div class="flex items-center justify-between">
-									<span class="text-sm text-gray-600">Stok Tersedia:</span>
+								<div class="flex items-center gap-2">
+									<span class="text-xs text-gray-600">Stok Tersedia:</span>
 									<span id="stock-{{ $item->id_barang }}" class="@if ($item->available_stock > 10) text-green-600
                                 @elseif($item->available_stock > 5) text-yellow-600
-                                @else text-red-600 @endif text-sm font-bold">
+                                @else text-red-600 @endif text-xs font-bold">
 										{{ $item->available_stock }}
 									</span>
 								</div>
@@ -160,10 +160,10 @@ SISTEM MONITORING BARANG HABIS PAKAI
 								data-barang-nama="{{ addslashes($item->nama_barang) }}"
 								data-satuan="{{ $item->satuan }}" data-current-stock="{{ $item->available_stock }}"
 								onclick="handleAddToCart(this)"
-								class="inline-flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+								class="inline-flex w-full items-center justify-center rounded-md border border-transparent px-4 py-2 text-sm font-semibold tracking-wide text-white transition duration-150 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
 								style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
 								onmouseout="this.style.backgroundColor='#0074BC'">
-								<i class="fas fa-cart-plus mr-2"></i>
+								<i class="fas fa-cart-plus mr-2 text-sm"></i>
 								Ambil Barang
 							</button>
 							@else

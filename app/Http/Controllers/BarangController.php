@@ -232,7 +232,7 @@ class BarangController extends Controller
 </head>
 <body>
     <div class="header">
-        SISTEM INFORMASI MONITORING BARANG HABIS PAKAI<br>
+        SISTEM PERSEDIAAN BARANG<br>
         Daftar Barang<br>
         <br><br>
     </div>

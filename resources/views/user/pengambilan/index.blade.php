@@ -70,11 +70,9 @@ Pengambilan Barang
                             <select name="jenis"
                                 class="w-full border-gray-300 rounded-md shadow-sm focus:border-blue-500 focus:ring-blue-500">
                                 <option value="">Semua Jenis</option>
-                                @foreach($jenisBarang as $jenis)
-                                <option value="{{ $jenis }}" {{ request('jenis')==$jenis ? 'selected' : '' }}>
-                                    {{ ucfirst($jenis) }}
-                                </option>
-                                @endforeach
+                                <option value="atk" {{ request('jenis')=='atk' ? 'selected' : '' }}>ATK</option>
+                                <option value="cetak" {{ request('jenis')=='cetak' ? 'selected' : '' }}>Cetak</option>
+                                <option value="tinta" {{ request('jenis')=='tinta' ? 'selected' : '' }}>Tinta</option>
                             </select>
                         </div>
 
@@ -96,22 +94,22 @@ Pengambilan Barang
 
                 <!-- Items Grid -->
                 @if($barang->count() > 0)
-                <div class="grid grid-cols-1 gap-6 mb-6 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
+                <div class="grid grid-cols-1 gap-2 mb-6 sm:grid-cols-2 md:grid-cols-6">
                     @foreach($barang as $item)
                     <div
-                        class="transition-shadow duration-200 bg-white border border-gray-200 rounded-lg shadow-md hover:shadow-lg">
+                        class="transition-shadow duration-200 bg-white border border-gray-200 rounded-lg shadow hover:shadow-md">
                         <!-- Item Image -->
-                        <div class="w-full h-48 overflow-hidden bg-gray-200 rounded-t-lg aspect-w-1 aspect-h-1">
+                        <div class="w-full h-32 overflow-hidden bg-gray-200 rounded-t-lg aspect-w-1 aspect-h-1">
                             @if($item->foto)
-                            <div class="flex items-center justify-center h-full p-4">
+                            <div class="flex items-center justify-center h-full p-2">
                                 <img src="{{ asset('storage/'.$item->foto) }}" alt="{{ $item->nama_barang }}"
-                                    style="width: 140px; height: 140px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
+                                    style="width: 100px; height: 100px; object-fit: cover; border-radius: 0.375rem; box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);">
                             </div>
                             @else
                             <div class="flex items-center justify-center h-full bg-gray-100">
                                 <span
-                                    class="inline-flex items-center px-3 py-2 text-sm font-medium text-gray-600 bg-gray-200 rounded-full">
-                                    <i class="mr-2 text-gray-400 fas fa-image"></i>
+                                    class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-600 bg-gray-200 rounded-full">
+                                    <i class="mr-1 text-gray-400 fas fa-image"></i>
                                     No Image
                                 </span>
                             </div>
@@ -119,24 +117,24 @@ Pengambilan Barang
                         </div>
 
                         <!-- Item Info -->
-                        <div class="p-4">
-                            <h3 class="mb-2 text-lg font-semibold text-gray-900 line-clamp-2">{{ $item->nama_barang }}
+                        <div class="p-2">
+                            <h3 class="mb-1.5 text-sm font-semibold text-gray-900 line-clamp-1">{{ $item->nama_barang }}
                             </h3>
 
-                            <div class="mb-4 space-y-2">
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600">Jenis:</span>
-                                    <span class="text-sm font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
+                            <div class="mb-2.5 space-y-1">
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-600">Jenis:</span>
+                                    <span class="text-xs font-medium text-gray-900">{{ ucfirst($item->jenis) }}</span>
                                 </div>
 
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600">Satuan:</span>
-                                    <span class="text-sm font-medium text-gray-900">{{ $item->satuan }}</span>
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-600">Satuan:</span>
+                                    <span class="text-xs font-medium text-gray-900">{{ $item->satuan }}</span>
                                 </div>
 
-                                <div class="flex items-center justify-between">
-                                    <span class="text-sm text-gray-600">Stok Tersedia:</span>
-                                    <span id="stock-{{ $item->id_barang }}" class="text-sm font-bold
+                                <div class="flex items-center gap-2">
+                                    <span class="text-xs text-gray-600">Stok Tersedia:</span>
+                                    <span id="stock-{{ $item->id_barang }}" class="text-xs font-bold
                                 @if($item->available_stock > 10) text-green-600
                                 @elseif($item->available_stock > 5) text-yellow-600
                                 @else text-red-600
@@ -152,10 +150,10 @@ Pengambilan Barang
                                 data-barang-nama="{{ addslashes($item->nama_barang) }}"
                                 data-satuan="{{ $item->satuan }}" data-current-stock="{{ $item->available_stock }}"
                                 onclick="handleAddToCart(this)"
-                                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold tracking-widest text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                                class="inline-flex items-center justify-center w-full px-4 py-2 text-sm font-semibold tracking-wide text-white transition duration-150 ease-in-out border border-transparent rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
                                 style="background-color: #0074BC;" onmouseover="this.style.backgroundColor='#005a94'"
                                 onmouseout="this.style.backgroundColor='#0074BC'">
-                                <i class="mr-2 fas fa-cart-plus"></i>
+                                <i class="mr-2 text-sm fas fa-cart-plus"></i>
                                 Ambil Barang
                             </button>
                             @else
@@ -301,17 +299,6 @@ Pengambilan Barang
                         @endforeach
                     </select>
                     @endif
-                </div>
-
-                <!-- Nama Pengambil Section -->
-                <div class="mb-4">
-                    <label for="pengambil" class="flex items-center mb-2 text-sm font-medium text-gray-700">
-                        <i class="mr-2 text-gray-500 fas fa-user"></i>
-                        Nama Pengambil <span class="text-red-500">*</span>
-                    </label>
-                    <input type="text" id="pengambil" name="pengambil" required
-                        class="w-full px-3 py-2 transition-colors duration-200 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                        placeholder="Masukkan nama pengambil...">
                 </div>
 
                 <!-- Keterangan Section -->
@@ -473,7 +460,6 @@ function showAddToCartModal(barangId, namaBarang, satuan, stok) {
     }
 
     document.getElementById('keterangan').value = '';
-    document.getElementById('pengambil').value = '';
 
     const modal = document.getElementById('addToCartModal');
     modal.classList.remove('hidden');
@@ -533,17 +519,6 @@ function addToCart() {
             icon: 'warning',
             title: 'Perhatian!',
             text: 'Bidang harus terisi. Pastikan akun Anda sudah terdaftar dengan bidang yang sesuai.',
-            confirmButtonColor: '#f59e0b'
-        });
-        return;
-    }
-
-    // Validate pengambil
-    if (!formData.get('pengambil') || formData.get('pengambil').trim() === '') {
-        Swal.fire({
-            icon: 'warning',
-            title: 'Perhatian!',
-            text: 'Nama pengambil harus diisi.',
             confirmButtonColor: '#f59e0b'
         });
         return;

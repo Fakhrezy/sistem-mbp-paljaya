@@ -86,6 +86,7 @@ Route::middleware(['auth', 'role:admin'])->group(function () {
         Route::get('/admin/monitoring-pengadaan/{id}/edit', 'edit')->name('admin.monitoring-pengadaan.edit');
         Route::put('/admin/monitoring-pengadaan/{id}', 'update')->name('admin.monitoring-pengadaan.update');
         Route::post('/admin/monitoring-pengadaan/{id}/status', 'updateStatus')->name('admin.monitoring-pengadaan.update-status');
+        Route::post('/admin/monitoring-pengadaan/bulk-complete', 'bulkComplete')->name('admin.monitoring-pengadaan.bulk-complete');
         Route::delete('/admin/monitoring-pengadaan/{id}', 'destroy')->name('admin.monitoring-pengadaan.destroy');
     });
 

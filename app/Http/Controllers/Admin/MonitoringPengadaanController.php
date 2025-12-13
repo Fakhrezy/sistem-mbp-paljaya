@@ -220,6 +220,95 @@ class MonitoringPengadaanController extends Controller
     }
 
     /**
+     * Bulk complete pengadaan
+     */
+    public function bulkComplete(Request $request)
+    {
+        try {
+            $request->validate([
+                'ids' => 'required|array|min:1',
+                'ids.*' => 'integer|exists:monitoring_pengadaan,id'
+            ]);
+
+            DB::beginTransaction();
+
+            $successCount = 0;
+            $failedItems = [];
+
+            foreach ($request->ids as $id) {
+                try {
+                    $pengadaan = MonitoringPengadaan::with('barang')->find($id);
+
+                    if (!$pengadaan) {
+                        $failedItems[] = "ID: $id (tidak ditemukan)";
+                        continue;
+                    }
+
+                    // Skip if already completed
+                    if ($pengadaan->status === 'selesai') {
+                        continue;
+                    }
+
+                    $jumlahPengadaan = $pengadaan->debit;
+
+                    // Update stok barang (tambah stok saat pengadaan selesai)
+                    $pengadaan->barang->stok += $jumlahPengadaan;
+                    $pengadaan->barang->save();
+
+                    // Update saldo dan saldo_akhir di monitoring pengadaan
+                    $pengadaan->saldo = $pengadaan->barang->stok - $jumlahPengadaan; // Saldo sebelum pengadaan
+                    $pengadaan->saldo_akhir = $pengadaan->barang->stok; // Saldo setelah pengadaan
+
+                    // Update pengadaan status
+                    $pengadaan->status = 'selesai';
+                    $pengadaan->save();
+
+                    // Sinkronisasi ke detail monitoring barang menggunakan service yang sudah ada
+                    $this->detailMonitoringService->syncFromMonitoringPengadaan($pengadaan->id);
+
+                    $successCount++;
+                } catch (\Exception $e) {
+                    $namaBarang = isset($pengadaan) && isset($pengadaan->barang) ? $pengadaan->barang->nama_barang : "ID: $id";
+                    $failedItems[] = $namaBarang;
+                    Log::error("Failed to complete pengadaan ID $id: " . $e->getMessage());
+                }
+            }
+
+            DB::commit();
+
+            if ($successCount > 0) {
+                $message = "$successCount pengadaan berhasil diselesaikan";
+                if (count($failedItems) > 0) {
+                    $message .= ", namun gagal untuk: " . implode(', ', $failedItems);
+                }
+                return response()->json([
+                    'success' => true,
+                    'message' => $message
+                ]);
+            } else {
+                DB::rollBack();
+                return response()->json([
+                    'success' => false,
+                    'message' => 'Tidak ada pengadaan yang berhasil diselesaikan'
+                ], 400);
+            }
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Data tidak valid: ' . $e->getMessage()
+            ], 422);
+        } catch (\Exception $e) {
+            DB::rollBack();
+            Log::error('Bulk complete error: ' . $e->getMessage());
+            Log::error('Stack trace: ' . $e->getTraceAsString());
+            return response()->json([
+                'success' => false,
+                'message' => 'Gagal menyelesaikan pengadaan: ' . $e->getMessage()
+            ], 500);
+        }
+    }
+
+    /**
      * Helper method to update saldo in monitoring barang table when stock changes
      */
     private function updateMonitoringBarangSaldo($idBarang, $newStok)

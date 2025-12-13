@@ -3,7 +3,7 @@
 @section('title', 'Monitoring Pengadaan')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')
@@ -16,6 +16,23 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         <div>
                             <h2 class="text-2xl font-semibold text-gray-800">Monitoring Pengadaan</h2>
                         </div>
+                    </div>
+                </div>
+
+                <!-- Bulk Action Button -->
+                <div id="bulkActionContainer" class="hidden p-4 mb-4 bg-blue-50 border border-blue-200 rounded-lg">
+                    <div class="flex items-center justify-between">
+                        <div class="flex items-center">
+                            <i class="mr-2 text-blue-500 fas fa-info-circle"></i>
+                            <span class="text-sm font-medium text-blue-800">
+                                <span id="selectedCount">0</span> item dipilih
+                            </span>
+                        </div>
+                        <button type="button" onclick="bulkComplete()"
+                            class="inline-flex items-center px-4 py-2 text-sm font-medium text-white bg-green-600 rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
+                            <i class="mr-2 fas fa-check"></i>
+                            Selesaikan Terpilih
+                        </button>
                     </div>
                 </div>
 
@@ -79,6 +96,12 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         <thead>
                             <tr class="bg-gray-50">
                                 <th
+                                    class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase border">
+                                    <input type="checkbox" id="selectAll"
+                                        class="w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        onchange="toggleSelectAll(this)">
+                                </th>
+                                <th
                                     class="w-12 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     No</th>
                                 <th
@@ -95,13 +118,13 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                     Satuan</th>
                                 <th
                                     class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
-                                    Saldo</th>
+                                    Stok</th>
                                 <th
                                     class="w-16 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
-                                    Debit</th>
+                                    Masuk</th>
                                 <th
                                     class="w-20 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
-                                    Saldo Akhir</th>
+                                    Sisa</th>
                                 <th
                                     class="w-24 px-3 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase border">
                                     Status</th>
@@ -116,6 +139,15 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($pengadaans as $index => $pengadaan)
                             <tr class="transition-colors duration-200 hover:bg-gray-50">
+                                <td class="px-3 py-3 text-sm text-center border">
+                                    @if($pengadaan->status === 'proses')
+                                    <input type="checkbox"
+                                        class="item-checkbox w-4 h-4 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
+                                        value="{{ $pengadaan->id }}" onchange="updateSelectedCount()">
+                                    @else
+                                    <span class="text-gray-400">-</span>
+                                    @endif
+                                </td>
                                 <td class="px-3 py-3 text-sm text-gray-900 border">
                                     {{ $pengadaans->firstItem() + $index }}
                                 </td>
@@ -207,7 +239,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                             </tr>
                             @empty
                             <tr>
-                                <td colspan="10" class="px-3 py-8 text-center text-gray-500 border">
+                                <td colspan="12" class="px-3 py-8 text-center text-gray-500 border">
                                     <div class="flex flex-col items-center">
                                         <i class="mb-2 text-3xl text-gray-400 fas fa-clipboard-list"></i>
                                         <p class="text-base font-medium">Belum ada data pengadaan</p>
@@ -233,6 +265,122 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
     @push('scripts')
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
     <script type="text/javascript">
+        // Bulk action functions
+        function toggleSelectAll(checkbox) {
+            const itemCheckboxes = document.querySelectorAll('.item-checkbox');
+            itemCheckboxes.forEach(item => {
+                item.checked = checkbox.checked;
+            });
+            updateSelectedCount();
+        }
+
+        function updateSelectedCount() {
+            const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+            const count = checkedBoxes.length;
+            const container = document.getElementById('bulkActionContainer');
+            const countSpan = document.getElementById('selectedCount');
+
+            if (count > 0) {
+                container.classList.remove('hidden');
+                countSpan.textContent = count;
+            } else {
+                container.classList.add('hidden');
+                document.getElementById('selectAll').checked = false;
+            }
+        }
+
+        function bulkComplete() {
+            const checkedBoxes = document.querySelectorAll('.item-checkbox:checked');
+            const ids = Array.from(checkedBoxes).map(cb => cb.value);
+
+            if (ids.length === 0) {
+                Swal.fire({
+                    title: 'Perhatian!',
+                    text: 'Pilih minimal satu item untuk diselesaikan',
+                    icon: 'warning',
+                    confirmButtonColor: '#3b82f6'
+                });
+                return;
+            }
+
+            Swal.fire({
+                title: 'Selesaikan Pengadaan Terpilih?',
+                text: `Anda akan menyelesaikan ${ids.length} pengadaan sekaligus`,
+                icon: 'question',
+                showCancelButton: true,
+                confirmButtonColor: '#16a34a',
+                cancelButtonColor: '#6b7280',
+                confirmButtonText: '<i class="mr-2 fas fa-check"></i>Ya, Selesaikan',
+                cancelButtonText: '<i class="mr-2 fas fa-times"></i>Batal',
+                reverseButtons: true
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    Swal.fire({
+                        title: 'Memproses...',
+                        text: 'Sedang menyelesaikan pengadaan',
+                        allowOutsideClick: false,
+                        showConfirmButton: false,
+                        didOpen: () => {
+                            Swal.showLoading();
+                        }
+                    });
+
+                    fetch('/admin/monitoring-pengadaan/bulk-complete', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+                            'Accept': 'application/json',
+                            'X-Requested-With': 'XMLHttpRequest'
+                        },
+                        body: JSON.stringify({ ids: ids })
+                    })
+                    .then(response => {
+                        const contentType = response.headers.get("content-type");
+                        if (!response.ok) {
+                            return response.text().then(text => {
+                                console.error('Response not OK:', text);
+                                throw new Error(`Server error: ${response.status}`);
+                            });
+                        }
+                        if (contentType && contentType.indexOf("application/json") !== -1) {
+                            return response.json();
+                        } else {
+                            return response.text().then(text => {
+                                console.error('Response is not JSON:', text);
+                                throw new Error('Server mengembalikan HTML bukan JSON. Cek log untuk detail.');
+                            });
+                        }
+                    })
+                    .then(data => {
+                        if (data.success) {
+                            Swal.fire({
+                                title: 'Berhasil!',
+                                text: data.message,
+                                icon: 'success',
+                                showConfirmButton: false,
+                                timer: 2000,
+                                timerProgressBar: true
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        } else {
+                            throw new Error(data.message || 'Terjadi kesalahan');
+                        }
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        Swal.fire({
+                            title: 'Error!',
+                            text: error.message,
+                            icon: 'error',
+                            confirmButtonColor: '#dc2626'
+                        });
+                    });
+                }
+            });
+        }
+
         document.addEventListener('DOMContentLoaded', function() {
     window.deletePengadaan = function(id) {
         Swal.fire({

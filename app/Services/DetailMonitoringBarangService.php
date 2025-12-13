@@ -122,9 +122,13 @@ class DetailMonitoringBarangService
     {
         $query = DetailMonitoringBarang::with(['barang', 'monitoringBarang', 'monitoringPengadaan']);
 
-        // Filter berdasarkan barang
-        if (isset($filters['id_barang']) && $filters['id_barang']) {
-            $query->where('id_barang', $filters['id_barang']);
+        // Filter pencarian berdasarkan nama barang atau nama pengambil
+        if (isset($filters['search']) && $filters['search']) {
+            $searchTerm = $filters['search'];
+            $query->where(function ($q) use ($searchTerm) {
+                $q->where('nama_barang', 'like', '%' . $searchTerm . '%')
+                    ->orWhere('pengambil', 'like', '%' . $searchTerm . '%');
+            });
         }
 
         // Filter berdasarkan rentang tanggal
@@ -148,6 +152,13 @@ class DetailMonitoringBarangService
             } elseif ($filters['jenis'] === 'kredit') {
                 $query->where('kredit', '>', 0);
             }
+        }
+
+        // Filter berdasarkan jenis barang (ATK, Cetak, Tinta)
+        if (isset($filters['jenis_barang']) && $filters['jenis_barang']) {
+            $query->whereHas('barang', function ($q) use ($filters) {
+                $q->where('jenis', $filters['jenis_barang']);
+            });
         }
 
         // Urutkan berdasarkan tanggal dan nama barang

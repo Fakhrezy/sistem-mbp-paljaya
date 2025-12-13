@@ -37,6 +37,13 @@ class TriwulanController extends Controller
             $query->where('nama_barang', 'LIKE', '%' . $request->search . '%');
         }
 
+        // Filter berdasarkan jenis barang
+        if ($request->has('jenis_barang') && !empty($request->jenis_barang)) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('jenis', $request->jenis_barang);
+            });
+        }
+
         $triwulans = $query->orderBy('tahun', 'desc')
             ->orderBy('triwulan', 'desc')
             ->orderBy('nama_barang', 'asc')
@@ -70,6 +77,12 @@ class TriwulanController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $query->where('nama_barang', 'LIKE', '%' . $request->search . '%');
+        }
+
+        if ($request->has('jenis_barang') && !empty($request->jenis_barang)) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('jenis', $request->jenis_barang);
+            });
         }
 
         $filename = 'triwulan_export_' . now()->format('Ymd_His') . '.xlsx';
@@ -186,6 +199,12 @@ class TriwulanController extends Controller
 
         if ($request->has('search') && !empty($request->search)) {
             $query->where('nama_barang', 'LIKE', '%' . $request->search . '%');
+        }
+
+        if ($request->has('jenis_barang') && !empty($request->jenis_barang)) {
+            $query->whereHas('barang', function ($q) use ($request) {
+                $q->where('jenis', $request->jenis_barang);
+            });
         }
 
         $result = $query->selectRaw('

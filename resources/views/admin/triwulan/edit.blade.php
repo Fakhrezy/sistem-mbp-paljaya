@@ -3,7 +3,7 @@
 @section('title', 'Edit Data Triwulan')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')
@@ -80,10 +80,10 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     @method('PUT')
 
                     <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-                        <!-- Saldo Awal -->
+                        <!-- Stok Awal -->
                         <div>
                             <label for="saldo_awal_triwulan" class="block text-sm font-medium text-gray-700">
-                                Saldo Awal Triwulan <span class="text-red-500">*</span>
+                                Stok Awal Triwulan <span class="text-red-500">*</span>
                             </label>
                             <input type="number" name="saldo_awal_triwulan" id="saldo_awal_triwulan"
                                 value="{{ old('saldo_awal_triwulan', $triwulan->saldo_awal_triwulan) }}" min="0"

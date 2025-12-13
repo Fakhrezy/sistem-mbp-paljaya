@@ -3,7 +3,7 @@
 @section('title', 'Tambah Data Triwulan')
 
 @section('header')
-SISTEM MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')
@@ -101,7 +101,7 @@ SISTEM MONITORING BARANG HABIS PAKAI
                                 <p class="text-sm text-blue-700">
                                     Data triwulan akan digenerate berdasarkan data detail monitoring barang pada periode
                                     yang dipilih.
-                                    Sistem akan menghitung saldo awal, total debit, kredit, dan persediaan secara
+                                    Sistem akan menghitung stok awal, total masuk, keluar, dan persediaan secara
                                     otomatis.
                                 </p>
                             </div>

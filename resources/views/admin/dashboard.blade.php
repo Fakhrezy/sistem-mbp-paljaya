@@ -3,7 +3,7 @@
 @section('title', 'Admin Dashboard')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @section('content')
@@ -119,41 +119,11 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                     <div class="charts-grid">
                         <!-- Bar Chart - Low Stock Items -->
                         <div
-                            class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg chart-container h-fit">
+                            class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg chart-container">
                             <div class="p-6">
                                 <div class="mb-6">
                                     <h3 class="text-xl font-semibold text-gray-800">Stok Barang Terendah</h3>
                                     <p class="mt-1 text-sm text-gray-600">10 barang dengan stok paling sedikit</p>
-                                </div>
-
-                                <!-- Bar Chart Container -->
-                                <div class="w-full">
-                                    @if($lowStockItems->count() > 0)
-                                    <canvas id="lowStockChart" width="400" height="300"></canvas>
-                                    @else
-                                    <div class="flex items-center justify-center h-64 rounded-lg bg-gray-50">
-                                        <div class="text-center">
-                                            <svg class="w-12 h-12 mx-auto text-gray-400" fill="none"
-                                                stroke="currentColor" viewBox="0 0 24 24">
-                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
-                                                </path>
-                                            </svg>
-                                            <p class="mt-2 text-sm text-gray-500">Belum ada data barang</p>
-                                        </div>
-                                    </div>
-                                    @endif
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Pie Chart - Category Distribution -->
-                        <div
-                            class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg chart-container h-fit">
-                            <div class="p-6">
-                                <div class="mb-6">
-                                    <h3 class="text-xl font-semibold text-gray-800">Distribusi Kategori Barang</h3>
-                                    <p class="mt-1 text-sm text-gray-600">Persentase barang berdasarkan jenis</p>
                                 </div>
 
                                 <!-- Legend -->
@@ -173,6 +143,71 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             style="background-color: rgba(147, 51, 234, 0.8);"></div>
                                         <span class="text-sm text-gray-600">Tinta</span>
                                     </div>
+                                </div>
+
+                                <!-- Bar Chart Container -->
+                                <div class="w-full">
+                                    @if($lowStockItems->count() > 0)
+                                    <div style="position: relative; width: 100%; height: 400px;">
+                                        <canvas id="lowStockChart"></canvas>
+                                    </div>
+                                    @else
+                                    <div class="flex items-center justify-center h-64 rounded-lg bg-gray-50">
+                                        <div class="text-center">
+                                            <svg class="w-12 h-12 mx-auto text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                                                </path>
+                                            </svg>
+                                            <p class="mt-2 text-sm text-gray-500">Belum ada data barang</p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Bar Chart - Top Taken Items -->
+                        <div
+                            class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg chart-container">
+                            <div class="p-6">
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-800">Barang Paling Banyak Diambil</h3>
+                                    <p class="mt-1 text-sm text-gray-600">10 barang dengan total pengambilan tertinggi
+                                    </p>
+                                </div>
+
+                                <!-- Bar Chart Container -->
+                                <div class="w-full">
+                                    @if(isset($topTakenItems) && $topTakenItems->count() > 0)
+                                    <div style="position: relative; width: 100%; height: 400px;">
+                                        <canvas id="topTakenChart"></canvas>
+                                    </div>
+                                    @else
+                                    <div class="flex items-center justify-center h-64 rounded-lg bg-gray-50">
+                                        <div class="text-center">
+                                            <svg class="w-12 h-12 mx-auto text-gray-400" fill="none"
+                                                stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                                    d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4">
+                                                </path>
+                                            </svg>
+                                            <p class="mt-2 text-sm text-gray-500">Belum ada data pengambilan barang</p>
+                                        </div>
+                                    </div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Pie Chart - Category Distribution -->
+                        <div
+                            class="overflow-hidden bg-white border border-gray-200 shadow-sm sm:rounded-lg chart-container h-fit">
+                            <div class="p-6">
+                                <div class="mb-6">
+                                    <h3 class="text-xl font-semibold text-gray-800">Distribusi Kategori Barang</h3>
+                                    <p class="mt-1 text-sm text-gray-600">Persentase barang berdasarkan jenis</p>
                                 </div>
 
                                 <!-- Pie Chart Container -->
@@ -205,57 +240,64 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
 </div>
 
 <!-- Chart.js Script -->
-<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0"></script>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-    // Initialize Bar Chart for Low Stock Items
     @if($lowStockItems->count() > 0)
-    const barChartElement = document.getElementById('lowStockChart');
-    if (barChartElement) {
-        const barCtx = barChartElement.getContext('2d');
+    document.addEventListener('DOMContentLoaded', function() {
+        const canvas = document.getElementById('lowStockChart');
+        if (!canvas) {
+            console.error('Canvas element not found');
+            return;
+        }
 
-        // Data dari controller untuk bar chart
+        const ctx = canvas.getContext('2d');
         const chartData = @json($lowStockItems);
 
-        // Prepare data for bar chart
+        console.log('Bar Chart Data:', chartData);
+
+        // Prepare data
         const labels = chartData.map(item => {
-            return item.nama_barang.length > 20
-                ? item.nama_barang.substring(0, 20) + '...'
-                : item.nama_barang;
+            const name = item.nama_barang;
+            return name.length > 15 ? name.substring(0, 15) + '...' : name;
         });
-        const stockData = chartData.map(item => item.stok);
 
-        // Color mapping for different categories (Tinta hidden)
-        const getBarColor = (jenis) => {
-            switch(jenis) {
-                case 'atk': return 'rgba(34, 197, 94, 0.8)';
-                case 'cetak': return 'rgba(251, 191, 36, 0.8)';
-                case 'tinta': return 'rgba(147, 51, 234, 0.8)';
-                default: return 'rgba(156, 163, 175, 0.8)';
+        // Store original values for tooltip
+        const originalValues = chartData.map(item => parseInt(item.stok) || 0);
+
+        // For display: if stok is 0, show as 0.5 to make it visible, otherwise use original value
+        const dataValues = originalValues.map(val => val === 0 ? 0.5 : val);
+
+        console.log('Original values:', originalValues);
+        console.log('Display values:', dataValues);
+        console.log('Min value:', Math.min(...originalValues));
+        console.log('Max value:', Math.max(...originalValues));
+
+        const colors = chartData.map(item => {
+            switch(item.jenis.toLowerCase()) {
+                case 'atk': return '#22c55e';
+                case 'cetak': return '#fbbf24';
+                case 'tinta': return '#9333ea';
+                default: return '#6b7280';
             }
-        };
+        });
 
-        const backgroundColors = chartData.map(item => getBarColor(item.jenis));
-        const borderColors = chartData.map(item => getBarColor(item.jenis).replace('0.8', '1'));
-
-        // Create bar chart
-        const barChart = new Chart(barCtx, {
+        new Chart(ctx, {
             type: 'bar',
             data: {
                 labels: labels,
                 datasets: [{
-                    label: 'Stok',
-                    data: stockData,
-                    backgroundColor: backgroundColors,
-                    borderColor: borderColors,
+                    label: 'Jumlah Stok',
+                    data: dataValues,
+                    backgroundColor: colors,
+                    borderColor: colors,
                     borderWidth: 1,
-                    borderRadius: 4,
-                    borderSkipped: false,
+                    borderRadius: 4
                 }]
             },
             options: {
                 responsive: true,
                 maintainAspectRatio: false,
+                indexAxis: 'x',
                 plugins: {
                     legend: {
                         display: false
@@ -264,15 +306,21 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         titleColor: 'white',
                         bodyColor: 'white',
+                        padding: 8,
+                        titleFont: {
+                            size: 13
+                        },
+                        bodyFont: {
+                            size: 12
+                        },
                         callbacks: {
                             title: function(context) {
-                                const index = context[0].dataIndex;
-                                return chartData[index].nama_barang;
+                                return chartData[context[0].dataIndex].nama_barang;
                             },
                             label: function(context) {
-                                const index = context.dataIndex;
-                                const jenis = chartData[index].jenis.toUpperCase();
-                                return `Stok: ${context.parsed.y} | Jenis: ${jenis}`;
+                                const item = chartData[context.dataIndex];
+                                const actualStok = originalValues[context.dataIndex];
+                                return 'Stok: ' + actualStok + ' | Jenis: ' + item.jenis.toUpperCase();
                             }
                         }
                     }
@@ -280,88 +328,194 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                 scales: {
                     y: {
                         beginAtZero: true,
-                        title: {
-                            display: true,
-                            text: 'Jumlah Stok'
-                        },
+                        min: 0,
+                        max: Math.max(...originalValues, 5) + 1,
                         ticks: {
                             stepSize: 1,
                             callback: function(value) {
-                                return Number.isInteger(value) ? value : '';
+                                if (Number.isInteger(value)) return value;
+                                return '';
                             }
                         },
                         grid: {
-                            color: 'rgba(0, 0, 0, 0.1)'
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
                         }
                     },
                     x: {
-                        title: {
-                            display: true,
-                            text: 'Barang'
+                        grid: {
+                            display: false,
+                            drawBorder: false
                         },
                         ticks: {
-                            display: false
-                        },
-                        grid: {
-                            display: false
+                            display: false,
+                            font: {
+                                size: 11
+                            }
                         }
-                    }
-                },
-                layout: {
-                    padding: {
-                        top: 20
                     }
                 }
             }
         });
 
-        barCtx.canvas.style.height = '350px';
-    }
+        console.log('Bar chart rendered successfully');
+    });
     @endif
 
-    // Initialize Pie Chart for Category Distribution
+    @if(isset($topTakenItems) && $topTakenItems->count() > 0)
+    document.addEventListener('DOMContentLoaded', function() {
+        const canvas = document.getElementById('topTakenChart');
+        if (!canvas) {
+            console.error('Top taken chart canvas element not found');
+            return;
+        }
+
+        const ctx = canvas.getContext('2d');
+        const chartData = @json($topTakenItems);
+
+        console.log('Top Taken Chart Data:', chartData);
+
+        // Prepare data
+        const labels = chartData.map(item => {
+            const name = item.nama_barang;
+            return name.length > 15 ? name.substring(0, 15) + '...' : name;
+        });
+
+        const dataValues = chartData.map(item => parseInt(item.total_diambil) || 0);
+
+        console.log('Data values:', dataValues);
+
+        // Color based on jenis barang (same as pie chart)
+        const colors = chartData.map(item => {
+            if (!item.jenis) return '#6b7280'; // gray if no jenis
+            switch(item.jenis.toLowerCase()) {
+                case 'atk': return '#22c55e'; // green
+                case 'cetak': return '#fbbf24'; // yellow
+                case 'cetakan': return '#fbbf24'; // yellow
+                case 'tinta': return '#9333ea'; // purple
+                default: return '#6b7280'; // gray
+            }
+        });
+
+        new Chart(ctx, {
+            type: 'bar',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: 'Total Diambil',
+                    data: dataValues,
+                    backgroundColor: colors,
+                    borderColor: colors,
+                    borderWidth: 1,
+                    borderRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                indexAxis: 'x',
+                plugins: {
+                    legend: {
+                        display: false
+                    },
+                    tooltip: {
+                        backgroundColor: 'rgba(0, 0, 0, 0.8)',
+                        titleColor: 'white',
+                        bodyColor: 'white',
+                        padding: 8,
+                        titleFont: {
+                            size: 13
+                        },
+                        bodyFont: {
+                            size: 12
+                        },
+                        callbacks: {
+                            title: function(context) {
+                                return chartData[context[0].dataIndex].nama_barang;
+                            },
+                            label: function(context) {
+                                const item = chartData[context.dataIndex];
+                                const jenis = item.jenis ? item.jenis.toUpperCase() : 'N/A';
+                                return 'Total Diambil: ' + context.parsed.y + ' unit | Jenis: ' + jenis;
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        beginAtZero: true,
+                        ticks: {
+                            stepSize: 1,
+                            callback: function(value) {
+                                if (Number.isInteger(value)) return value;
+                                return '';
+                            }
+                        },
+                        grid: {
+                            color: 'rgba(0, 0, 0, 0.05)',
+                            drawBorder: false
+                        }
+                    },
+                    x: {
+                        grid: {
+                            display: false,
+                            drawBorder: false
+                        },
+                        ticks: {
+                            display: false,
+                            font: {
+                                size: 11
+                            }
+                        }
+                    }
+                }
+            }
+        });
+
+        console.log('Top taken chart rendered successfully');
+    });
+    @endif
+
     @if($stats['total'] > 0)
-    const pieChartElement = document.getElementById('categoryPieChart');
-    if (pieChartElement) {
-        const pieCtx = pieChartElement.getContext('2d');
+    document.addEventListener('DOMContentLoaded', function() {
+        const canvas = document.getElementById('categoryPieChart');
+        if (!canvas) {
+            console.warn('Pie chart canvas not found');
+            return;
+        }
 
-        // Data statistik dari controller
-        const statsData = @json($stats);
+        const ctx = canvas.getContext('2d');
+        const stats = @json($stats);
 
-        // Prepare data for pie chart
         const pieLabels = [];
         const pieData = [];
         const pieColors = [];
 
-        if (statsData.atk > 0) {
+        if (stats.atk > 0) {
             pieLabels.push('ATK');
-            pieData.push(statsData.atk);
-            pieColors.push('rgba(34, 197, 94, 0.8)');
+            pieData.push(stats.atk);
+            pieColors.push('#22c55e');
         }
-
-        if (statsData.cetak > 0) {
+        if (stats.cetak > 0) {
             pieLabels.push('Cetakan');
-            pieData.push(statsData.cetak);
-            pieColors.push('rgba(251, 191, 36, 0.8)');
+            pieData.push(stats.cetak);
+            pieColors.push('#fbbf24');
         }
-
-        if (statsData.tinta > 0) {
+        if (stats.tinta > 0) {
             pieLabels.push('Tinta');
-            pieData.push(statsData.tinta);
-            pieColors.push('rgba(147, 51, 234, 0.8)');
+            pieData.push(stats.tinta);
+            pieColors.push('#9333ea');
         }
 
-        // Create pie chart
-        const pieChart = new Chart(pieCtx, {
+        new Chart(ctx, {
             type: 'pie',
             data: {
                 labels: pieLabels,
                 datasets: [{
                     data: pieData,
                     backgroundColor: pieColors,
-                    borderColor: pieColors.map(color => color.replace('0.8', '1')),
-                    borderWidth: 2,
-                    hoverOffset: 4
+                    borderColor: '#ffffff',
+                    borderWidth: 2
                 }]
             },
             options: {
@@ -375,25 +529,23 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                         backgroundColor: 'rgba(0, 0, 0, 0.8)',
                         titleColor: 'white',
                         bodyColor: 'white',
+                        padding: 8,
                         callbacks: {
                             label: function(context) {
-                                const label = context.label;
                                 const value = context.parsed;
                                 const total = pieData.reduce((a, b) => a + b, 0);
                                 const percentage = ((value / total) * 100).toFixed(1);
-                                return `${label}: ${value} barang (${percentage}%)`;
+                                return context.label + ': ' + value + ' (' + percentage + '%)';
                             }
                         }
                     }
-                },
-                layout: {
-                    padding: 20
                 }
             }
         });
-    }
+
+        console.log('Pie chart rendered');
+    });
     @endif
-});
 </script>
 
 <style>
@@ -404,13 +556,19 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
         gap: 1.5rem;
     }
 
-    @media (min-width: 1024px) {
+    @media (min-width: 768px) {
         .charts-grid {
             grid-template-columns: 1fr 1fr;
         }
     }
 
-    @media (max-width: 1023px) {
+    @media (min-width: 1280px) {
+        .charts-grid {
+            grid-template-columns: 1fr 1fr;
+        }
+    }
+
+    @media (max-width: 767px) {
         .charts-grid {
             grid-template-columns: 1fr;
         }

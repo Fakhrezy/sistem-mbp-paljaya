@@ -3,7 +3,7 @@
 @section('title', 'Data Users')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @push('scripts')

@@ -52,7 +52,15 @@ class MonitoringBarangController extends Controller
             });
         }
 
-        $monitoringBarang = $query->orderBy('created_at', 'desc')->paginate(15);
+        // Order by custom status priority: diajukan, diterima, ditolak, then by created_at desc
+        $monitoringBarang = $query->orderByRaw("
+            CASE status
+                WHEN 'diajukan' THEN 1
+                WHEN 'diterima' THEN 2
+                WHEN 'ditolak' THEN 3
+                ELSE 4
+            END
+        ")->orderBy('created_at', 'desc')->paginate(15);
 
         // Sync saldo dengan stok barang terkini untuk status 'diajukan'
         $this->syncSaldoWithCurrentStock();
@@ -66,7 +74,8 @@ class MonitoringBarangController extends Controller
     public function updateStatus(Request $request, $id)
     {
         $request->validate([
-            'status' => 'required|in:diajukan,diproses,diterima,ditolak'
+            'status' => 'required|in:diajukan,diproses,diterima,ditolak',
+            'feedback' => 'nullable|string|max:1000'
         ]);
 
         try {
@@ -103,6 +112,12 @@ class MonitoringBarangController extends Controller
 
             // Update the status
             $monitoringBarang->status = $newStatus;
+
+            // Simpan feedback jika ada (untuk status diterima)
+            if ($request->has('feedback') && $request->feedback) {
+                $monitoringBarang->alasan_penolakan = $request->feedback;
+            }
+
             $monitoringBarang->save();
 
             // Sinkronisasi ke detail monitoring barang berdasarkan status baru

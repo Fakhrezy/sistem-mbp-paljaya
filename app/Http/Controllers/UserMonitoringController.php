@@ -11,11 +11,12 @@ class UserMonitoringController extends Controller
     public function index(Request $request)
     {
         $userBidang = Auth::user()->bidang;
+        $userName = Auth::user()->name;
 
-        // Query builder untuk monitoring berdasarkan bidang user yang login
+        // Query builder untuk monitoring berdasarkan user yang login saja
         $query = MonitoringBarang::with(['barang'])
             ->whereHas('barang')
-            ->where('bidang', $userBidang);
+            ->where('nama_pengambil', $userName);
 
         // Filter berdasarkan pencarian (nama barang atau nama pengambil)
         if ($request->filled('search')) {
@@ -57,6 +58,37 @@ class UserMonitoringController extends Controller
 
         $monitorings = $query->orderBy('created_at', 'desc')->paginate(20);
 
-        return view('user.monitoring.index', compact('monitorings', 'userBidang'));
+        // Statistik keseluruhan tanpa filter
+        $totalCount = MonitoringBarang::with(['barang'])
+            ->whereHas('barang')
+            ->where('nama_pengambil', $userName)
+            ->count();
+
+        $diterimaCount = MonitoringBarang::with(['barang'])
+            ->whereHas('barang')
+            ->where('nama_pengambil', $userName)
+            ->whereIn('status', ['diterima', 'disetujui'])
+            ->count();
+
+        $pendingCount = MonitoringBarang::with(['barang'])
+            ->whereHas('barang')
+            ->where('nama_pengambil', $userName)
+            ->whereIn('status', ['diajukan', 'pending'])
+            ->count();
+
+        $ditolakCount = MonitoringBarang::with(['barang'])
+            ->whereHas('barang')
+            ->where('nama_pengambil', $userName)
+            ->where('status', 'ditolak')
+            ->count();
+
+        return view('user.monitoring.index', compact(
+            'monitorings',
+            'userBidang',
+            'totalCount',
+            'diterimaCount',
+            'pendingCount',
+            'ditolakCount'
+        ));
     }
 }

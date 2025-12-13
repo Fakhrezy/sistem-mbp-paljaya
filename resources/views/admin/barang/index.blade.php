@@ -3,7 +3,7 @@
 @section('title', 'Data Barang')
 
 @section('header')
-SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
+SISTEM PERSEDIAAN BARANG
 @endsection
 
 @push('scripts')
@@ -261,7 +261,7 @@ SISTEM INFORMASI MONITORING BARANG HABIS PAKAI
                                             title="Edit Barang">
                                             <i class="fas fa-pen"></i>
                                         </a>
-                                        <a href="{{ route('admin.detail-monitoring-barang.index', ['id_barang' => $item->id_barang]) }}"
+                                        <a href="{{ route('admin.detail-monitoring-barang.index', ['search' => $item->nama_barang]) }}"
                                             class="px-2 py-1 text-xs text-white transition duration-150 bg-blue-800 rounded hover:bg-blue-900"
                                             title="Detail Monitoring Barang">
                                             <i class="fas fa-eye"></i>
