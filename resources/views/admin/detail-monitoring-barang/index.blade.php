@@ -309,7 +309,7 @@ SISTEM PERSEDIAAN BARANG
                                     <div class="space-y-2 text-xs">
                                         @if($item->keterangan)
                                         <div>
-                                            <span class="font-medium text-gray-600">Keterangan:</span>
+                                            <span class="font-medium text-gray-600">Keperluan:</span>
                                             <p class="text-gray-700">{{ $item->keterangan }}</p>
                                         </div>
                                         @endif
@@ -401,7 +401,7 @@ SISTEM PERSEDIAAN BARANG
                                 <!-- Sub Header -->
                                 <tr class="bg-gray-100">
                                     <th class="px-3 py-3 text-sm font-bold text-center text-gray-700 uppercase border">
-                                        Keterangan</th>
+                                        Keperluan</th>
                                     <th class="px-3 py-3 text-sm font-bold text-center text-gray-700 uppercase border">
                                         Bidang
                                     </th>
@@ -434,7 +434,7 @@ SISTEM PERSEDIAAN BARANG
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         {{ $item->barang->nama_barang ?? $item->nama_barang ?? '-' }}
                                     </td>
-                                    <!-- Uraian: Keterangan -->
+                                    <!-- Uraian: Keperluan -->
                                     <td class="px-3 py-3 text-sm text-gray-900 border">
                                         @if($item->keterangan)
                                         <span title="{{ $item->keterangan }}">

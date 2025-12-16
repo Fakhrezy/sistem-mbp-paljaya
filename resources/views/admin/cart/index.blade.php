@@ -150,15 +150,14 @@ SISTEM PERSEDIAAN BARANG
                             placeholder="Masukkan nama pengambil...">
                     </div>
 
-                    <!-- Keterangan Section -->
+                    <!-- Keperluan Section -->
                     <div class="mb-4">
                         <label for="edit_keterangan" class="flex items-center mb-2 text-sm font-medium text-gray-700">
                             <i class="mr-2 text-gray-500 fas fa-sticky-note"></i>
-                            Keterangan <span class="text-xs text-gray-400">(opsional)</span>
+                            Keperluan <span class="text-xs text-gray-400">(opsional)</span>
                         </label>
                         <textarea id="edit_keterangan" name="keterangan" rows="3"
-                            class="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"
-                            placeholder="Keterangan tambahan..."></textarea>
+                            class="w-full px-3 py-2 border border-gray-300 rounded-md resize-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400"></textarea>
                     </div>
                 </form>
             </div>

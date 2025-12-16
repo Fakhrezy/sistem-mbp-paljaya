@@ -145,8 +145,8 @@
                         <th class="px-4 py-3 text-left min-w-48">Nama Barang</th>
                         <th class="px-4 py-3 text-left w-20">Total Ambil</th>
                         <th class="px-4 py-3 text-left w-24">Status</th>
+                        <th class="px-4 py-3 text-left min-w-40">Keperluan</th>
                         <th class="px-4 py-3 text-left min-w-40">Keterangan</th>
-                        <th class="px-4 py-3 text-left min-w-40">Feedback</th>
                     </tr>
                 </thead>
                 <tbody class="divide-y divide-gray-200">

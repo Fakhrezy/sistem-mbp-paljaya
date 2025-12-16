@@ -26,10 +26,16 @@ run project
 cd c:\laragon\www\sistem-mbp-paljaya
 php artisan serve --host=192.168.20.xx --port=8000
 
+aktifkan ziparchive
+-> right click laragon icon
+-> PHP
+-> php.ini
+-> delete ; on extension=zip
+
 
 todolist--> app-sismon
-- buatkan menjadi sistem booking barang/ update jumlah barang ketika sudah masuk monitoring pengambilan (dengan sistem 1x24 jam barang akan terhapus dan jumlah stok pada katalog pengambilan dikembalikan)
-- perbaiki ekspor data triwulan
+- buat script otomatis menjalanka 'php artisan schedule:work
+- ganti schedule command jadi hourly
 
 todolist--> paljaya-enterprise
 - ubah icon lebih fancy
@@ -37,6 +43,7 @@ todolist--> paljaya-enterprise
 todolist--> app-sistamu
 - halaman form yang bisa diinputkan data tamu, dengan pencatatan tanggal dan waktu otomatis
 - tambahkan status check-in otomatis ketika tamu melakukan input, dan status check-out yang dilakukan oleh petugas
+- tambahkan kolom jam check out di data tamu
 
 todolist--> penanggulangan-it-rt
 -  buat form input data kendala kerusakan dengan pilihan IT dan RT dalam satu sistem
