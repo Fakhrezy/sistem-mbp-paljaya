@@ -17,7 +17,7 @@ class Kernel extends ConsoleKernel
     {
         //! (for testing)
 
-        $schedule->command('pengambilan:cancel-expired')->everyMinute();
+        $schedule->command('pengambilan:cancel-expired')->hourly();
         // $schedule->command('pengambilan:cancel-expired')->hourly();
     }
 
