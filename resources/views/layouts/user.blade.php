@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>sisebar paljaya</title>
+    <title>sipedia paljaya</title>
 
     <!-- Favicon -->
     <link rel="icon" type="image/png" href="{{ asset('images/logo-pal.png') }}">
@@ -31,7 +31,7 @@
     <div class="min-h-screen bg-gray-100">
         <div class="flex h-screen">
             <!-- Sidebar -->
-            <div class="flex-shrink-0 w-0 overflow-y-auto bg-blue-800 shadow-lg hidden">
+            <div class="flex-shrink-0 hidden w-0 overflow-y-auto bg-blue-800 shadow-lg">
                 <div class="flex flex-col h-full">
                     <!-- Logo -->
                     <div class="flex items-center justify-center h-16 px-4 bg-blue-900">
@@ -122,7 +122,7 @@
                         <div class="flex items-center space-x-4">
                             <!-- User Info -->
                             <div class="flex items-center space-x-3 text-white">
-                                <i class="fas fa-user-circle text-xl"></i>
+                                <i class="text-xl fas fa-user-circle"></i>
                                 <span class="text-sm font-medium">{{ Auth::user()->name }}</span>
                             </div>
 
@@ -130,9 +130,9 @@
                             <form method="POST" action="{{ route('logout') }}" class="inline">
                                 @csrf
                                 <button type="submit"
-                                    class="flex items-center px-3 py-2 text-sm font-medium bg-white rounded-lg transition-colors duration-200 border border-white hover:bg-gray-100"
+                                    class="flex items-center px-3 py-2 text-sm font-medium transition-colors duration-200 bg-white border border-white rounded-lg hover:bg-gray-100"
                                     style="color: #0074BC;">
-                                    <i class="fas fa-sign-out-alt mr-2"></i>
+                                    <i class="mr-2 fas fa-sign-out-alt"></i>
                                     Logout
                                 </button>
                             </form>
