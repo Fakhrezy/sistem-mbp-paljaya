@@ -41,8 +41,7 @@ SISTEM PERSEDIAAN BARANG
                     <div>
                         <label for="stok" class="block text-sm font-medium text-gray-700">Stok</label>
                         <input type="number" name="stok" id="stok" value="{{ $barang->stok }}" min="0"
-                            class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md shadow-sm cursor-not-allowed"
-                            readonly>
+                            class="block w-full mt-1 bg-gray-100 border-gray-300 rounded-md shadow-sm cursor-not-allowed">
                         <p class="mt-1 text-xs text-gray-500">Stok tidak dapat diedit secara langsung. Gunakan fitur
                             monitoring untuk mengubah stok.</p>
                     </div>

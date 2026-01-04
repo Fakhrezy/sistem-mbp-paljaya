@@ -310,7 +310,8 @@ SISTEM PERSEDIAAN BARANG
                         <span class="text-sm text-gray-700">item per halaman</span>
                     </div>
                     <div>
-                        {{ $barang->appends(['per_page' => request('per_page')])->links() }}
+                        {{ $barang->appends(['per_page' => request('per_page'), 'search' => request('search'), 'jenis'
+                        => request('jenis')])->links() }}
                     </div>
                 </div>
             </div>

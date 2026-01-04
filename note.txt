@@ -34,7 +34,7 @@ aktifkan ziparchive
 
 
 todolist--> app-sismon
-- buat script otomatis menjalanka 'php artisan schedule:work
+- buat script otomatis menjalanka 'php artisan schedule:work'
 - ganti schedule command jadi hourly
 
 todolist--> paljaya-enterprise

@@ -95,12 +95,15 @@ class DetailMonitoringBarangController extends Controller
     public function getStatistics(Request $request)
     {
         try {
+            // Gunakan filter yang sama dengan index
             $filters = [
+                'search' => $request->get('search'),
                 'id_barang' => $request->get('id_barang'),
                 'start_date' => $request->get('start_date'),
                 'end_date' => $request->get('end_date'),
                 'bidang' => $request->get('bidang'),
                 'jenis' => $request->get('jenis'),
+                'jenis_barang' => $request->get('jenis_barang'),
             ];
 
             // Mendapatkan query yang sama dengan index
@@ -149,19 +152,29 @@ class DetailMonitoringBarangController extends Controller
     public function export(Request $request)
     {
         try {
+            // Gunakan filter yang sama dengan index
             $filters = [
-                'id_barang' => $request->get('id_barang'),
+                'search' => $request->get('search'),
                 'start_date' => $request->get('start_date'),
                 'end_date' => $request->get('end_date'),
                 'bidang' => $request->get('bidang'),
                 'jenis' => $request->get('jenis'),
+                'jenis_barang' => $request->get('jenis_barang'),
             ];
 
             $detailMonitoring = $this->detailMonitoringService->getDetailMonitoring($filters)->get();
+
+            // Hitung statistik untuk ditampilkan di export
+            $statistics = [
+                'total_kredit' => (int) $detailMonitoring->sum('kredit'),
+                'total_debit' => (int) $detailMonitoring->sum('debit'),
+                'total_saldo' => (int) $detailMonitoring->sum('saldo'),
+            ];
+
             $barangList = Barang::select('id_barang', 'nama_barang')->orderBy('nama_barang')->get();
 
             // Generate HTML table with exact styling
-            $html = $this->generateExcelHtml($detailMonitoring, $filters, $barangList);
+            $html = $this->generateExcelHtml($detailMonitoring, $filters, $statistics);
 
             $filename = 'detail-monitoring-barang-' . date('Y-m-d-H-i-s') . '.xls';
 
@@ -180,7 +193,7 @@ class DetailMonitoringBarangController extends Controller
     /**
      * Generate HTML untuk Excel dengan format tabel yang sama
      */
-    private function generateExcelHtml($detailMonitoring, $filters, $barangList)
+    private function generateExcelHtml($detailMonitoring, $filters, $statistics)
     {
         $html = '<!DOCTYPE html>
 <html>
@@ -217,8 +230,10 @@ class DetailMonitoringBarangController extends Controller
         SISTEM PERSEDIAAN BARANG<br>
         Detail Monitoring Barang<br>
         <small style="font-size: 12px;">Rekapitulasi monitoring pengambilan dan pengadaan barang</small>
-        <br><br>
+        <br>
+        <small style="font-size: 10px;">Dicetak pada: ' . date('d/m/Y H:i:s') . '</small>
     </div>
+
 
     <table>
         <thead>
@@ -232,12 +247,12 @@ class DetailMonitoringBarangController extends Controller
             </tr>
             <!-- Sub Header -->
             <tr class="header-sub">
-                <th>Keterangan</th>
+                <th>Keperluan</th>
                 <th>Bidang</th>
-                <th>Pengambil</th>
-                <th>Debit</th>
-                <th>Kredit</th>
-                <th>Saldo</th>
+                <th>Penerima</th>
+                <th>Masuk</th>
+                <th>Keluar</th>
+                <th>Sisa</th>
             </tr>
         </thead>
         <tbody>';
@@ -259,7 +274,7 @@ class DetailMonitoringBarangController extends Controller
         if ($detailMonitoring->isEmpty()) {
             $html .= '<tr>
                 <td colspan="9" class="text-center" style="padding: 20px; font-style: italic;">
-                    Belum ada data monitoring
+                    Tidak ada data yang sesuai dengan filter
                 </td>
             </tr>';
         }
