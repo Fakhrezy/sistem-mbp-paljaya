@@ -27,20 +27,20 @@ SISTEM PERSEDIAAN BARANG
     @endif
 
     <!-- Main Card -->
-    <div class="bg-white shadow-xl rounded-lg overflow-hidden">
+    <div class="overflow-hidden bg-white rounded-lg shadow-xl">
         <!-- Card Header -->
-        <div class="bg-white px-6 py-4 border-b border-gray-200">
-            <div class="flex justify-between items-center">
+        <div class="px-6 py-4 bg-white border-b border-gray-200">
+            <div class="flex items-center justify-between">
                 <div>
-                    <h3 class="text-xl font-bold text-gray-900 flex items-center">
-                        <i class="fas fa-chart-line mr-3"></i>
+                    <h3 class="flex items-center text-xl font-bold text-gray-900">
+                        <i class="mr-3 fas fa-chart-line"></i>
                         Data Monitoring Barang ATK
                     </h3>
-                    <p class="text-gray-600 text-sm mt-1">Kelola dan pantau stok barang ATK</p>
+                    <p class="mt-1 text-sm text-gray-600">Kelola dan pantau stok barang ATK</p>
                 </div>
                 <a href="{{ route('admin.monitoring.create') }}"
-                    class="bg-blue-600 hover:bg-blue-700 text-white font-semibold py-2 px-4 rounded-lg transition duration-200 flex items-center">
-                    <i class="fas fa-plus mr-2"></i>
+                    class="flex items-center px-4 py-2 font-semibold text-white transition duration-200 bg-blue-600 rounded-lg hover:bg-blue-700">
+                    <i class="mr-2 fas fa-plus"></i>
                     Tambah Data
                 </a>
             </div>
@@ -49,13 +49,13 @@ SISTEM PERSEDIAAN BARANG
         <!-- Card Body -->
         <div class="p-6">
             <!-- Filter Section -->
-            <div class="bg-gray-50 rounded-lg p-4 mb-6">
+            <div class="p-4 mb-6 rounded-lg bg-gray-50">
                 <form method="GET" action="{{ route('admin.monitoring') }}">
-                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-4">
+                    <div class="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-5">
                         <!-- Search -->
                         <div>
-                            <label for="search" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-search mr-1"></i>Pencarian
+                            <label for="search" class="block mb-2 text-sm font-medium text-gray-700">
+                                <i class="mr-1 fas fa-search"></i>Pencarian
                             </label>
                             <input type="text" name="search" id="search" value="{{ request('search') }}"
                                 placeholder="ID, bidang, penerima..."
@@ -64,8 +64,8 @@ SISTEM PERSEDIAAN BARANG
 
                         <!-- Status Filter -->
                         <div>
-                            <label for="status" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-flag mr-1"></i>Status
+                            <label for="status" class="block mb-2 text-sm font-medium text-gray-700">
+                                <i class="mr-1 fas fa-flag"></i>Status
                             </label>
                             <select name="status" id="status"
                                 class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent">
@@ -81,8 +81,8 @@ SISTEM PERSEDIAAN BARANG
 
                         <!-- Date From -->
                         <div>
-                            <label for="tanggal_dari" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-calendar-alt mr-1"></i>Tanggal Dari
+                            <label for="tanggal_dari" class="block mb-2 text-sm font-medium text-gray-700">
+                                <i class="mr-1 fas fa-calendar-alt"></i>Tanggal Dari
                             </label>
                             <input type="date" name="tanggal_dari" id="tanggal_dari"
                                 value="{{ request('tanggal_dari') }}"
@@ -91,8 +91,8 @@ SISTEM PERSEDIAAN BARANG
 
                         <!-- Date To -->
                         <div>
-                            <label for="tanggal_sampai" class="block text-sm font-medium text-gray-700 mb-2">
-                                <i class="fas fa-calendar-alt mr-1"></i>Tanggal Sampai
+                            <label for="tanggal_sampai" class="block mb-2 text-sm font-medium text-gray-700">
+                                <i class="mr-1 fas fa-calendar-alt"></i>Tanggal Sampai
                             </label>
                             <input type="date" name="tanggal_sampai" id="tanggal_sampai"
                                 value="{{ request('tanggal_sampai') }}"
@@ -102,12 +102,12 @@ SISTEM PERSEDIAAN BARANG
                         <!-- Action Buttons -->
                         <div class="flex items-end space-x-2">
                             <button type="submit"
-                                class="flex-1 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center justify-center">
-                                <i class="fas fa-filter mr-2"></i>Filter
+                                class="flex items-center justify-center flex-1 px-4 py-2 font-medium text-white transition duration-200 bg-blue-600 rounded-md hover:bg-blue-700">
+                                <i class="mr-2 fas fa-filter"></i>Filter
                             </button>
                             <a href="{{ route('admin.monitoring') }}"
-                                class="flex-1 bg-gray-500 hover:bg-gray-600 text-white font-medium py-2 px-4 rounded-md transition duration-200 flex items-center justify-center">
-                                <i class="fas fa-undo mr-2"></i>Reset
+                                class="flex items-center justify-center flex-1 px-4 py-2 font-medium text-white transition duration-200 bg-gray-500 rounded-md hover:bg-gray-600">
+                                <i class="mr-2 fas fa-undo"></i>Reset
                             </a>
                         </div>
                     </div>
@@ -115,7 +115,7 @@ SISTEM PERSEDIAAN BARANG
             </div>
 
             <!-- Pagination Controls -->
-            <div class="flex justify-between items-center mb-4">
+            <div class="flex items-center justify-between mb-4">
                 <div class="flex items-center space-x-2">
                     <span class="text-sm text-gray-600">Tampilkan:</span>
                     <form method="GET" action="{{ route('admin.monitoring') }}" class="inline">
@@ -133,84 +133,84 @@ SISTEM PERSEDIAAN BARANG
                     <span class="text-sm text-gray-600">entri per halaman</span>
                 </div>
                 <div class="text-sm text-gray-600">
-                    <i class="fas fa-info-circle mr-1"></i>
+                    <i class="mr-1 fas fa-info-circle"></i>
                     Data diurutkan berdasarkan tanggal terbaru
                 </div>
             </div>
 
             <!-- Data Table -->
-            <div class="bg-white rounded-lg border border-gray-200 overflow-hidden">
+            <div class="overflow-hidden bg-white border border-gray-200 rounded-lg">
                 <div class="overflow-x-auto">
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     <div class="flex items-center">
-                                        <i class="fas fa-hashtag mr-2"></i>
+                                        <i class="mr-2 fas fa-hashtag"></i>
                                         ID Monitoring
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     <div class="flex items-center">
-                                        <i class="fas fa-calendar mr-2"></i>
+                                        <i class="mr-2 fas fa-calendar"></i>
                                         Tanggal
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     <div class="flex items-center">
-                                        <i class="fas fa-box mr-2"></i>
+                                        <i class="mr-2 fas fa-box"></i>
                                         Barang
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     <div class="flex items-center">
-                                        <i class="fas fa-building mr-2"></i>
+                                        <i class="mr-2 fas fa-building"></i>
                                         Bidang
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-left text-gray-500 uppercase">
                                     <div class="flex items-center">
-                                        <i class="fas fa-user mr-2"></i>
+                                        <i class="mr-2 fas fa-user"></i>
                                         Penerima
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                     <div class="flex items-center justify-center">
-                                        <i class="fas fa-flag mr-2"></i>
+                                        <i class="mr-2 fas fa-flag"></i>
                                         Status
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                     <div class="flex items-center justify-center">
-                                        <i class="fas fa-plus text-green-600 mr-2"></i>
+                                        <i class="mr-2 text-green-600 fas fa-plus"></i>
                                         Debit
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                     <div class="flex items-center justify-center">
-                                        <i class="fas fa-minus text-red-600 mr-2"></i>
+                                        <i class="mr-2 text-red-600 fas fa-minus"></i>
                                         Kredit
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                     <div class="flex items-center justify-center">
-                                        <i class="fas fa-balance-scale mr-2"></i>
+                                        <i class="mr-2 fas fa-balance-scale"></i>
                                         Saldo
                                     </div>
                                 </th>
                                 <th
-                                    class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    class="px-6 py-3 text-xs font-medium tracking-wider text-center text-gray-500 uppercase">
                                     <div class="flex items-center justify-center">
-                                        <i class="fas fa-cogs mr-2"></i>
+                                        <i class="mr-2 fas fa-cogs"></i>
                                         Aksi
                                     </div>
                                 </th>
@@ -218,7 +218,7 @@ SISTEM PERSEDIAAN BARANG
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse($monitoring as $item)
-                            <tr class="hover:bg-gray-50 transition-colors duration-150">
+                            <tr class="transition-colors duration-150 hover:bg-gray-50">
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="text-sm font-medium text-gray-900">{{ $item->id_monitoring }}</div>
                                 </td>
@@ -234,16 +234,16 @@ SISTEM PERSEDIAAN BARANG
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <span
                                         class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-blue-100 text-blue-800">
-                                        <i class="fas fa-building mr-1"></i>
+                                        <i class="mr-1 fas fa-building"></i>
                                         {{ \App\Constants\BidangConstants::getBidangName($item->bidang) }}
                                     </span>
                                 </td>
                                 <td class="px-6 py-4 whitespace-nowrap">
                                     <div class="flex items-center">
-                                        <div class="flex-shrink-0 h-8 w-8">
+                                        <div class="flex-shrink-0 w-8 h-8">
                                             <div
-                                                class="h-8 w-8 rounded-full bg-gray-200 flex items-center justify-center">
-                                                <i class="fas fa-user text-gray-600 text-xs"></i>
+                                                class="flex items-center justify-center w-8 h-8 bg-gray-200 rounded-full">
+                                                <i class="text-xs text-gray-600 fas fa-user"></i>
                                             </div>
                                         </div>
                                         <div class="ml-3">
@@ -251,64 +251,64 @@ SISTEM PERSEDIAAN BARANG
                                         </div>
                                     </div>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
                                     @if($item->status === 'diterima')
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800">
-                                        <i class="fas fa-check mr-1"></i>
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium text-green-800 bg-green-100 rounded-full">
+                                        <i class="mr-1 fas fa-check"></i>
                                         Diterima
                                     </span>
                                     @elseif($item->status === 'ditolak')
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800">
-                                        <i class="fas fa-times-circle mr-1"></i>
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium text-red-800 bg-red-100 rounded-full">
+                                        <i class="mr-1 fas fa-times-circle"></i>
                                         Ditolak
                                     </span>
                                     @else
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
-                                        <i class="fas fa-clock mr-1"></i>
+                                        class="inline-flex items-center px-3 py-1 text-xs font-medium text-yellow-800 bg-yellow-100 rounded-full">
+                                        <i class="mr-1 fas fa-clock"></i>
                                         Diajukan
                                     </span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
                                     @if($item->debit > 0)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded text-sm font-semibold bg-green-100 text-green-800">
-                                        <i class="fas fa-arrow-up mr-1"></i>
+                                        class="inline-flex items-center px-2 py-1 text-sm font-semibold text-green-800 bg-green-100 rounded">
+                                        <i class="mr-1 fas fa-arrow-up"></i>
                                         {{ number_format($item->debit) }}
                                     </span>
                                     @else
-                                    <span class="text-gray-400 text-sm">—</span>
+                                    <span class="text-sm text-gray-400">—</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
                                     @if($item->kredit > 0)
                                     <span
-                                        class="inline-flex items-center px-2 py-1 rounded text-sm font-semibold bg-red-100 text-red-800">
-                                        <i class="fas fa-arrow-down mr-1"></i>
+                                        class="inline-flex items-center px-2 py-1 text-sm font-semibold text-red-800 bg-red-100 rounded">
+                                        <i class="mr-1 fas fa-arrow-down"></i>
                                         {{ number_format($item->kredit) }}
                                     </span>
                                     @else
-                                    <span class="text-gray-400 text-sm">—</span>
+                                    <span class="text-sm text-gray-400">—</span>
                                     @endif
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
                                     <span
-                                        class="inline-flex items-center px-3 py-1 rounded-full text-sm font-bold bg-blue-100 text-blue-900">
-                                        {{ number_format($item->saldo) }}
+                                        class="inline-flex items-center px-3 py-1 text-sm font-bold text-blue-900 bg-blue-100 rounded-full">
+                                        {{ number_format($item->saldo_akhir) }}
                                     </span>
                                 </td>
-                                <td class="px-6 py-4 whitespace-nowrap text-center">
+                                <td class="px-6 py-4 text-center whitespace-nowrap">
                                     <div class="flex items-center justify-center space-x-2">
                                         <a href="{{ route('admin.monitoring.show', $item->id_monitoring) }}"
-                                            class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-blue-700 bg-blue-100 hover:bg-blue-200 transition-colors duration-150"
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-blue-700 transition-colors duration-150 bg-blue-100 border border-transparent rounded hover:bg-blue-200"
                                             title="Lihat Detail">
                                             <i class="fas fa-eye"></i>
                                         </a>
                                         <a href="{{ route('admin.monitoring.edit', $item->id_monitoring) }}"
-                                            class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-yellow-700 bg-yellow-100 hover:bg-yellow-200 transition-colors duration-150"
+                                            class="inline-flex items-center px-2 py-1 text-xs font-medium text-yellow-700 transition-colors duration-150 bg-yellow-100 border border-transparent rounded hover:bg-yellow-200"
                                             title="Edit">
                                             <i class="fas fa-edit"></i>
                                         </a>
@@ -318,7 +318,7 @@ SISTEM PERSEDIAAN BARANG
                                             @csrf
                                             @method('DELETE')
                                             <button type="submit"
-                                                class="inline-flex items-center px-2 py-1 border border-transparent text-xs font-medium rounded text-gray-700 bg-gray-100 hover:bg-gray-200 transition-colors duration-150"
+                                                class="inline-flex items-center px-2 py-1 text-xs font-medium text-gray-700 transition-colors duration-150 bg-gray-100 border border-transparent rounded hover:bg-gray-200"
                                                 title="Hapus">
                                                 <i class="fas fa-trash"></i>
                                             </button>
@@ -330,14 +330,14 @@ SISTEM PERSEDIAAN BARANG
                             <tr>
                                 <td colspan="10" class="px-6 py-12 text-center">
                                     <div class="flex flex-col items-center">
-                                        <i class="fas fa-inbox text-4xl text-gray-300 mb-4"></i>
-                                        <h3 class="text-lg font-medium text-gray-900 mb-2">Tidak ada data monitoring
+                                        <i class="mb-4 text-4xl text-gray-300 fas fa-inbox"></i>
+                                        <h3 class="mb-2 text-lg font-medium text-gray-900">Tidak ada data monitoring
                                         </h3>
                                         <p class="text-gray-500">Belum ada data yang sesuai dengan filter yang dipilih.
                                         </p>
                                         <a href="{{ route('admin.monitoring.create') }}"
-                                            class="mt-4 inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-blue-600 hover:bg-blue-700">
-                                            <i class="fas fa-plus mr-2"></i>
+                                            class="inline-flex items-center px-4 py-2 mt-4 text-sm font-medium text-white bg-blue-600 border border-transparent rounded-md hover:bg-blue-700">
+                                            <i class="mr-2 fas fa-plus"></i>
                                             Tambah Data Pertama
                                         </a>
                                     </div>
@@ -351,12 +351,12 @@ SISTEM PERSEDIAAN BARANG
 
             <!-- Pagination -->
             @if($monitoring->hasPages())
-            <div class="bg-white px-4 py-3 border-t border-gray-200 sm:px-6">
+            <div class="px-4 py-3 bg-white border-t border-gray-200 sm:px-6">
                 <div class="flex items-center justify-between">
-                    <div class="flex-1 flex justify-between sm:hidden">
+                    <div class="flex justify-between flex-1 sm:hidden">
                         @if ($monitoring->onFirstPage())
                         <span
-                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default rounded-md">
+                            class="relative inline-flex items-center px-4 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md cursor-default">
                             Sebelumnya
                         </span>
                         @else
@@ -373,7 +373,7 @@ SISTEM PERSEDIAAN BARANG
                         </a>
                         @else
                         <span
-                            class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 cursor-default rounded-md">
+                            class="relative inline-flex items-center px-4 py-2 ml-3 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md cursor-default">
                             Selanjutnya
                         </span>
                         @endif

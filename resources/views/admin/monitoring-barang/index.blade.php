@@ -180,9 +180,9 @@ SISTEM PERSEDIAAN BARANG
                                 @endif
                                 @if($item->status == 'ditolak' && $item->alasan_penolakan)
                                 <div class="mb-3 text-xs">
-                                    <div class="p-2 bg-red-50 border-l-4 border-red-400 rounded">
+                                    <div class="p-2 border-l-4 border-red-400 rounded bg-red-50">
                                         <span class="font-medium text-red-700">
-                                            <i class="fas fa-exclamation-triangle mr-1"></i>Alasan Penolakan:
+                                            <i class="mr-1 fas fa-exclamation-triangle"></i>Alasan Penolakan:
                                         </span>
                                         <p class="mt-1 text-red-600">{{ $item->alasan_penolakan }}</p>
                                     </div>
@@ -268,7 +268,7 @@ SISTEM PERSEDIAAN BARANG
                     </div>
 
                     <!-- Desktop view (hidden on mobile) -->
-                    <div class="hidden md:block overflow-x-auto">
+                    <div class="hidden overflow-x-auto md:block">
                         <table class="w-full">
                             <thead>
                                 <tr class="bg-gray-50">
@@ -319,7 +319,7 @@ SISTEM PERSEDIAAN BARANG
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
                                         {{ \Carbon\Carbon::parse($item->tanggal_ambil)->format('d/m/Y') }}
                                     </td>
-                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 border break-words"
+                                    <td class="px-3 py-3 text-sm font-medium text-gray-900 break-words border"
                                         title="{{ $item->nama_barang }}">
                                         {{ $item->nama_barang }}
                                     </td>
@@ -354,7 +354,7 @@ SISTEM PERSEDIAAN BARANG
                                         {{ number_format($item->saldo, 0, ',', '.') }}
                                     </td>
                                     <td class="px-3 py-3 text-sm text-center text-gray-900 border whitespace-nowrap">
-                                        {{ number_format($item->saldo_akhir, 0, ',', '.') }}
+                                        {{ number_format($item->kredit, 0, ',', '.') }}
                                     </td>
                                     <td
                                         class="px-3 py-3 text-sm font-medium text-center border whitespace-nowrap {{ $item->saldo_akhir < 0 ? 'text-red-600 font-bold' : 'text-gray-900' }}">
@@ -642,7 +642,7 @@ function deleteMonitoring(id) {
         title: 'Tolak Pengambilan Barang',
         html: `
             <div class="text-left">
-                <p class="text-sm text-gray-600 mb-4">Berikan alasan penolakan yang akan ditampilkan kepada user:</p>
+                <p class="mb-4 text-sm text-gray-600">Berikan alasan penolakan yang akan ditampilkan kepada user:</p>
                 <textarea
                     id="alasan-penolakan"
                     class="w-full px-3 py-2 text-sm border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -650,7 +650,7 @@ function deleteMonitoring(id) {
                     placeholder="Contoh: Stok barang tidak mencukupi, permintaan melebihi kuota, dll..."
                     maxlength="1000"
                 ></textarea>
-                <div class="text-xs text-gray-400 mt-1">
+                <div class="mt-1 text-xs text-gray-400">
                     <span id="char-count">0</span>/1000 karakter
                 </div>
             </div>
@@ -798,11 +798,14 @@ function editMonitoring(id) {
                                     <i class="w-4 mr-2 text-gray-500 fas fa-building"></i>
                                     <strong>Bidang:</strong> <span class="ml-2">${monitoring.bidang}</span>
                                 </p>
-                                <p class="flex items-center">
-                                    <i class="w-4 mr-2 text-gray-500 fas fa-calendar-alt"></i>
-                                    <strong>Tanggal Ambil:</strong> <span class="ml-2">${new Date(monitoring.tanggal_ambil).toLocaleDateString('id-ID')}</span>
-                                </p>
                             </div>
+                        </div>
+                        <div class="mb-4">
+                            <label class="flex items-center block mb-2 text-sm font-medium text-gray-700">
+                                <i class="mr-2 text-blue-500 fas fa-calendar-alt"></i>
+                                Tanggal Ambil <span class="text-red-500">*</span>
+                            </label>
+                            <input type="date" id="edit_tanggal_ambil" class="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500" value="${monitoring.tanggal_ambil}" required>
                         </div>
                         <div class="mb-4">
                             <label class="flex items-center block mb-2 text-sm font-medium text-gray-700">
@@ -837,14 +840,21 @@ function editMonitoring(id) {
                 width: '500px',
                 preConfirm: () => {
                     const kredit = document.getElementById('edit_kredit').value;
+                    const tanggal_ambil = document.getElementById('edit_tanggal_ambil').value;
 
                     if (!kredit || kredit < 0) {
                         Swal.showValidationMessage('Kredit harus diisi dan tidak boleh negatif!');
                         return false;
                     }
 
+                    if (!tanggal_ambil) {
+                        Swal.showValidationMessage('Tanggal ambil harus diisi!');
+                        return false;
+                    }
+
                     return {
-                        kredit: parseFloat(kredit)
+                        kredit: parseFloat(kredit),
+                        tanggal_ambil: tanggal_ambil
                     };
                 }
             }).then((result) => {
@@ -929,10 +939,10 @@ function editMonitoring(id) {
 // Show rejection reason function
 function showRejectionReason(reason) {
     Swal.fire({
-        title: '<i class="fas fa-exclamation-triangle text-red-500"></i> Alasan Penolakan',
+        title: '<i class="text-red-500 fas fa-exclamation-triangle"></i> Alasan Penolakan',
         html: `
-            <div class="text-left p-4 bg-red-50 border-l-4 border-red-400 rounded">
-                <p class="text-sm text-gray-700 leading-relaxed">${reason}</p>
+            <div class="p-4 text-left border-l-4 border-red-400 rounded bg-red-50">
+                <p class="text-sm leading-relaxed text-gray-700">${reason}</p>
             </div>
         `,
         icon: null,

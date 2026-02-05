@@ -172,25 +172,27 @@ class MonitoringBarangController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'kredit' => 'required|numeric|min:0'
+            'kredit' => 'required|numeric|min:0',
+            'tanggal_ambil' => 'required|date'
         ]);
 
         try {
             $monitoringBarang = MonitoringBarang::findOrFail($id);
 
-            // Hanya update field kredit
+            // Update field kredit dan tanggal_ambil
             $monitoringBarang->update([
-                'kredit' => $request->kredit
+                'kredit' => $request->kredit,
+                'tanggal_ambil' => $request->tanggal_ambil
             ]);
 
             return response()->json([
                 'success' => true,
-                'message' => 'Kredit berhasil diperbarui!'
+                'message' => 'Data berhasil diperbarui!'
             ]);
         } catch (\Exception $e) {
             return response()->json([
                 'success' => false,
-                'message' => 'Gagal memperbarui kredit: ' . $e->getMessage()
+                'message' => 'Gagal memperbarui data: ' . $e->getMessage()
             ], 500);
         }
     }
