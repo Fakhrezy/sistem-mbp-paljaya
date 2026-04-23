@@ -24,9 +24,9 @@ class AdminUserController extends Controller
         // Filter berdasarkan pencarian
         if ($request->has('search')) {
             $search = $request->input('search');
-            $query->where(function($q) use ($search) {
+            $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
-                  ->orWhere('email', 'like', "%{$search}%");
+                    ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
@@ -57,7 +57,7 @@ class AdminUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8|confirmed',
             'role' => 'required|in:admin,user',
-            'bidang' => 'required|in:teknik,pemasaran,umum,keuangan,lainnya',
+            'bidang' => 'required|in:' . implode(',', \App\Constants\BidangConstants::getBidangKeys()),
         ]);
 
         User::create([
@@ -98,7 +98,7 @@ class AdminUserController extends Controller
             'email' => 'required|string|email|max:255|unique:users,email,' . $user->id,
             'password' => 'nullable|string|min:8|confirmed',
             'role' => 'required|in:admin,user',
-            'bidang' => 'required|in:teknik,pemasaran,umum,keuangan,lainnya',
+            'bidang' => 'required|in:' . implode(',', \App\Constants\BidangConstants::getBidangKeys()),
         ]);
 
         $userData = [

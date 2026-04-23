@@ -41,8 +41,7 @@ class Barang extends Model
 
         static::creating(function ($model) {
             if (!$model->id_barang) {
-                // Generate ID: BRG-[jenis]-[random string]
-                $jenis = substr($model->jenis, 0, 3); // Mengambil 3 huruf pertama dari jenis
+                $jenis = substr($model->jenis, 0, 3);
                 $model->id_barang = 'BRG-' . strtoupper($jenis) . '-' . strtoupper(Str::random(5));
             }
         });
